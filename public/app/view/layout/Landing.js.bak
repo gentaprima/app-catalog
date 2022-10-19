@@ -1,0 +1,25 @@
+/*window.onbeforeunload = function(e) {
+    return 'Refresh Browser ?';
+};*/
+/**
+ * Generic landing page for application
+ */
+Ext.define('APP.view.layout.Landing', {
+    extend: 'Ext.panel.Panel',
+    alias: 'widget.layout.landing',
+    title: 'Welcome!',
+    bodyPadding: 10,
+    html: 'Welcome to the Cataloguing System !',
+    initComponent: function(){
+        var me = this;
+        Ext.applyIf(me,{
+            items:[
+                {
+                    xtype:'image',
+                    src:''
+                }
+            ]
+        });
+        me.callParent( arguments );
+    } 
+});

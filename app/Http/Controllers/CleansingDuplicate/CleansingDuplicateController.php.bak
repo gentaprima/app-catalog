@@ -1,0 +1,516 @@
+<?php
+
+namespace App\Http\Controllers\CleansingDuplicate;
+
+use App\Helpers\AutoNumber;
+use App\Models\AdrDItems;
+use App\Models\AdrDItemsCharacteristics;
+use App\Models\AdrDItemsStatus;
+use App\Models\AdrM;
+use App\Models\AdrMStatus;
+use App\Models\IncCharacteristics;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
+use Response; 
+use Illuminate\Foundation\Auth\User;
+use UserGroup;
+use Auth ;
+use DB;
+use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Model;
+use Session;
+use Excel;
+use File;
+use Reader;
+use App\Models\IncM;
+ini_set('memory_limit', '3000M');
+ini_set('max_execution_time', '0');
+
+class CleansingDuplicateController extends Controller
+{
+    public function arrayToObject($array) {
+        if (!is_array($array)) {
+            return $array;
+        }
+        
+        $object = new \stdClass();
+        if (is_array($array) && count($array) > 0) {
+            foreach ($array as $name=>$value) {
+                $name = strtolower(trim($name));
+                if (!empty($name)) {
+                    $object->$name = $this->arrayToObject($value);
+                }
+            }
+            return $object;
+        }
+        else {
+            return FALSE;
+        }
+    }
+    public function getCleansingDuplicate(Request $request)
+    {
+        switch ($request->action){
+            case 'ByLongDesc':
+                $sql = "SELECT * FROM vw_cleansing_duplication_desc" ;
+                $result = BaseModel::buildSql($sql);
+                return \Response::json($result,200);
+                break;
+            case 'ByOldMaterialCode':
+                $sql = "SELECT * FROM vw_cleansing_duplication_oldmaterial" ;
+                $result = BaseModel::buildSql($sql);
+                return \Response::json($result,200);
+                break;
+            case 'ByRefno':
+                $sql = "SELECT * FROM vw_cleansing_duplication_refno" ;
+                $result = BaseModel::buildSql($sql);
+                return \Response::json($result,200);
+                break;
+        }
+    }
+
+    public function multi_diff($arr1,$arr2){
+        $result = array();
+        foreach ($arr1 as $k=>$v){
+            if(!isset($arr2[$k])){
+                $result[$k] = $v;
+            } else {
+                if(is_array($v) && is_array($arr2[$k])){
+                    $diff = multi_diff($v, $arr2[$k]);
+                    if(!empty($diff)){
+                        $result[$k] = $diff;
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function searchArrayKeyVal($sKey, $id, $array) {
+       foreach ($array as $key => $val) {
+           if ($val[$sKey] == $id) {
+               return $key;
+           }
+       }
+       return false;
+    }
+
+    public function SaveImportDataCleansing(Request $request){
+        DB::beginTransaction();
+        try {
+            $input = Input::all();
+            $user_id  = Auth::user()->user_id;
+            $dataUserProfile = User::select(DB::raw("*"))
+                                    ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                    ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                    ->where('user_name','=',$request->user_name)
+                                    ->get();
+            $table="adr_m";
+            $primary="id";
+            $years=date('Y');
+            $prefix=$dataUserProfile->first()->getOriginal()['code'];
+            $sprintf="%06s";
+            $adr_no=AutoNumber::autonumber($table,$primary,$prefix,$years,$sprintf);
+
+            $adrM = new AdrM();
+            $adrM->adr_no = $adr_no;
+            $adrM->company_code = $prefix;
+            $adrM->creator_id = $dataUserProfile->first()->getOriginal()['user_id'];
+            $adrM->save();
+            $adr_m_id = $adrM->id;
+
+            $adrMStatus = new AdrMStatus();
+            $adrMStatus->adr_m_id = $adr_m_id;
+            $adrMStatus->adr_status ='FINISH';
+            $adrMStatus->save();
+			
+			$adr_d_items_count=0;
+			
+            if($request->hasFile('file_excel')){
+                $excel = new Excel();
+                $extension = File::extension($request->file_excel->getClientOriginalName());
+                $path = $request->file('file_excel')->getRealPath();
+                if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+                    if($request->hasFile('file_excel')){
+                        Excel::load($path, function ($reader) use(&$adr_d_items_count) {
+                            $reader->each(function($sheet) use(&$adr_d_items_count) {
+                                $input = Input::all();
+                                if($sheet->getTitle() == 'material' ||  $sheet->getTitle() == 'sheet1')  {
+                                    $rowRecord = 2 ;
+                                    foreach ($sheet->toArray() as $key=>$rowRider) {
+                                        $dataFileReader = $this->arrayToObject($rowRider);
+                                        if (!empty($dataFileReader->mgc && $dataFileReader->inc)) {
+                                            /*Check INC & MGC*/
+//                                            DB::enableQueryLog();
+                                            $query = DB::table('vw_inc_m');
+                                            $query->where('inc', "=", trim($dataFileReader->inc));
+                                            $query->where('groupclass', "=", trim($dataFileReader->mgc));
+                                            $query->where('transaction_type', "=", $input['transaction_type']);
+                                            $query->where('is_active', 'Active');
+                                            $search = $query->get();
+                                            if (count($search) > 0) {
+                                                /*Check Material/Service Type*/
+
+                                                $dataIncM = $this->arrayToObject($search[0]);
+                                                $short_name_code = $dataIncM->short_name_code;
+                                                $lenShortNameCode = strlen($short_name_code);
+                                                /*Check Short Teks*/
+//                                                if($dataIncM->short_name_code.':' === substr($dataFileReader->short_text, 0,($lenShortNameCode))) {
+                                                    /*Check Long Teks*/
+                                                    if($short_name_code === substr($dataFileReader->long_text, 0,$lenShortNameCode)){
+                                                        //$long_text = $dataFileReader->long_text;
+														
+                                                        $dataIncChar = IncCharacteristics::select(DB::raw("*"))
+                                                            ->where('inc','=',$dataFileReader->inc)
+                                                            ->get()->all();
+                                                        $iChr=0;
+                                                        $incChar = array();
+                                                        foreach ($dataIncChar as $rowIncChar){
+                                                            $incChar[$iChr]['inc_m_id'] = $dataIncM->id;
+                                                            $incChar[$iChr]['inc_characteristics_id'] = $rowIncChar->id;
+                                                            $incChar[$iChr]['mrcode'] = $rowIncChar->mrcode;
+                                                            $incChar[$iChr]['characteristics'] = $rowIncChar->characteristics;
+															$incChar[$iChr]['nvalue'] = null;
+                                                            $iChr++;
+                                                        }
+//                                                        var_dump($incChar);
+//                                                        var_dump(count($itemsIncCharsAllArray));
+//                                                        if(count($itemsIncCharsAllArray) > 0) {
+//                                                            var_dump($itemsIncCharsAllArray);
+														$ii = 0;
+														$excelChar = array();
+														$false = 0;
+														$nvalue = array();
+														$posItemsIncCharsAll = strpos($dataFileReader->long_text, ':', $lenShortNameCode);
+														$itemsIncCharsAllArray = array();
+														
+														if ($posItemsIncCharsAll > 0 ) {
+															$itemsIncCharsAll = substr($dataFileReader->long_text, $posItemsIncCharsAll + 1);
+															$itemsIncCharsAllArray = explode(';', $itemsIncCharsAll);
+															//$num_itemsIncCharsAllArray = count($itemsIncCharsAllArray);
+															
+                                                            foreach ($itemsIncCharsAllArray as $incCharValue) {
+                                                                $num_incCharValueArray = explode(':', $incCharValue);
+                                                                $excelChar[]['characteristics'] = $num_incCharValueArray[0];
+                                                                $nvalue[] = $num_incCharValueArray;
+                                                                $arrayKey = $this->searchArrayKeyVal("characteristics", $num_incCharValueArray[0], $incChar);
+                                                                if ($arrayKey !== false) {
+																	$incChar[$arrayKey]['nvalue'] = $num_incCharValueArray[1];
+                                                                } else {
+                                                                    $false++;
+                                                                }
+                                                                $ii++;
+                                                            }
+														}
+															
+                                                            if ($false > 0) {
+//                                                                 echo "Gagal";
+//                                                            var_dump($rowRecord);
+                                                            } else {
+//                                                                 echo "Berhasil";
+                                                                $dataMaterialOwner = User::select(DB::raw("*,users.email as useremail"))
+                                                                    ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                                                    ->where('user_name', '=', $input['user_name'])
+                                                                    ->get();
+                                                                if (count($dataMaterialOwner) > 0) {
+                                                                    $adrM = new AdrM();
+                                                                    $adr_m_id = AdrM::all()->last()->id;
+                                                                    $table = "adr_d_items";
+                                                                    $primary = "catalog_no";
+                                                                    $years = '';
+                                                                    $prefix = "";
+                                                                    $sprintf = "%0s";
+                                                                    $catalog_no = AutoNumber::autonumber($table, $primary, $prefix, $years, $sprintf);
+
+                                                                    $adr_d_items = new AdrDItems();
+
+                                                                    if ($dataFileReader->material_type !== 'ZOEM') {
+                                                                        $table = "adr_d_items";
+                                                                        $primary = "sap_material_code";
+                                                                        $years = '';
+                                                                        if ($input['transaction_type'] == 'Material') {
+                                                                            $prefix = 'G';
+                                                                        } else {
+                                                                            $prefix = 'S';
+                                                                        }
+
+                                                                        $sprintf = "%017s";
+                                                                        $generateSAPNO = AutoNumber::autonumber($table, $primary, $prefix, $years, $sprintf);
+
+                                                                        $adr_d_items->sap_material_code = $generateSAPNO;
+                                                                        $adr_d_items->sap_material_code_by_id = Auth::user()->user_id;
+                                                                        $adr_d_items->sap_material_code_date = date("Y-m-d H:i:s");
+                                                                    } else {
+                                                                        $adr_d_items->sap_material_code = $dataFileReader->sap_code;
+                                                                        $adr_d_items->sap_material_code_by_id = Auth::user()->user_id;
+                                                                        $adr_d_items->sap_material_code_date = date("Y-m-d H:i:s");
+                                                                    }
+
+                                                                    $adr_d_items->adr_m_id = $adr_m_id;
+                                                                    $adr_d_items->items_is_active = 'Validate';
+                                                                    $adr_d_items->name_code = $dataIncM->item_name;
+                                                                    $adr_d_items->short_name_code = $dataIncM->short_name_code;
+                                                                    $adr_d_items->short_description = $dataFileReader->short_text;
+                                                                    $adr_d_items->long_description = $dataFileReader->long_text;
+                                                                    $adr_d_items->raw = $dataFileReader->raw;
+                                                                    $adr_d_items->transaction_type = $input['transaction_type'];
+                                                                    $adr_d_items->catalog_no = $catalog_no;
+                                                                    $adr_d_items->inc = $dataFileReader->inc;
+                                                                    $adr_d_items->groupclass = $dataFileReader->mgc;
+                                                                    $adr_d_items->material_type = $dataFileReader->material_type;
+                                                                    $adr_d_items->uom = $dataFileReader->uom;
+                                                                    $adr_d_items->category = $dataFileReader->category;
+
+                                                                    $QueryCat = User::select(DB::raw("users.*"))
+                                                                        ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                                                        ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                                                        ->where('group_name', '=', 'Cat')
+                                                                        //->where('users.companies_m_id', '=', Auth::user()->companies_m_id)
+                                                                        ->where('users.companies_m_id', '=', $dataMaterialOwner->first()->getOriginal()['companies_m_id'])
+																		->limit(1)
+                                                                        ->get();
+                                                                    $getCat = $this->arrayToObject($QueryCat->first()->getOriginal());
+
+                                                                    $adr_d_items->cataloguer = 'Validate';
+                                                                    $adr_d_items->catemail = $getCat->email;
+                                                                    $adr_d_items->cataloguer_by_id = $getCat->user_id;
+                                                                    $adr_d_items->cataloguer_date = date("Y-m-d H:i:s");
+
+                                                                    $sttdApp = 'Std App ' . $dataFileReader->category;
+                                                                    $QueryStdApp = User::select(DB::raw("users.*"))
+                                                                        ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                                                        ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                                                        ->where('group_name', '=', $sttdApp)
+                                                                        ->limit(1)
+                                                                        ->get();
+
+                                                                    $getStdApp = $this->arrayToObject($QueryStdApp->first()->getOriginal());
+
+                                                                    $adr_d_items->std_approval = 'Validate';
+                                                                    $adr_d_items->stdemail = $getStdApp->email;
+                                                                    $adr_d_items->std_approval_by_id = $getStdApp->user_id;
+                                                                    $adr_d_items->std_approval_date = date("Y-m-d H:i:s");
+
+                                                                    $adr_d_items->proc_approver = 'Validate';
+                                                                    $adr_d_items->procemail = Auth::user()->email;
+                                                                    $adr_d_items->proc_approver_by_id = Auth::user()->user_id;
+                                                                    $adr_d_items->proc_approver_date = date("Y-m-d H:i:s");
+
+                                                                    // var_dump($dataMaterialOwner);
+
+                                                                    $adr_d_items->created_by = $dataMaterialOwner->first()->getOriginal()['user_id'];
+                                                                    $adr_d_items->useremail = $dataMaterialOwner->first()->getOriginal()['useremail'];
+                                                                    $adr_d_items->trx = 'Cleansing';
+                                                                    $adr_d_items->save();
+                                                                    $adr_d_items_id = $adr_d_items->id;
+																	$adr_d_items_count++;
+																	//$sheet->setCellValue('K'.$key, "SUCCESS");
+																	
+                                                                    $adrDItemsStatus = new AdrDItemsStatus();
+                                                                    $adrDItemsStatus->adr_d_items_id = $adr_d_items_id;
+                                                                    $adrDItemsStatus->item_status = 'ORIGIN';
+                                                                    $adrDItemsStatus->save();
+
+                                                                    foreach ($incChar as $rowIncChar) {
+                                                                        $dataConvRowIncChar = $this->arrayToObject($rowIncChar);
+                                                                        $adrDItemsCharacteristics = new AdrDItemsCharacteristics();
+                                                                        $adrDItemsCharacteristics->adr_d_items_id = $adr_d_items_id;
+                                                                        $adrDItemsCharacteristics->catalog_no = $catalog_no;
+                                                                        $adrDItemsCharacteristics->inc_m_id = $dataConvRowIncChar->inc_m_id;
+                                                                        $adrDItemsCharacteristics->inc_characteristics_id = $dataConvRowIncChar->inc_characteristics_id;
+                                                                        $adrDItemsCharacteristics->mrcode = $dataConvRowIncChar->mrcode;
+                                                                        $adrDItemsCharacteristics->nvalue = $dataConvRowIncChar->nvalue;																		
+                                                                        $adrDItemsCharacteristics->save();
+                                                                    }
+/*                                                                     $r = 1;
+                                                                    foreach ($nvalue as $incCharValue1) {
+                                                                        $searchAdrDItemsCharacteristics = AdrDItemsCharacteristics::select(DB::raw("adr_d_items_characteristic.id"))
+                                                                            ->Join('inc_m', 'adr_d_items_characteristic.inc_m_id', '=', 'inc_m.id')
+                                                                            ->Join('inc_characteristics', 'adr_d_items_characteristic.inc_characteristics_id', '=', 'inc_characteristics.id')
+                                                                            ->where('adr_d_items_characteristic.adr_d_items_id', '=', $adr_d_items_id)
+                                                                            ->where('inc_m.inc', '=', $dataFileReader->inc)
+                                                                            ->where('inc_characteristics.characteristics', '=', $incCharValue1[0])
+                                                                            ->get();
+                                                                        if (count($searchAdrDItemsCharacteristics) > 0) {
+                                                                            $AdrDItemsCharacteristicsId = $searchAdrDItemsCharacteristics->first()->getOriginal()['id'];
+                                                                            $UpdateItemsIncChar = AdrDItemsCharacteristics::find($AdrDItemsCharacteristicsId);
+                                                                            $UpdateItemsIncChar->nvalue = trim($incCharValue1[1]);
+                                                                            $UpdateItemsIncChar->save();
+                                                                        }
+                                                                        $r++;
+                                                                    }
+ */
+                                                                }
+                                                            }
+//                                                            var_dump('abcd');
+/*                                                         }else{
+//                                                            var_dump($rowRecord);
+                                                            $dataMaterialOwner = User::select(DB::raw("*,users.email as useremail"))
+                                                                ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                                                ->where('user_name', '=', $input['user_name'])
+                                                                ->get();
+                                                            if (count($dataMaterialOwner) > 0) {
+                                                                $adrM = new AdrM();
+                                                                $adr_m_id = AdrM::all()->last()->id;
+                                                                $table = "adr_d_items";
+                                                                $primary = "catalog_no";
+                                                                $years = '';
+                                                                $prefix = "";
+                                                                $sprintf = "%0s";
+                                                                $catalog_no = AutoNumber::autonumber($table, $primary, $prefix, $years, $sprintf);
+
+                                                                $adr_d_items = new AdrDItems();
+
+                                                                if ($dataFileReader->material_type !== 'ZOEM') {
+                                                                    $table = "adr_d_items";
+                                                                    $primary = "sap_material_code";
+                                                                    $years = '';
+                                                                    if ($input['transaction_type'] == 'Material') {
+                                                                        $prefix = 'G';
+                                                                    } else {
+                                                                        $prefix = 'S';
+                                                                    }
+
+                                                                    $sprintf = "%017s";
+                                                                    $generateSAPNO = AutoNumber::autonumber($table, $primary, $prefix, $years, $sprintf);
+
+                                                                    $adr_d_items->sap_material_code = $generateSAPNO;
+                                                                    $adr_d_items->sap_material_code_by_id = Auth::user()->user_id;
+                                                                    $adr_d_items->sap_material_code_date = date("Y-m-d H:i:s");
+                                                                } else {
+                                                                    $adr_d_items->sap_material_code = $dataFileReader->sap_code;
+                                                                    $adr_d_items->sap_material_code_by_id = Auth::user()->user_id;
+                                                                    $adr_d_items->sap_material_code_date = date("Y-m-d H:i:s");
+                                                                }
+
+                                                                $adr_d_items->adr_m_id = $adr_m_id;
+                                                                $adr_d_items->items_is_active = 'Validate';
+                                                                $adr_d_items->name_code = $dataIncM->item_name;
+                                                                $adr_d_items->short_name_code = $dataIncM->short_name_code;
+                                                                $adr_d_items->short_description = $dataFileReader->short_text;
+                                                                $adr_d_items->long_description = $dataFileReader->long_text;
+                                                                $adr_d_items->raw = $dataFileReader->raw;
+                                                                $adr_d_items->transaction_type = $input['transaction_type'];
+                                                                $adr_d_items->catalog_no = $catalog_no;
+                                                                $adr_d_items->inc = $dataFileReader->inc;
+                                                                $adr_d_items->groupclass = $dataFileReader->mgc;
+                                                                $adr_d_items->material_type = $dataFileReader->material_type;
+                                                                $adr_d_items->uom = $dataFileReader->uom;
+                                                                $adr_d_items->category = $dataFileReader->category;
+
+                                                                $QueryCat = User::select(DB::raw("users.*"))
+                                                                    ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                                                    ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                                                    ->where('group_name', '=', 'Cat')
+																	//->where('users.companies_m_id', '=', Auth::user()->companies_m_id)
+																	->where('users.companies_m_id', '=', $dataMaterialOwner->first()->getOriginal()['companies_m_id'])
+                                                                    ->limit(1)
+                                                                    ->get();
+                                                                $getCat = $this->arrayToObject($QueryCat->first()->getOriginal());
+
+                                                                $adr_d_items->cataloguer = 'Validate';
+                                                                $adr_d_items->catemail = $getCat->email;
+                                                                $adr_d_items->cataloguer_by_id = $getCat->user_id;
+                                                                $adr_d_items->cataloguer_date = date("Y-m-d H:i:s");
+
+                                                                $sttdApp = 'Std App ' . $dataFileReader->category;
+                                                                $QueryStdApp = User::select(DB::raw("users.*"))
+                                                                    ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                                                    ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                                                    ->where('group_name', '=', $sttdApp)
+                                                                    ->limit(1)
+                                                                    ->get();
+
+                                                                $getStdApp = $this->arrayToObject($QueryStdApp->first()->getOriginal());
+
+                                                                $adr_d_items->std_approval = 'Validate';
+                                                                $adr_d_items->stdemail = $getStdApp->email;
+                                                                $adr_d_items->std_approval_by_id = $getStdApp->user_id;
+                                                                $adr_d_items->std_approval_date = date("Y-m-d H:i:s");
+
+                                                                $adr_d_items->proc_approver = 'Validate';
+                                                                $adr_d_items->procemail = Auth::user()->email;
+                                                                $adr_d_items->proc_approver_by_id = Auth::user()->user_id;
+                                                                $adr_d_items->proc_approver_date = date("Y-m-d H:i:s");
+
+                                                                // var_dump($dataMaterialOwner);
+
+                                                                $adr_d_items->created_by = $dataMaterialOwner->first()->getOriginal()['user_id'];
+                                                                $adr_d_items->useremail = $dataMaterialOwner->first()->getOriginal()['useremail'];
+                                                                $adr_d_items->trx = 'Cleansing';
+                                                                $adr_d_items->save();
+                                                                $adr_d_items_id = $adr_d_items->id;
+																$adr_d_items_count++;
+																//$sheet->setCellValue('K'.$key, "SUCCESS");
+																
+                                                                $adrDItemsStatus = new AdrDItemsStatus();
+                                                                $adrDItemsStatus->adr_d_items_id = $adr_d_items_id;
+                                                                $adrDItemsStatus->item_status = 'ORIGIN';
+                                                                $adrDItemsStatus->save();
+
+                                                                foreach ($incChar as $rowIncChar) {
+                                                                    $dataConvRowIncChar = $this->arrayToObject($rowIncChar);
+                                                                    $adrDItemsCharacteristics = new AdrDItemsCharacteristics();
+                                                                    $adrDItemsCharacteristics->adr_d_items_id = $adr_d_items_id;
+                                                                    $adrDItemsCharacteristics->catalog_no = $catalog_no;
+                                                                    $adrDItemsCharacteristics->inc_m_id = $dataConvRowIncChar->inc_m_id;
+                                                                    $adrDItemsCharacteristics->inc_characteristics_id = $dataConvRowIncChar->inc_characteristics_id;
+                                                                    $adrDItemsCharacteristics->mrcode = $dataConvRowIncChar->mrcode;
+                                                                    $adrDItemsCharacteristics->save();
+                                                                }
+                                                            }
+                                                        } */
+                                                    }else{
+//                                                       var_dump('Data Long Teks Tidak Ketemu');
+                                                    }
+//                                                    var_dump($rowRecord);
+
+/*                                                 }else{
+//                                                   var_dump('Data Short Teks Tidak Ketemu');
+                                                } */
+                                                
+                                            }
+                                        }
+//                                        var_dump($rowRecord);
+                                        $rowRecord++;
+                                    }
+                                }
+                            });
+                        })
+						->setFileName($adrM->adr_no)
+						->save($extension, "C:\\Development\\ecatalog.2018\\ecatalog.web\\public\\files");
+                    }
+                }
+            }
+            $message =  'Process Succes';
+            $success = true ;
+			
+			if ($adr_d_items_count > 0) {
+				DB::commit();
+			}
+			else {
+				DB::rollback();
+			}
+			
+        } catch (\Illuminate\Database\QueryException $e) {
+            $message =  $e->getMessage();
+            $success = false ;
+            DB::rollback();
+        } catch (\Exception $e) {
+            $message =  $e->getMessage();
+            $success = false ;
+            DB::rollback();
+        }
+        $data = array(
+            // 'data'=> $insert,
+            'success' => $success  ,
+            'message' => $message
+        );
+        return \Response::json($data,200);
+    }
+
+    public function getTemplateDataCleansing(Request $request){
+        $file="./files/template_data Cleansing.xlsx";
+        return Response::download($file);
+    }    
+}

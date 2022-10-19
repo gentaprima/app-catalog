@@ -1,0 +1,102 @@
+.content-wrapper>.content {
+    padding: 0 9px !important;
+}
+
+.content>.card {
+    box-shadow: none !important;
+    border-radius: 10px;
+}
+
+
+.table th{
+    background-color: #C1C12E;
+    color: #fff
+}
+
+#example1_paginate {
+    display: none;
+}
+
+#example2_paginate {
+    float: right;
+    margin-left: auto;
+}
+
+.paginate_button.next>a {
+    margin-left: 8px;
+    background-color: #001f3f !important;
+    border-radius: 4px !important;
+    color: #fff;
+    padding: 5px 8px 5px 8px;
+}
+
+.paginate_button.active>a {
+    background-color: #C1C12E !important;
+    border-radius: 4px;
+    margin-left: 8px;
+    height: 32px;
+    width: 32px;
+    color: #fff;
+    padding: 5px 8px 5px 8px;
+}
+
+.paginate_button.next>a>i {
+    position: relative;
+    top: 1px;
+}
+
+.paginate_button.next.prev.disabledd>a>i {
+    position: relative;
+    top: 1px;
+}
+
+.paginate_button.next.prev.disabledd>a {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.paginate_button.next.disabledd>a {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.paginate_button.previous {
+    margin-right: 8px !important;
+    border: none !important;
+    font-weight: bold !important;
+    color: #eee !important;
+    background-color: #001f3f !important;
+}
+
+.paginate_button.previous>a:hover {
+    color: #FFF;
+    cursor: pointer;
+}
+
+.paginate_button.next>a:hover {
+    color: #FFF;
+    cursor: pointer;
+
+}
+
+.paginate_button.next>a:focus {
+    color: #FFF;
+}
+
+.border-search {
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+.btn-primary{
+    background-color: #C1C12E;
+    color: #fff;
+    border-color: #C1C12E;
+}
+
+.btn-primary:hover{
+    background-color: #919123;
+    color: #fff;
+    border-color: #919123;
+}
+

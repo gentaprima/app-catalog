@@ -1,0 +1,244 @@
+Credential for access ABM dev server 10.1.3.46
+User: cat
+Password: Cat123@bm
+Applicable for ssh, sftp, and MySQL
+Database dump dari Toshiba sudah berhasil import di 10.1.3.46
+Dbname: temp_dbcat
+User dan password sama dengan di atas.
+Untuk deploy web application bisa dicopy ke /var/www/html/
+Create folder baru under directory di atas.
+
+IP:10.1.14.16
+Username: cat2
+Password: Cata2345678
+ ☐ VPN
+Conncetion:vpn.tmt.co.id
+Username  :abmconsultant7
+Password  :jakarta@jkt
+Domain    :abmm.tmt.co.id
+
+*WIFI ACCESS*
+ABMConsultant4:abm16@c4
+
+*RECORD LAYOUT*
+ FOR CHARACTERISTICS DATA
+AS OF 1 FEB 2007
+There are two records for each NSN
+
+VPS : DedyGanteng123
+
+FIELD LENGTH  DATA ELEMENT
+First Record
+
+  4      Federal Supply Class
+  9      National Stock Number
+  5      Item Name Code
+  2      Counter - Number of characters in Item Name
+   Variable    Item Name
+  4      Counter - Number of MRCs
+  4      Master Requirement Code
+  4      Counter - Number of characters in Decoded MRC
+   Variable    Decoded MRC
+  4      Counter - Number of characters in MRC Reply
+   Variable    MRC Reply
+
+Second Record
+
+  2      Counter – Number of ENAC Codes
+   Variable    ENAC Codes (2 positions each)
+  up to 50 occurrences)
+
+
+
+
+#sample date
+
+95150000133223701311PLATE,METAL0017MATT0008MATERIAL0005STEELAARN0018FABRICATION METHOD0010HOT ROLLEDHEAT0014HEAT TREATMENT0008ANNEALEDSFCD0017SURFACE CONDITION0016DESCALED OVERALLAQQR0009EDGE TYPE0007SHEAREDCQBC0024MINIMUM TENSILE STRENGTH002890000 POUNDS PER SQUARE INCHCQHQ0022MINIMUM YIELD STRENGTH002870000 POUNDS PER SQUARE INCHABRY0006LENGTH00186.000 FEET NOMINALAGTA0017BASIC SHAPE STYLE0005SOLIDABGL0005WIDTH002136.000 INCHES NOMINALADVM0025CROSS-SECTIONAL THICKNESS00212.0000 INCHES NOMINALBRFD0023WEIGHT PER UNIT MEASURE002981.600 POUNDS PER SQUARE FOOTFEAT0016SPECIAL FEATURES0025STEEL,AMS 6350 ALLOY 4130ZZZT0027NONDEFINITIVE SPEC/STD DATA0011A CONDITIONSR-10025SPEC/STD CONTROLLING DATA0000SR-10018MANUFACTURERS CODE000581349SR-10044NON-DEFINITIVE GOVERNMENT SPEC/STD REFERENCE0009MILS18729
+00
+
+# Extract
+fsc @4  =>  9515
+NSN @9  =>  000013322
+INC @5  =>  37013
+Counter @xx   =>  11
+Item Name @Counter  =>  PLATE,METAL
+TTL ROW MRCODE @4  => 0017
+    MATT=>0008=>MATERIAL
+    0005=>STEEL
+    AARN => 0018 => FABRICATION METHOD
+    0010  =>  HOT ROLLED
+    HEAT => 0014 => HEAT TREATMENT
+    0008  =>  ANNEALEDSFCD
+    0017  =>  SURFACE CONDITION
+    0016  =>  DESCALED OVERALLAQQR
+    0009  =>  EDGE TYPE
+    0007  =>  SHEAREDCQBC
+    0024  =>  MINIMUM TENSILE STRENGTH
+    0028  =>  90000 POUNDS PER SQUARE INCH 
+          => CQHQ
+    0022  =>  MINIMUM YIELD STRENGTH
+    0028  =>  70000 POUNDS PER SQUARE INCH
+          =>  ABRY
+    0006  =>  LENGTH
+    00186.000 => FEET NOMINALAGTA0017BASIC SHAPE STYLE
+              =>  0005  => SOLID => ABGL
+              =>  0005  =>  WIDTH
+              002136.000 INCHES NOMINALADVM0025CROSS-SECTIONAL THICKNESS00212.0000 INCHES NOMINALBRFD0023WEIGHT PER UNIT MEASURE002981.600 POUNDS PER SQUARE FOOTFEAT0016SPECIAL FEATURES0025STEEL,AMS 6350 ALLOY 4130ZZZT0027NONDEFINITIVE SPEC/STD DATA0011A CONDITIONSR-10025SPEC/STD CONTROLLING DATA0000SR-10018MANUFACTURERS CODE000581349SR-10044NON-DEFINITIVE GOVERNMENT SPEC/STD REFERENCE0009MILS18729
+00
+
+Urgent
+ ✔ Framework Harus di benerin untuk memperbaiki proses @done (16-08-26 09:37)
+ ✔ Extjs 5.1.0.107 @done (16-08-26 09:38)
+ ✔ User Management @done (16-08-26 09:38)
+ ✔ Modul  @done (16-11-01 11:05)
+   ✔ Multiple View @done (16-11-01 11:05)
+   ✔ Single View @done (16-11-01 11:05)
+   ✔ Addition Deletion &Revision @done (16-11-01 11:05)
+   ✔ Cleaning & Duplications @done (16-11-01 11:05)
+   ✔ NCS Namecode  @done (16-11-01 11:05)
+   ✔ UNSPSC Namecode @done (16-11-01 11:05)
+   ✔ Group & Class @done (16-11-01 11:05)
+
+(16-08-18 11:06)
+ ✔ Material Item @done (16-11-01 11:05)
+   ✔ Catalogu No @done (16-11-01 11:05)
+   ✔ AGC @done (16-11-01 11:05)
+     ✔ INC @done (16-11-01 11:05)
+     ✔ Material Type @done (16-11-01 11:05)
+     ✔ Cataloguer @done (16-11-01 11:05)
+     ✔ Uom @done (16-11-01 11:05)
+     ✔ Std App @done (16-11-01 11:05)
+(16-08-19 09:36)By Reza Pahlevy
+✔ Modul Yang Sudah Jalan @done (16-11-01 11:05)
+  ✔ Multiple View @done (16-11-01 11:05)
+  ✔ Single View @done (16-11-01 11:05)
+      ✔ ADR Status @done (16-11-01 11:05)
+        ✔ Adition @done (16-11-01 11:05)
+        ✔ Revision @done (16-11-01 11:05)
+        ✔ Deletion @done (16-11-01 11:05)
+        ✔ Finish @done (16-11-01 11:05)
+      ✔ Item Status @done (16-11-01 11:05)
+        ✔ Origin @done (16-11-01 11:05)
+        ✔ On Process @done (16-11-01 11:05)
+        ✔ Rev 1 @done (16-11-01 11:05)
+        ✔ Rer 2 @done (16-11-01 11:05)
+      ✔ Image @done (16-11-01 11:05)
+        ✔  Bisa Di Edit @done (16-11-01 11:05)
+        ✔  Upload Lebih Dari 1 @done (16-11-01 11:05)
+      ✔ cataloger @done (16-11-01 11:05)
+        ✔ Verified @done (16-11-01 11:05)
+        ✔ Un Verified @done (16-11-01 11:05)
+      ✔ Std App @done (16-11-01 11:05)
+        ✔ Approve @done (16-11-01 11:05)
+        ✔ Not Approve @done (16-11-01 11:05)
+      ✔ Approver @done (16-11-01 11:05)
+        ✔ Approve @done (16-11-01 11:05)
+        ✔ Not Approve @done (16-11-01 11:05)
+      ✔ SAP No (Editable) @done (16-11-01 11:05)
+        ✔ Cataloger -> Std App -> Approver ( Done ) @done (16-11-01 11:05)
+      ✔ Plant @done (16-11-01 11:05)
+        ✔ (Sesuai Role lihat dokumen pendukung) @done (16-11-01 11:05)
+      ✔ Stock Type @done (16-11-01 11:05)
+        ✔ (Sesuai Role lihat dokumen pendukung) @done (16-11-01 11:05)
+      ✔ Moving Type @done (16-11-01 11:05)
+        ✔ (Sesuai Role lihat dokumen pendukung) @done (16-11-01 11:05)
+      ✔ Inventory Category @done (16-11-01 11:05)
+        ✔ Lead Time ( Text ) @done (16-11-01 11:05)
+        ✔ Unit Price @done (16-11-01 11:05)
+        ✔ Item Controller  @done (16-11-01 11:05)
+          ✔ Verified @done (16-11-01 11:05)
+          ✔ Un Verified @done (16-11-01 11:05)
+        ✔ Approval 1 @done (16-11-01 11:05)
+          ✔ Approve @done (16-11-01 11:05)
+          ✔ Not Approve @done (16-11-01 11:05)
+        ✔ Approval 2 @done (16-11-01 11:05)
+          ✔ Approve @done (16-11-01 11:05)
+          ✔ Not Approve @done (16-11-01 11:05)
+        ✔ Approval 3 @done (16-11-01 11:05)
+          ✔ Approve @done (16-11-01 11:05)
+          ✔ Not Approve @done (16-11-01 11:05)
+
+  ✔ Addition Deletion &Revision @done (16-11-01 11:05)
+    ✔ Add data @done (16-11-01 11:05)
+      ✔  Addition  @done (16-11-01 11:05)
+        ✔  Catalog No @done (16-11-01 11:05)
+            ✔ material (1xxxx)xx= 18 Digit @done (16-11-01 11:05)
+            ✔ Service  (8xxxx)xx= 18 Digit @done (16-11-01 11:05)
+        ✔  Material All @done (16-11-01 11:05)
+          ✔ Service Item @done (16-11-01 11:05)
+          ✔ Material Item @done (16-11-01 11:05)
+      ✔  Deletion & Revision @done (16-11-01 11:05)
+         ✔ Pending @done (16-11-01 11:05)
+      ✔  ADR History @done (16-11-01 11:05)
+      ✔ Upload Data @done (16-11-01 11:05)
+        ✔ Raw | Service | MGC/SGC | INC | Ref | @done (16-11-01 11:05)
+  ✔ Cleaning & Duplications @done (16-11-01 11:05)
+  ✔ NCS Namecode  @done (16-11-01 11:05)
+  ✔ UNSPSC Namecode @done (16-11-01 11:05)
+  ✔ Group & Class @done (16-11-01 11:05)
+
+  ✔ Dokumen Pendukung @done (16-11-01 11:05)
+  ✔ 1. Data Plant ( Sudah Ada Sama Pak Leo) @done (16-11-01 11:05)
+ 
+✔  groupclass -> GroupClass @done (16-11-01 11:05)
+✔  namecodeclass -> INC code @done (16-11-01 11:05)
+✔  adr -> Adr History @done (16-11-01 11:05)
+
+ ✔ Buatkan Dictionary Characteristic -> Value ( Counter mrc_reply ) @done (16-11-01 11:05)
+ ✔ INC -> Characteristic dimunculkan berdasakan jumlah NSN dan bila INC->Characteristic lebih dari 50 row ambil 20 row nsn terbanyak  @done (16-11-01 11:05)
+ ✔ Modul NCS @done (16-11-01 11:05)
+   ✔ Characteristic @done (16-11-01 11:05)
+   ✔ MRCODE  @done (16-11-01 11:05)
+     ✔ ( Characteristic yang di extract by nato tidak ada velue yang duplicate ) @done (16-11-01 11:05)
+     ✔ Di characteristic velue yang ada END nya di satukan dan tidak boleh kosong @done (16-11-01 11:05)
+   ✔ Pilih INC -> Caracteristic -> Counter Value -> Velue Detail Per Inc  @done (16-11-01 11:05)
+   ✔ Crossreference  @done (16-11-01 11:05)
+
+ ✔ (16-10-18 16:24)
+ ✔  Benerin Image NCS @done (16-10-27 17:09)
+ ✔  Benerin Image di singgle view @done (16-12-01 10:05)
+ ✔  Check type chrakteristic @done (16-10-27 17:10)
+ ✔  Check Value di single view @done (16-10-27 17:10)
+(16-11-29 13:56)
+☐  Material
+   ☐  Single View
+       ✔ Upload PDF @done (16-12-01 14:54)
+   ☐  Multiple View
+     ☐  More Search
+       ☐  ADR - no
+       ☐  Ref. No
+       ☐  Manufactur
+       ☐  Old Material Code 
+       ☐  Category
+       ☐  MGC
+☐  Service
+   ☐  Single View
+   ☐  Multiple View
+☐ ADR
+   ✔  Create ADR  @done (16-11-29 15:38)
+   ✔  ADR - History @done (16-11-29 15:38)
+   ☐  ADR - Revision
+      ☐  Request For revision Yang sudah Ada SAP No
+      ☐  Completed Deleted Record 
+      ☐  Request For Block 
+☐ NCS
+  ✔  Material @done (16-11-29 15:39)
+☐  UNSPC
+  ☐  Service 40%
+☐ Cleansing & Duplication 
+☐ Dictionary
+  ☐  Material Type
+  ☐  Group Class
+  ☐  UOM
+  ☐  Category
+  ☐  Plant
+  ☐  Valuation Class
+  ☐  Stock Type
+  ☐  Stock Class
+  ☐  Hazard Type
+  ☐  Currency
+  ☐  Shelf Life
+  ☐  Cracateristics
+✔ @done (17-02-28 16:40)
+  ☐ Single View's
+
