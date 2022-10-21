@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -63,19 +65,20 @@ class LoginController extends Controller
         return property_exists($this, 'username') ? $this->user_name : 'username';
     }
 
-    public function keepalive(Request $request){
+    public function keepalive(Request $request)
+    {
 
         $message =  'Process Succes';
-        $success = true ;
+        $success = true;
 
         $data = array(
-            'success' => $success  ,
+            'success' => $success,
             'message' => $message
         );
-        return \Response::json($data,200);
+        return \Response::json($data, 200);
     }
 
-/**
+    /**
      * Handle a login request to the application.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -128,46 +131,47 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-		$user = User::where('user_name', '=' , $request->username)
-				->where('is_active', '=' , 1)
-				->first();
-				
-		if ($user) {
-			if ($this->attemptLDAP($request)) {
-				$this->guard()->login($user);
-				return true;
-			}
-			
-			return $this->guard()->attempt(
-				$this->credentials($request), $request->has('remember')
-			);
-		}
-		
-		return false;
+        $user = User::where('user_name', '=', $request->username)
+            ->where('is_active', '=', 1)
+            ->first();
+
+        if ($user) {
+            if ($this->attemptLDAP($request)) {
+                $this->guard()->login($user);
+                return true;
+            }
+
+            return $this->guard()->attempt(
+                $this->credentials($request),
+                $request->has('remember')
+            );
+        }
+
+        return false;
     }
 
-	protected function attemptLDAP(Request $request) 
-	{
-		
-		$ad_server = config('auth.ldap.server');
-		$ad_domain = config('auth.ldap.domain');
-	
-		$ldaprdn  = $ad_domain."\\".$request->username;     
-		$ldappass = $request->password;  
+    protected function attemptLDAP(Request $request)
+    {
 
-		try {
-			// connect to ldap server
-			$ldapconn = @ldap_connect($ad_server);
-			if ($ldapconn) {
-				// binding to ldap server
-				return @ldap_bind($ldapconn, $ldaprdn, $ldappass);
-			}		
-		} catch (Exception $e) {
-		}
-		
-		return false;
-	}
-    
+        $ad_server = config('auth.ldap.server');
+        $ad_domain = config('auth.ldap.domain');
+
+        $ldaprdn  = $ad_domain . "\\" . $request->username;
+        $ldappass = $request->password;
+
+        try {
+            // connect to ldap server
+            $ldapconn = @ldap_connect($ad_server);
+            if ($ldapconn) {
+                // binding to ldap server
+                return @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+            }
+        } catch (Exception $e) {
+        }
+
+        return false;
+    }
+
     /**
      * Send the response after the user was authenticated.
      *
@@ -179,12 +183,18 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         $this->clearLoginAttempts($request);
+        // $user = User::where('user_name', '=', $request->username)
+        //     ->where('is_active', '=', 1)
+        //     ->first();
+
+        $user = DB::table('vw_users')->where('user_name',$request->username)->where('is_active',1)->first();
 
         $data = array(
-          'success' => true ,
-          'message' => 'Ok'
+            'success' => true,
+            'message' => 'Ok',
+            'data' => $user
         );
-        return response()->json($data,200);
+        return response()->json($data, 200);
 
         /*return $this->authenticated($request, $this->guard()->user())
                 ?: redirect()->intended($this->redirectPath());*/
@@ -212,19 +222,21 @@ class LoginController extends Controller
     {
         $errors = [$this->username() => trans('auth.failed')];
 
-        if ($request->expectsJson()){
-          $message = trans('auth.failed');
-          $success = false ;
-        }else{
-          $message =  'Ok';
-          $success = true ;
+
+
+
+
+        if ($request->expectsJson()) {
+            $message = trans('auth.failed');
+            $success = false;
+        } else {
+            $message =  'Ok';
+            $success = true;
         }
         $data = array(
-          'success' => $success  ,
-          'message' => $message
+            'success' => $success,
+            'message' => $message,
         );
-        return response()->json($data,200);
+        return response()->json($data, 200);
     }
-
-    
 }

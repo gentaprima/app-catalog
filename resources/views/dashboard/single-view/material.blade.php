@@ -61,7 +61,7 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-2">Catologue No</label>
                             <div class="col-sm-10">
                                 <div class="input-group mb-2">
-                                    <input type="text" class="form-control" id="catologueNo" placeholder="">
+                                    <input type="number" class="form-control" id="catologueNo" placeholder="">
                                     <div class="input-group-prepend">
                                         <div id="btnSearch" onclick="searchCatolog()" class="input-group-text"><i class="fa fa-search"></i></div>
                                     </div>
@@ -111,13 +111,13 @@ use Illuminate\Support\Facades\Auth;
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Short Desc</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="shortDesc">
+                                <input type="text" class="form-control" id="shortDesc" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Long Desc</label>
                             <div class="col-sm-10">
-                                <textarea type="text" class="form-control" rows="5" id="longDesc"></textarea>
+                                <textarea type="text" class="form-control" rows="5" id="longDesc" readonly></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -125,7 +125,7 @@ use Illuminate\Support\Facades\Auth;
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <select class="js-example-data-ajax" id="materialType">
+                                        <select readonly class="js-example-data-ajax" id="materialType">
                                             <option value="">Select Material Type</option>
                                         </select>
                                     </div>
@@ -147,13 +147,25 @@ use Illuminate\Support\Facades\Auth;
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" placeholder="Select Catologuer">
+                                        <select type="text" required class="form-control" id="cataloguer">
+                                            <option value="">Select Cataologuer</option>
+                                            <option value="Validate">Validate</option>
+                                            <option value="Not Validate">Not Validate</option>
+                                        </select>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" placeholder="Select Std APP">
+                                        <select type="text" class="form-control" id="stdApp">
+                                            <option value="">Select Std App</option>
+                                            <option value="Validate">Validate</option>
+                                            <option value="Not Validate">Not Validate</option>
+                                        </select>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" placeholder="Select Approver">
+                                        <select type="text" class="form-control" id="procApp">
+                                            <option value="">Select Proc Approver</option>
+                                            <option value="Validate">Validate</option>
+                                            <option value="Not Validate">Not Validate</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +185,7 @@ use Illuminate\Support\Facades\Auth;
                         <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
-                                <button class="btn btn-primary" type="button" onclick="applyChanges()">Apply Changes</button>
+                                <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
                             </div>
                         </div>
                         <input type="hidden" name="" id="useremail">
@@ -420,6 +432,7 @@ use Illuminate\Support\Facades\Auth;
         let longDesc = "";
         let dataCharateristic = "";
 
+
         $(document).ready(function() {
             $('.js-example-basic-single').select2();
             $('.js-example-basic-single2').select2();
@@ -443,89 +456,256 @@ use Illuminate\Support\Facades\Auth;
                 dataType: 'json',
                 url: `/getCatalogM_p?filter=[{"operator":"eq","value":"${catologueNo}","property":"catalog_no","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]&action=getCatalogM_p&_token=${csrf_token}`,
                 success: function(response) {
-                    let data = response;
-                    document.getElementById("adrStatus").innerHTML = data[0].adr_status;
-                    document.getElementById("itemStatus").innerHTML = data[0].item_status;
-                    document.getElementById("SAP").innerHTML = data[0].sap_material_code;
-                    document.getElementById("inc").value = data[0].inc;
-                    var incSelect = $('#inc');
-                    var option = new Option(data[0].class_inc_name, data[0].inc, true, true);
-                    incSelect.append(option).trigger('change');
+                    if (response.length > 0) {
+                        let data = response;
+                        checkUser(data[0].user_name);
+                        checkApproval(data[0].company_code);
+                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp);
+                        document.getElementById("adrStatus").innerHTML = data[0].adr_status;
+                        document.getElementById("itemStatus").innerHTML = data[0].item_status;
+                        document.getElementById("SAP").innerHTML = data[0].sap_material_code;
+                        document.getElementById("inc").value = data[0].inc;
+                        var incSelect = $('#inc');
+                        var option = new Option(data[0].class_inc_name, data[0].inc, true, true);
+                        incSelect.append(option).trigger('change');
 
-                    var mgcSelect = $("#mgc")
-                    var optiobMgc = new Option(data[0].group_class_name, data[0].groupclass, true, true)
-                    mgcSelect.append(optiobMgc).trigger('change');
+                        var mgcSelect = $("#mgc")
+                        var optiobMgc = new Option(data[0].group_class_name, data[0].groupclass, true, true)
+                        mgcSelect.append(optiobMgc).trigger('change');
 
-                    if(data[0].material_type != "null"){
-                        var materialType = $("#materialType")
-                        var optiobMaterial = new Option(data[0].material_type, data[0].material_type, true, true)
-                        materialType.append(optiobMaterial).trigger('change');
+                        if (data[0].material_type != null) {
+                            var materialType = $("#materialType")
+                            var optiobMaterial = new Option(data[0].material_type, data[0].material_type, true, true)
+                            materialType.append(optiobMaterial).trigger('change');
+                        }
+
+                        if (data[0].uom != null) {
+                            var uom = $("#uom")
+                            var optionUom = new Option(data[0].uom, data[0].uom, true, true)
+                            uom.append(optionUom).trigger('change');
+                        }
+
+                        if (data[0].category != null) {
+                            var category = $("#category")
+                            var optionCategory = new Option(data[0].category, data[0].category, true, true)
+                            category.append(optionCategory).trigger('change');
+                        }
+
+                        document.getElementById("nameCode").value = data[0].item_name;
+                        document.getElementById("shortNameCode").value = data[0].short_name_code;
+                        document.getElementById("adrDItems").innerHTML = data[0].adr_d_items_id;
+                        document.getElementById("incMId").innerHTML = data[0].inc_m_id;
+                        document.getElementById("useremail").value = data[0].email_user;
+                        document.getElementById("catemail").value = data[0].email_cat;
+                        document.getElementById("procemail").value = data[0].email_proc;
+                        document.getElementById("procemail").value = data[0].email_std;
+                        document.getElementById("adr_status").value = data[0].adr_status;
+                        document.getElementById("adr_m_id").value = data[0].adr_m_id;
+                        document.getElementById("item_status").value = data[0].item_status;
+                        document.getElementById("shortDesc").value = data[0].short_description;
+                        document.getElementById("longDesc").value = data[0].long_description;
+                        if (data[0].cataloguer != null) {
+                            document.getElementById("cataloguer").value = data[0].cataloguer;
+                        }
+
+                        if (data[0].std_approval != null) {
+                            document.getElementById("stdApp").value = data[0].std_approval;
+                        }
+
+                        getReference(data[0].adr_d_items_id);
+                        getItemsFuncloc(data[0].adr_d_items_id);
+                        getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id);
+
+                        // check status
+
+                        if (data[0].status_user == 1) {
+                            $("#arrowUser").attr("class", "left right active")
+                        } else {
+                            $("#arrowUser").attr("class", "left right notactive")
+                        }
+
+                        if (data[0].status_cat == 1) {
+                            $("#arrowCat").attr("class", "left right active")
+                        } else {
+                            $("#arrowCat").attr("class", "left right notactive")
+                        }
+
+                        if (data[0].status_stdapp == 1) {
+                            $("#arrowStd").attr("class", "left right active")
+                        } else {
+                            $("#arrowStd").attr("class", "left right notactive")
+                        }
+
+                        if (data[0].status_sap == 1) {
+                            $("#arrowSap").attr("class", "left right active")
+                        } else {
+                            $("#arrowSap").attr("class", "left right notactive")
+                        }
+
+                        if (data[0].status_proc == 1) {
+                            $("#arrowProc").attr("class", "left right active")
+                        } else {
+                            $("#arrowProc").attr("class", "left right notactive")
+                        }
+
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Data not found'
+                        });
                     }
+                }
 
-                    if(data[0].uom != "null"){
-                        var uom = $("#uom")
-                        var optionUom = new Option(data[0].uom, data[0].uom, true, true)
-                        uom.append(optionUom).trigger('change');
-                    }
+            })
+        }
 
-                    if(data[0].category != "nu"){
-                        var category = $("#category")
-                        var optionCategory = new Option(data[0].category, data[0].category, true, true)
-                        category.append(optionCategory).trigger('change');
-                    }
+        function checkUser(username) {
+            console.log(username + " " + userName);
+            if (username != userName) {
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = true;
+                })
 
-                    document.getElementById("nameCode").value = data[0].item_name;
-                    document.getElementById("shortNameCode").value = data[0].short_name_code;
-                    document.getElementById("adrDItems").innerHTML = data[0].adr_d_items_id;
-                    document.getElementById("incMId").innerHTML = data[0].inc_m_id;
-                    document.getElementById("useremail").value = data[0].email_user;
-                    document.getElementById("catemail").value = data[0].email_cat;
-                    document.getElementById("procemail").value = data[0].email_proc;
-                    document.getElementById("procemail").value = data[0].email_std;
-                    document.getElementById("adr_status").value = data[0].adr_status;
-                    document.getElementById("adr_m_id").value = data[0].adr_m_id;
-                    document.getElementById("item_status").value = data[0].item_status;
-                    document.getElementById("shortDesc").value = data[0].short_description;
-                    document.getElementById("longDesc").value = data[0].long_description;
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true)
+                document.getElementById("category").setAttribute("disabled", true)
+                document.getElementById("btnApply").hidden = true
 
-                    getReference(data[0].adr_d_items_id);
-                    getItemsFuncloc(data[0].adr_d_items_id);
-                    getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id);
+            } else {
+                document.getElementById("btnApply").hidden = false
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = false;
+                })
 
-                    // check status
-                    
-                    if(data[0].status_user == 1){
-                        $("#arrowUser").attr("class","left right active")
-                    }else{
-                        $("#arrowUser").attr("class","left right notactive")
-                    }
 
-                    if(data[0].status_cat == 1){
-                        $("#arrowCat").attr("class","left right active")
-                    }else{
-                        $("#arrowCat").attr("class","left right notactive")
-                    }
+                document.getElementById("materialType").removeAttribute("disabled");
+                document.getElementById("uom").removeAttribute("disabled");
+            }
+        }
 
-                    if(data[0].status_stdapp == 1){
-                        $("#arrowStd").attr("class","left right active")
-                    }else{
-                        $("#arrowStd").attr("class","left right notactive")
-                    }
 
-                    if(data[0].status_sap == 1){
-                        $("#arrowSap").attr("class","left right active")
-                    }else{
-                        $("#arrowSap").attr("class","left right notactive")
-                    }
+        function checkApproval(company_code, ) {
 
-                    if(data[0].status_proc == 1){
-                        $("#arrowProc").attr("class","left right active")
-                    }else{
-                        $("#arrowProc").attr("class","left right notactive")
-                    }
+            if (groupName == 'User') {
+                document.getElementById("cataloguer").setAttribute("disabled", true)
+                document.getElementById("stdApp").setAttribute("disabled", true)
+                document.getElementById("procApp").setAttribute("disabled", true)
+            } else if (groupName == 'Cat') {
+                if (company_code == companyCode) {
+
+                    document.getElementById("materialType").setAttribute("disabled", true);
+                    document.getElementById("uom").setAttribute("disabled", true)
+                    document.getElementById("category").setAttribute("disabled", true)
+
+                    document.getElementById("cataloguer").removeAttribute("disabled")
+                    document.getElementById("stdApp").setAttribute("disabled", true)
+                    document.getElementById("procApp").setAttribute("disabled", true)
+                    document.getElementById("btnApply").hidden = false
+                } else {
+                    document.getElementById("cataloguer").setAttribute("disabled", true);
+                    document.getElementById("stdApp").setAttribute("disabled", true)
+                    document.getElementById("procApp").setAttribute("disabled", true)
 
                 }
-            })
+
+            } else if (groupName == 'Std App T' || groupName == 'Std App O' || groupName == 'Std App M' || groupName == 'Std App I' || groupName == 'Std App H' || groupName == 'Std App G' || groupName == 'Std App S') {
+
+                if (company_code == companyCode) {
+                    document.getElementById("materialType").setAttribute("disabled", true);
+                    document.getElementById("uom").setAttribute("disabled", true)
+                    document.getElementById("category").setAttribute("disabled", true)
+
+                    document.getElementById("cataloguer").setAttribute("disabled", true)
+                    document.getElementById("stdApp").removeAttribute("disabled")
+                    document.getElementById("procApp").setAttribute("disabled", true)
+                    document.getElementById("btnApply").hidden = false
+
+                } else {
+                    document.getElementById("btnApply").hidden = true
+                    document.getElementById("cataloguer").setAttribute("disabled", true);
+                    document.getElementById("stdApp").setAttribute("disabled", true)
+                    document.getElementById("procApp").setAttribute("disabled", true)
+                }
+            }
+        }
+
+        function checkStatus(status, statusCat, statusStd) {
+            if (status == "1" && groupName == 'User') {
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = true;
+                })
+
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true)
+                document.getElementById("category").setAttribute("disabled", true)
+                document.getElementById("inc").setAttribute("disabled", true)
+                document.getElementById("mgc").setAttribute("disabled", true)
+
+                document.getElementById("btnApply").hidden = true
+            } else if (statusCat == "1" && groupName == 'Cat') {
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = true;
+                })
+
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true)
+                document.getElementById("category").setAttribute("disabled", true)
+
+                document.getElementById("cataloguer").setAttribute("disabled", true);
+                document.getElementById("btnApply").hidden = true
+            } else if (statusStd == '1' && groupName.substr(0, 3) == 'Std') {
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = true;
+                })
+
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true)
+                document.getElementById("category").setAttribute("disabled", true)
+
+                document.getElementById("stdApp").setAttribute("disabled", true)
+                document.getElementById("btnApply").hidden = true
+            } else if (status == 0 && groupName == 'User') {
+                document.getElementById("btnApply").hidden = false
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = false;
+                })
+
+
+                document.getElementById("materialType").removeAttribute("disabled");
+                document.getElementById("uom").removeAttribute("disabled");
+                document.getElementById("category").removeAttribute("disabled");
+                document.getElementById("cataloguer").setAttribute("disabled", true);
+                document.getElementById("stdApp").setAttribute("disabled", true)
+                document.getElementById("procApp").setAttribute("disabled", true)
+            } else if (statusCat == 0 && groupName == 'Cat') {
+                document.getElementById("btnApply").hidden = false
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = false;
+                })
+
+
+                document.getElementById("materialType").removeAttribute("disabled");
+                document.getElementById("uom").removeAttribute("disabled");
+                document.getElementById("category").removeAttribute("disabled");
+                document.getElementById("cataloguer").removeAttribute("disabled", true);
+                document.getElementById("stdApp").setAttribute("disabled", true)
+                document.getElementById("procApp").setAttribute("disabled", true)
+            }else if(statusStd == 0 && groupName.substr(0, 3) == 'Std'){
+                document.getElementById("btnApply").hidden = false
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = false;
+                })
+
+
+                document.getElementById("materialType").setAttribute("disabled",true);
+                document.getElementById("inc").setAttribute("disabled",true);
+                document.getElementById("mgc").setAttribute("disabled",true);
+                document.getElementById("uom").setAttribute("disabled",true);
+                document.getElementById("category").setAttribute("disabled",true);
+                document.getElementById("cataloguer").setAttribute("disabled", true);
+                document.getElementById("stdApp").removeAttribute("disabled")
+                document.getElementById("procApp").setAttribute("disabled", true)
+            }
         }
 
 
@@ -549,57 +729,117 @@ use Illuminate\Support\Facades\Auth;
             let shortDesc = document.getElementById("shortDesc").value;
             let longDesc = document.getElementById("longDesc").value;
             let sap = document.getElementById("SAP").value;
+            let cataloguer = document.getElementById("cataloguer").value;
+            let stdApp = document.getElementById("stdApp").value;
+            let procApp = document.getElementById("procApp").value;
+
 
             if (catologueNo == '' || materialType == '' || uom == '' || category == '') {
+
                 Toast.fire({
                     icon: 'error',
                     title: 'Data cannot be null'
                 });
             } else {
-                $.ajax({
-                    type: "post",
-                    url: '/MaterialApplyChanges',
-                    dataType: 'json',
-                    data: {
-                        items_characteristic: dataCharateristic,
-                        catalog_no: catologueNo,
-                        _token: csrf_token,
-                        transaction_type: 'Material',
-                        useremail: userEmail,
-                        items_is_active: "",
-                        catemail: catEmail,
-                        procemail: emailProc,
-                        adr_status: adrStatus,
-                        stdemail: stdEmail,
-                        adr_m_id: adrMId,
-                        adr_d_items_id: adrDItems,
-                        sap_material_code: sap,
-                        item_status: itemStatus,
-                        inc: inc,
-                        groupclass: mgc,
-                        name_code: nameCode,
-                        short_name_code: shortNameCode,
-                        short_description: shortDesc,
-                        long_description: longDesc,
-                        material_type: materialType,
-                        uom: uom,
-                        category: category,
+                if (groupName == 'User') {
+                    materialApplyChange();
+                } else if (groupName == 'Cat') {
+                    if (cataloguer == '') {
 
-                    },
-                    success: function(response) {
-                        if (response.success == true) {
-                            Toast.fire({
-                                icon: 'success',
-                                title: response.message
-                            });
-                            searchCatolog();
-                        }
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please select cataloguer'
+                        });
+                    } else {
+                        materialApplyChange();
                     }
-                })
+                } else if (groupName == 'Std App T' || groupName == 'Std App O' || groupName == 'Std App M' || groupName == 'Std App I' || groupName == 'Std App H' || groupName == 'Std App G' || groupName == 'Std App S') {
+                    if (stdApp == '') {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please select std approver'
+                        });
+                    } else {
+                        materialApplyChange();
+                    }
+                }
+
             }
         }
 
+        function materialApplyChange() {
+            let catologueNo = document.getElementById("catologueNo").value;
+            let materialType = document.getElementById("materialType").value;
+            let uom = document.getElementById("uom").value;
+            let category = document.getElementById("category").value;
+            let adrDItems = document.getElementById("adrDItems").innerHTML
+            let inc = document.getElementById("inc").value;
+            let mgc = document.getElementById("mgc").value;
+            let userEmail = document.getElementById("useremail").value;
+            let catEmail = document.getElementById("catemail").value;
+            let emailProc = document.getElementById("procemail").value;
+            let stdEmail = document.getElementById("stdemail").value;
+            let adrStatus = document.getElementById("adr_status").value;
+            let adrMId = document.getElementById("adr_m_id").value;
+            let itemStatus = document.getElementById("item_status").value
+            let nameCode = document.getElementById("nameCode").value;
+            let shortNameCode = document.getElementById("shortNameCode").value;
+            let shortDesc = document.getElementById("shortDesc").value;
+            let longDesc = document.getElementById("longDesc").value;
+            let sap = document.getElementById("SAP").value;
+            let cataloguer = document.getElementById("cataloguer").value;
+            let stdApp = document.getElementById("stdApp").value;
+            let procApp = document.getElementById("procApp").value;
 
+            $.ajax({
+                type: "post",
+                url: '/MaterialApplyChanges',
+                dataType: 'json',
+                data: {
+                    items_characteristic: dataCharateristic,
+                    catalog_no: catologueNo,
+                    _token: csrf_token,
+                    transaction_type: 'Material',
+                    useremail: userEmail,
+                    items_is_active: "",
+                    catemail: catEmail,
+                    procemail: emailProc,
+                    adr_status: adrStatus,
+                    stdemail: stdEmail,
+                    adr_m_id: adrMId,
+                    adr_d_items_id: adrDItems,
+                    sap_material_code: sap,
+                    item_status: itemStatus,
+                    inc: inc,
+                    groupclass: mgc,
+                    name_code: nameCode,
+                    short_name_code: shortNameCode,
+                    short_description: shortDesc,
+                    long_description: longDesc,
+                    material_type: materialType,
+                    uom: uom,
+                    category: category,
+                    cataloguer: cataloguer,
+                    std_approval: stdApp,
+                    proc_approver: procApp
+
+                },
+                success: function(response) {
+                    if (response.success == true) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        });
+                        searchCatolog();
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.message
+                        });
+                    }
+                }
+            })
+        }
 
         $("#inc").select2({
 
@@ -814,7 +1054,7 @@ use Illuminate\Support\Facades\Auth;
                             </td>`);
                         $("#tableDataCharacteristic").append(tr);
                     }
-                    for(let i = 0; i< data.length;i++){
+                    for (let i = 0; i < data.length; i++) {
                         data[i].id = data[i].id_characteristic_value;
                     }
 
@@ -875,7 +1115,7 @@ use Illuminate\Support\Facades\Auth;
                     if (response.total > 0) {
                         dataCharateristic += JSON.stringify(response.data)
                         let data = response.data
-                        for(let i = 0;i < data.length;i++){
+                        for (let i = 0; i < data.length; i++) {
                             data[i].id_characteristic_value = data[i].id
                         }
 

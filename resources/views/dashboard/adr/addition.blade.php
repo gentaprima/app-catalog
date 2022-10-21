@@ -245,7 +245,7 @@
                     url: '/CreateAddition',
                     data: {
                         data_grid: `[{"flag":"","norder":1,"id":"model_adr_entry-1","raw":"${raw}","transaction_type":"${matSer}","class_code":"${mgc}","inc_code":"${inc}","manuf":"${manufacturing}","refnbr":"${refNo}","old_mat_no":"${manufacturing}"}]`,
-                        company_code : "",
+                        company_code : companyCode,
                         _token : csrf_token
                     },
                     success: function(response) {

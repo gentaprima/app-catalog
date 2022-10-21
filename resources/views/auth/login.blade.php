@@ -136,6 +136,11 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response.success == true) {
+                        localStorage.setItem('companyCode',response.data.company_code);
+                        localStorage.setItem('realName',response.data.real_name);
+                        localStorage.setItem('username',response.data.user_name);
+                        localStorage.setItem('groupName',response.data.group_name);
+
                         window.location = "/home";
                     } else {
                         Toast.fire({

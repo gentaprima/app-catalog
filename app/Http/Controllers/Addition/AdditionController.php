@@ -516,26 +516,26 @@ class AdditionController extends Controller
                                     'Note'=>$Note,
                                     'regard' => $dataUserProfile[0]['real_name']
                                 );
-                                $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                $beautymail->send('emails.CatValidate', $data, function ($message) use($row)  {
-                                    $input = Input::all();
-                                    $emailSender = Auth::user()->email;
-                                    $type = $input['category'];
-                                    $sttdApp = 'Std App ' . $type;
-                                    $to = User::select(DB::raw("users.*"))
-                                        ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
-                                        ->where('group_name', '=', $sttdApp)
-                                        ->get();
-                                    $toStdApp = array();
-                                    foreach ($to as $arrEmailRow) {
-                                        $toStdApp[] = $arrEmailRow->email;
-                                    }
-                                    $message
-                                        ->from($emailSender, 'ABM E-Cataloguing Systems')
-                                        ->to($toStdApp, 'ABM E-Cataloguing Systems')
-                                        //->bcc('bqsoft77@gmail.com', 'Development')
-                                        ->subject('Request '.$row['transaction_type']);
-                                });
+                                // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                // $beautymail->send('emails.CatValidate', $data, function ($message) use($row)  {
+                                //     $input = Input::all();
+                                //     $emailSender = Auth::user()->email;
+                                //     $type = $input['category'];
+                                //     $sttdApp = 'Std App ' . $type;
+                                //     $to = User::select(DB::raw("users.*"))
+                                //         ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                //         ->where('group_name', '=', $sttdApp)
+                                //         ->get();
+                                //     $toStdApp = array();
+                                //     foreach ($to as $arrEmailRow) {
+                                //         $toStdApp[] = $arrEmailRow->email;
+                                //     }
+                                //     $message
+                                //         ->from($emailSender, 'ABM E-Cataloguing Systems')
+                                //         ->to($toStdApp, 'ABM E-Cataloguing Systems')
+                                //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                //         ->subject('Request '.$row['transaction_type']);
+                                // });
                             }else{
                                 $adrDitems->cataloguer = $row['cataloguer'] ;
                                 $adrDitems->cataloguer_by_id = $user_id ;
@@ -556,24 +556,24 @@ class AdditionController extends Controller
                                         'Note'=>$Note,
                                         'regard'=> $dataUserProfile[0]['real_name']
                                     );
-                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    $beautymail->send('emails.CatNotValidate', $data, function($message) use($row)
-                                    {
-                                        $emailSender = Auth::user()->email;
-                                        $input = Input::all();
-                                        $query = DB::table('vw_catalog_m_owner');
-                                        $query->where('catalog_no',"=",$row['catalog_no']);
-                                        $search = $query->get();
-                                        $toOwner = array();
-                                        foreach ($search as $arrEmailRow){
-                                            $toOwner[] = $arrEmailRow->email ;
-                                        }
-                                        $message
-                                            ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                            ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                            //->bcc('bqsoft77@gmail.com', 'Development')
-                                            ->subject('Request '.$row['transaction_type']);
-                                    });
+                                    // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                    // $beautymail->send('emails.CatNotValidate', $data, function($message) use($row)
+                                    // {
+                                    //     $emailSender = Auth::user()->email;
+                                    //     $input = Input::all();
+                                    //     $query = DB::table('vw_catalog_m_owner');
+                                    //     $query->where('catalog_no',"=",$row['catalog_no']);
+                                    //     $search = $query->get();
+                                    //     $toOwner = array();
+                                    //     foreach ($search as $arrEmailRow){
+                                    //         $toOwner[] = $arrEmailRow->email ;
+                                    //     }
+                                    //     $message
+                                    //         ->from($emailSender ,'ABM E-Cataloguing Systems')
+                                    //         ->to($toOwner, 'ABM E-Cataloguing Systems')
+                                    //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                    //         ->subject('Request '.$row['transaction_type']);
+                                    // });
                                 }
                             }
                         }
@@ -597,23 +597,23 @@ class AdditionController extends Controller
                                     'Note'=>$Note,
                                     'regard' => $dataUserProfile[0]['real_name']
                                 );
-                                $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                $beautymail->send('emails.StdAppValidate', $data, function ($message) use($row) {
-                                    $emailSender = Auth::user()->email;
-                                    $to = User::select(DB::raw("users.*"))
-                                        ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
-                                        ->where('group_name', '=', 'Proc')
-                                        ->get();
-                                    $toProc = array();
-                                    foreach ($to as $arrEmailRow) {
-                                        $toProc[] = $arrEmailRow->email;
-                                    }
-                                    $message
-                                        ->from($emailSender, 'ABM E-Cataloguing Systems')
-                                        ->to($toProc, 'ABM E-Cataloguing Systems')
-                                        //->bcc('bqsoft77@gmail.com', 'Development')
-                                        ->subject('Request '.$row['transaction_type']);
-                                });
+                                // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                // $beautymail->send('emails.StdAppValidate', $data, function ($message) use($row) {
+                                //     $emailSender = Auth::user()->email;
+                                //     $to = User::select(DB::raw("users.*"))
+                                //         ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                //         ->where('group_name', '=', 'Proc')
+                                //         ->get();
+                                //     $toProc = array();
+                                //     foreach ($to as $arrEmailRow) {
+                                //         $toProc[] = $arrEmailRow->email;
+                                //     }
+                                //     $message
+                                //         ->from($emailSender, 'ABM E-Cataloguing Systems')
+                                //         ->to($toProc, 'ABM E-Cataloguing Systems')
+                                //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                //         ->subject('Request '.$row['transaction_type']);
+                                // });
                             }else{
 
                                 $adrDitems->std_approval = $row['std_approval'];
@@ -634,24 +634,24 @@ class AdditionController extends Controller
                                     'Note'=>$Note,
                                     'regard'=> $dataUserProfile[0]['real_name']
                                 );
-                                $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                $beautymail->send('emails.StdAppNotValidate', $data, function($message) use($row)
-                                {
-                                    $emailSender = Auth::user()->email;
-                                    $input = Input::all();
-                                    $query = DB::table('vw_catalog_m_owner');
-                                    $query->where('catalog_no',"=",$row['catalog_no']);
-                                    $search = $query->get();
-                                    $toOwner = array();
-                                    foreach ($search as $arrEmailRow){
-                                        $toOwner[] = $arrEmailRow->email ;
-                                    }
-                                    $message
-                                        ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                        ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                        //->bcc('bqsoft77@gmail.com', 'Development')
-                                        ->subject('Request '.$row['transaction_type']);
-                                });
+                                // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                // $beautymail->send('emails.StdAppNotValidate', $data, function($message) use($row)
+                                // {
+                                //     $emailSender = Auth::user()->email;
+                                //     $input = Input::all();
+                                //     $query = DB::table('vw_catalog_m_owner');
+                                //     $query->where('catalog_no',"=",$row['catalog_no']);
+                                //     $search = $query->get();
+                                //     $toOwner = array();
+                                //     foreach ($search as $arrEmailRow){
+                                //         $toOwner[] = $arrEmailRow->email ;
+                                //     }
+                                //     $message
+                                //         ->from($emailSender ,'ABM E-Cataloguing Systems')
+                                //         ->to($toOwner, 'ABM E-Cataloguing Systems')
+                                //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                //         ->subject('Request '.$row['transaction_type']);
+                                // });
                             }
                         }
                         if($levelUser == 'Proc'){
