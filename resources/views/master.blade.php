@@ -38,6 +38,16 @@
         const groupName = localStorage.getItem('groupName');
     </script>
     <style>
+        #realName {
+            position: relative;
+            top: -10px;
+            font-weight: bold;
+        }
+
+        .nav-link p {
+            font-size: 15px !important;
+        }
+
         .select2.select2-container.select2-container--default {
             width: 100% !important;
             margin-left: -7px !important;
@@ -182,10 +192,10 @@
         #flowBoxes div.active:after {
             background-color: green;
         }
+
         #flowBoxes div.notactive:after {
             background-color: red;
         }
-
     </style>
     <style>
         .colored-toast.swal2-icon-success {
@@ -199,6 +209,25 @@
         .colored-toast.swal2-icon-warning {
             background-color: #f8bb86 !important;
         }
+
+        .no-border {
+            border: none;
+        }
+
+        .search {
+            background-color: #b9b9b93b;
+            color: #FFF;
+            width: 300px;
+            float: right;
+            border-radius: 10px;
+        }
+
+        .border-search {
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important;
+        }
+
+       
     </style>
 </head>
 
@@ -251,6 +280,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#" style="height: 0px !important;" aria-expanded="false">
                         <img style="margin-top: -25px;border:3px solid #fff;height:50px;" class="img-size-50 img-circle" src="{{asset('css_dashboard/dist/img/avatar.png')}}" alt="">
+                        <span id="realName"></span>
                         <!-- <img src="https://tvupi.redmilkproject.com/LOGO_TVUPI_PLAYSTORE_1.png" alt="User Avatar" style="margin-top: -25px;border:3px solid #fff;height:50px;" class="img-size-50 img-circle"> -->
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="margin-top: 30px; left: inherit; right: 0px;">
@@ -327,7 +357,7 @@
                         <div id="menu-group">
 
                         </div>
-            
+
 
 
                     </ul>
@@ -393,11 +423,12 @@
     <script src="{{asset('css_dashboard/dist/js/pages/dashboard.js')}}"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    
+
 
     <script>
+        document.getElementById("realName").innerHTML = realName + ' (' + groupName + ')';
         // LOAD MENU
-        function logout(){
+        function logout() {
             localStorage.clear();
             window.location = '/logout';
         }

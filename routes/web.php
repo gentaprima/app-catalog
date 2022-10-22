@@ -35,7 +35,20 @@ Route::post('/update-value-characteristic','Catalogue\CatalogueController@update
 Route::get('/get-value-characteristic/{adrItems}','Catalogue\CatalogueController@getValueCharacteristicById');
 Route::get('/get-value-characteristic-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicById');
 
+Route::get('/single-view/service','NavController@singleViewService');
+Route::get('/single-view/service/{id}','NavController@singleViewServiceById');
+
 // SINGLE VIEW
+
+// DICTIONARY
+Route::get('/dictionary/material-characteristic','NavController@viewMaterialCharacteristic');
+Route::get('/dictionary/service-characteristic','NavController@viewServiceCharacteristic');
+Route::get('/dictionary/material-group-class','NavController@viewMaterialGroupClass');
+Route::get('/dictionary/service-group-class','NavController@viewServiceGroupClass');
+Route::get('/dictionary/material-type','NavController@viewMaterialType');
+Route::get('/dictionary/service-type','NavController@viewServiceType');
+
+// DICTIONARY
 
 // NEW
 Route::get('/TestMail', 'Addition\AdditionController@TestMail');
@@ -223,7 +236,9 @@ Route::post('/MoveIncC/{inc}', 'DataTools\DataToolsController@MoveIncC');
 ///*/
 
 Route::get('/getMaterialType', 'Dictionary\DictionaryController@getEntity');
+Route::get('/getDataTableMaterialType', 'Dictionary\DictionaryController@getEntityData');
 Route::get('/getServiceType', 'Dictionary\DictionaryController@getEntity');
+Route::get('/getDataTableServiceType', 'Dictionary\DictionaryController@getEntityData');
 Route::get('/getUOM', 'Dictionary\DictionaryController@getEntity');
 //Route::get('/getAbbreviation', 'Dictionary\DictionaryController@getAbbreviation');
 Route::get('/getAbbreviation', 'Dictionary\DictionaryController@getEntity');

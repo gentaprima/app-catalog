@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title','Revision | Material')
+@section('title','Dictionary | Material Group Class')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -9,14 +9,13 @@
         <div class="container-fluid mt-3">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Material</h1>
+                    <h1 class="m-0">Material Group Class</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item">Adr & History</li>
-                        <li class="breadcrumb-item">Revision</li>
-                        <li class="breadcrumb-item active">Material</li>
+                        <li class="breadcrumb-item">Dictionary</li>
+                        <li class="breadcrumb-item active">Material Group Class</li>
                     </ol>
                 </div><!-- /.col -->
                 <p id="menu"></p>
@@ -31,21 +30,22 @@
         <div class="card p-4 mb-5 m-2">
             <div class="row">
                 <div class="col-sm-6">
-                    <!-- <button class="btn btn-outline-primary"><i class="fa fa-plus"></i> Addition</button> -->
+                    <!-- <button id="btnAdd" data-toggle="modal" data-target="#modalForm" onclick="addData()" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add</button> -->
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group mb-3 search">
+                        <input type="search" class="form-control border-search" id="searchDescription" placeholder="Telusuri ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <table id="tableData" class="table table-striped mt-3">
                 <thead>
                     <tr>
-                        <th>Req. Revision No</th>
-                        <th>Adr No</th>
-                        <th>Catalogue No</th>
-                        <th>SAP No</th>
-                        <th>Request Date</th>
-                        <th>Last Update</th>
-                        <th>Update By</th>
-                        <th>Status</th>
-                        <th>History</th>
+                        <th>Group Class</th>
+                        <th>Name</th>   
                     </tr>
                 </thead>
                 <tbody>
@@ -70,18 +70,27 @@
     </section>
     <!-- /.content -->
 
+  
+
     <script>
-        loadData(1);
+        loadData();
         $(document).ready(function() {
-            $("#main-menu-MNU1").addClass("nav-item menu-is-opening menu-open")
-            $("#subchild-MNU3").addClass("nnav-item menu-open")
-            $("#children-MNU28").addClass("nav-link active")
+            $("#main-menu-MNU10").addClass("nav-item menu-is-opening menu-open")
+            $("#subchild-MNU11").addClass("nav-link active")
         });
 
-        function loadData(page = 1, start = 1, limit = 25) {
+        $('#searchDescription').keyup((e) => {
+            loadData(1, 1, 25, e.currentTarget.value);
+        });
+
+        
+
+       
+
+        function loadData(page = 1, start = 1, limit = 25, search = "") {
             $("#tableData tbody").empty();
             $.ajax({
-                url: `/getRevisionRequestM?page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]`,
+                url: `/getGroupClassM?action=getGroup&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"like","value":"${search}","property":"group_class_name","type":"string"}]&group={"property":"group_header","direction":"ASC"}`,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
@@ -90,15 +99,14 @@
                     document.getElementById("total_page").innerHTML = totalPage
                     for (let i = 0; i < response.data.length; i++) {
                         var tr = $("<tr>");
-                        tr.append("<td>" + response.data[i].request_no + "</td>");
-                        tr.append("<td>" + (response.data[i].adr_no) + "</td>");
-                        tr.append("<td>" + (response.data[i].catalog_no) + "</td>");
-                        tr.append("<td>" + (response.data[i].sap_material_code) + "</td>");
-                        tr.append("<td>" + (response.data[i].created_at) + "</td>");
-                        tr.append("<td>" + (response.data[i].updated_at) + "</td>");
-                        tr.append("<td>" + (response.data[i].process_by) + "</td>");
-                        tr.append("<td>" + (response.data[i].process_status) + "</td>");
-                        tr.append("<td><center><i class='fa fa-table'></i></center></td>");
+                        console.log(response.data[i].class == null);
+                        tr.append("<td>" + response.data[i].groupclass + "</td>");
+                        if(response.data[i].class == null){
+                            tr.append("<td><span class='font-weight-bold'>" + response.data[i].group_name + "</span></td>");
+                        }else{
+                            tr.append("<td>" + (response.data[i].group_name) + "</td>");
+                        }
+                       
                         $("#tableData").append(tr);
                     }
                 }
@@ -109,8 +117,8 @@
             $("#tableData tbody").empty();
             var page = document.getElementById("page").innerHTML;
             var start = document.getElementById("start").innerHTML;
-
-            loadData(parseInt(page) + 1, parseInt(start) + 25);
+            let search = document.getElementById("searchDescription").value
+            loadData(parseInt(page) + 1, parseInt(start) + 25, 25, search);
 
             document.getElementById("page").innerHTML = parseInt(page) + 1
             document.getElementById("start").innerHTML = parseInt(start) + 25
@@ -125,8 +133,9 @@
             $("#tableData tbody").empty();
             var page = document.getElementById("page").innerHTML;
             var start = document.getElementById("start").innerHTML;
+            let search = document.getElementById("searchDescription").value
 
-            loadData(parseInt(page) - 1, parseInt(start) - 25);
+            loadData(parseInt(page) - 1, parseInt(start) - 25, 25, search);
 
             document.getElementById("page").innerHTML = parseInt(page) - 1
             document.getElementById("start").innerHTML = parseInt(start) - 25

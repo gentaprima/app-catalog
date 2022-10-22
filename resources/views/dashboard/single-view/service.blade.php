@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 ?>
 @extends('master')
 
-@section('title','Single View | Material')
+@section('title','Single View | Service')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -61,7 +61,7 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-2">Catologue No</label>
                             <div class="col-sm-10">
                                 <div class="input-group mb-2">
-                                    <input type="text" class="form-control" id="catologueNo" value="{{$id}}" placeholder="">
+                                    <input type="number" class="form-control" id="catologueNo" placeholder="">
                                     <div class="input-group-prepend">
                                         <div id="btnSearch" onclick="searchCatolog()" class="input-group-text"><i class="fa fa-search"></i></div>
                                     </div>
@@ -111,13 +111,13 @@ use Illuminate\Support\Facades\Auth;
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Short Desc</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="shortDesc">
+                                <input type="text" class="form-control" id="shortDesc" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Long Desc</label>
                             <div class="col-sm-10">
-                                <textarea type="text" class="form-control" rows="5" id="longDesc"></textarea>
+                                <textarea type="text" class="form-control" rows="5" id="longDesc" readonly></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -125,7 +125,7 @@ use Illuminate\Support\Facades\Auth;
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <select class="js-example-data-ajax" id="materialType">
+                                        <select readonly class="js-example-data-ajax" id="materialType">
                                             <option value="">Select Material Type</option>
                                         </select>
                                     </div>
@@ -185,7 +185,7 @@ use Illuminate\Support\Facades\Auth;
                         <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
-                                <button class="btn btn-primary" id="btnApply" type="button" onclick="applyChanges()">Apply Changes</button>
+                                <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
                             </div>
                         </div>
                         <input type="hidden" name="" id="useremail">
@@ -442,7 +442,7 @@ use Illuminate\Support\Facades\Auth;
         });
         $(document).ready(function() {
             $("#main-menu-MNU6").addClass("nav-item menu-is-opening menu-open")
-            $("#subchild-MNU7").addClass("nav-link active")
+            $("#subchild-MNU8").addClass("nav-link active")
         });
 
 
@@ -454,13 +454,13 @@ use Illuminate\Support\Facades\Auth;
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
-                url: `/getCatalogM_p?filter=[{"operator":"eq","value":"${catologueNo}","property":"catalog_no","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]&action=getCatalogM_p&_token=${csrf_token}`,
+                url: `/getCatalogM_p?filter=[{"operator":"eq","value":"${catologueNo}","property":"catalog_no","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"},{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}]&action=getCatalogM_p&_token=${csrf_token}`,
                 success: function(response) {
                     if (response.length > 0) {
                         let data = response;
                         checkUser(data[0].user_name);
                         checkApproval(data[0].company_code);
-                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc);
+                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp,data[0].status_proc);
                         document.getElementById("adrStatus").innerHTML = data[0].adr_status;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").innerHTML = data[0].sap_material_code;
@@ -504,6 +504,7 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("item_status").value = data[0].item_status;
                         document.getElementById("shortDesc").value = data[0].short_description;
                         document.getElementById("longDesc").value = data[0].long_description;
+                        document.getElementById("SAP").value = data[0].sap_material_code;
                         if (data[0].cataloguer != null) {
                             document.getElementById("cataloguer").value = data[0].cataloguer;
                         }
@@ -512,7 +513,7 @@ use Illuminate\Support\Facades\Auth;
                             document.getElementById("stdApp").value = data[0].std_approval;
                         }
 
-                        if (data[0].proc_approver != null) {
+                        if(data[0].proc_approver != null){
                             document.getElementById("procApp").value = data[0].proc_approver;
                         }
 
@@ -633,7 +634,7 @@ use Illuminate\Support\Facades\Auth;
             }
         }
 
-        function checkStatus(status, statusCat, statusStd, statusProc) {
+        function checkStatus(status, statusCat, statusStd,statusProc) {
             if (status == "1" && groupName == 'User') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
@@ -681,8 +682,8 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
-                document.getElementById("inc").removeAttribute("disabled")
-                document.getElementById("mgc").removeAttribute("disabled")
+                document.getElementById("inc").removeAttribute("disabled", true)
+                document.getElementById("mgc").removeAttribute("disabled", true)
             } else if (statusCat == 0 && groupName == 'Cat') {
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
@@ -696,22 +697,22 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("cataloguer").removeAttribute("disabled", true);
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
-            } else if (statusStd == 0 && groupName.substr(0, 3) == 'Std') {
+            }else if(statusStd == 0 && groupName.substr(0, 3) == 'Std'){
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = false;
                 })
 
 
-                document.getElementById("materialType").setAttribute("disabled", true);
-                document.getElementById("inc").setAttribute("disabled", true);
-                document.getElementById("mgc").setAttribute("disabled", true);
-                document.getElementById("uom").setAttribute("disabled", true);
-                document.getElementById("category").setAttribute("disabled", true);
+                document.getElementById("materialType").setAttribute("disabled",true);
+                document.getElementById("inc").setAttribute("disabled",true);
+                document.getElementById("mgc").setAttribute("disabled",true);
+                document.getElementById("uom").setAttribute("disabled",true);
+                document.getElementById("category").setAttribute("disabled",true);
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("stdApp").removeAttribute("disabled")
                 document.getElementById("procApp").setAttribute("disabled", true)
-            } else if (statusProc == 0 && groupName == 'Proc') {
+            }else if (statusProc == 0 && groupName == 'Proc') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -723,11 +724,11 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("mgc").setAttribute("disabled", true)
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").setAttribute("disabled", true)
+                document.getElementById("stdApp").setAttribute("disabled",true)
                 document.getElementById("procApp").removeAttribute("disabled")
 
                 document.getElementById("btnApply").hidden = false
-            } else if (statusProc == 1 && groupName == 'Proc') {
+            }else if(statusProc == 1 && groupName == 'Proc'){
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -739,7 +740,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("mgc").setAttribute("disabled", true)
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").setAttribute("disabled", true)
+                document.getElementById("stdApp").setAttribute("disabled",true)
                 document.getElementById("procApp").setAttribute("disabled", true)
 
                 document.getElementById("btnApply").hidden = true
@@ -800,13 +801,13 @@ use Illuminate\Support\Facades\Auth;
                     } else {
                         materialApplyChange();
                     }
-                } else if (groupName == 'Proc') {
-                    if (procApp == '') {
+                }else if(groupName == 'Proc'){
+                    if(procApp == ''){
                         Toast.fire({
                             icon: 'error',
                             title: 'Please select proc approver'
                         });
-                    } else {
+                    }else{
                         materialApplyChange();
                     }
                 }
@@ -815,6 +816,10 @@ use Illuminate\Support\Facades\Auth;
         }
 
         function materialApplyChange() {
+            if(dataCharateristic == ""){
+                dataCharateristic = "[]";
+            }
+
             let catologueNo = document.getElementById("catologueNo").value;
             let materialType = document.getElementById("materialType").value;
             let uom = document.getElementById("uom").value;
@@ -840,13 +845,13 @@ use Illuminate\Support\Facades\Auth;
 
             $.ajax({
                 type: "post",
-                url: '/MaterialApplyChanges',
+                url: '/ServiceApplyChanges',
                 dataType: 'json',
                 data: {
                     items_characteristic: dataCharateristic,
                     catalog_no: catologueNo,
                     _token: csrf_token,
-                    transaction_type: 'Material',
+                    transaction_type: 'Service',
                     useremail: userEmail,
                     items_is_active: "",
                     catemail: catEmail,
@@ -903,7 +908,7 @@ use Illuminate\Support\Facades\Auth;
                         page: 1,
                         start: 0,
                         limit: 25,
-                        filter: `[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"}]`
+                        filter: `[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"}]`
                     }
                     return query;
                 },
@@ -923,7 +928,7 @@ use Illuminate\Support\Facades\Auth;
         $("#materialType").select2({
 
             ajax: {
-                url: `/getMaterialType`,
+                url: `/getServiceType`,
                 dataType: 'json',
                 data: function(params) {
                     if (params.term == undefined) {
@@ -935,7 +940,7 @@ use Illuminate\Support\Facades\Auth;
                         page: 1,
                         start: 0,
                         limit: 25,
-                        filter: `[{"operator":"like","value":"material_type","property":"entity_name","type":"string"}]`
+                        filter: `[{"operator":"like","value":"service_type","property":"entity_name","type":"string"}]`
                     }
                     return query;
                 },
@@ -999,7 +1004,7 @@ use Illuminate\Support\Facades\Auth;
                         page: 1,
                         start: 0,
                         limit: 25,
-                        filter: `[{"operator":"eq","value":"itemcategory","property":"entity_name","type":"string"}]`
+                        filter: `[{"operator":"eq","value":"servicecategory","property":"entity_name","type":"string"}]`
                     }
                     return query;
                 },
@@ -1275,7 +1280,7 @@ use Illuminate\Support\Facades\Auth;
                             page: 1,
                             start: 0,
                             limit: 25,
-                            filter: `[{"operator":"like","value":"Material","property":"transaction_type","type":"string"},{"operator":"eq","value":"${inc}","property":"inc","type":"string"}]`
+                            filter: `[{"operator":"like","value":"Service","property":"transaction_type","type":"string"},{"operator":"eq","value":"${inc}","property":"inc","type":"string"}]`
                         }
                         return query;
                     },

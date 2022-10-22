@@ -46,4 +46,37 @@ class NavController extends Controller
         $data['id'] = $id;
         return view('dashboard/single-view/material-by-id',$data);
     }
+
+    public function singleViewService(){
+        return view('dashboard/single-view/service');
+    }
+
+    public function singleViewServiceById($id){
+        $data['id'] = $id;
+        return view('dashboard/single-view/service-by-id',$data);
+    }
+
+    public function viewMaterialCharacteristic(){
+        return view('/dashboard/dictionary/material-characteristic');
+    }
+
+    public function viewServiceCharacteristic(){
+        return view('/dashboard/dictionary/service-characteristic');
+    }
+    
+    public function viewMaterialGroupClass(){
+        return view('/dashboard/dictionary/material-group-class');
+    }
+    
+    public function viewServiceGroupClass(){
+        return view('/dashboard/dictionary/service-group-class');
+    }
+    
+    public function viewMaterialType(){
+        return view('/dashboard/dictionary/material-type');
+    }
+    
+    public function viewServiceType(){
+        return view('/dashboard/dictionary/service-type');
+    }
 }

@@ -328,9 +328,16 @@ use Illuminate\Support\Facades\Auth;
                 success: function(response) {
                     for (let i = 0; i < response.length; i++) {
                         var tr = $("<tr>");
-                        tr.append(`<td>
-                            <center><a href="/single-view/material/${response[i].catalog_no}">${response[i].catalog_no}</a></center>
-                        </td>`);
+                        if(response[i].transaction_type == 'Material'){
+                            tr.append(`<td>
+                                <center><a href="/single-view/material/${response[i].catalog_no}">${response[i].catalog_no}</a></center>
+                            </td>`);
+                        }else{
+                            tr.append(`<td>
+                                <center><a href="/single-view/service/${response[i].catalog_no}">${response[i].catalog_no}</a></center>
+                            </td>`);
+
+                        }
                         if(response[i].sap_material_code == null){
                             tr.append("<td></td>");
                         }else{

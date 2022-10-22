@@ -460,7 +460,7 @@ use Illuminate\Support\Facades\Auth;
                         let data = response;
                         checkUser(data[0].user_name);
                         checkApproval(data[0].company_code);
-                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp);
+                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc);
                         document.getElementById("adrStatus").innerHTML = data[0].adr_status;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").innerHTML = data[0].sap_material_code;
@@ -510,6 +510,10 @@ use Illuminate\Support\Facades\Auth;
 
                         if (data[0].std_approval != null) {
                             document.getElementById("stdApp").value = data[0].std_approval;
+                        }
+                        
+                        if(data[0].proc_approver != null){
+                            document.getElementById("procApp").value = data[0].proc_approver;
                         }
 
                         getReference(data[0].adr_d_items_id);
@@ -584,7 +588,7 @@ use Illuminate\Support\Facades\Auth;
         }
 
 
-        function checkApproval(company_code, ) {
+        function checkApproval(company_code) {
 
             if (groupName == 'User') {
                 document.getElementById("cataloguer").setAttribute("disabled", true)
@@ -629,7 +633,7 @@ use Illuminate\Support\Facades\Auth;
             }
         }
 
-        function checkStatus(status, statusCat, statusStd) {
+        function checkStatus(status, statusCat, statusStd, statusProc) {
             if (status == "1" && groupName == 'User') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
@@ -677,6 +681,8 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
+                document.getElementById("inc").removeAttribute("disabled")
+                document.getElementById("mgc").removeAttribute("disabled")
             } else if (statusCat == 0 && groupName == 'Cat') {
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
@@ -690,21 +696,53 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("cataloguer").removeAttribute("disabled", true);
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
-            }else if(statusStd == 0 && groupName.substr(0, 3) == 'Std'){
+            } else if (statusStd == 0 && groupName.substr(0, 3) == 'Std') {
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = false;
                 })
 
 
-                document.getElementById("materialType").setAttribute("disabled",true);
-                document.getElementById("inc").setAttribute("disabled",true);
-                document.getElementById("mgc").setAttribute("disabled",true);
-                document.getElementById("uom").setAttribute("disabled",true);
-                document.getElementById("category").setAttribute("disabled",true);
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("inc").setAttribute("disabled", true);
+                document.getElementById("mgc").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true);
+                document.getElementById("category").setAttribute("disabled", true);
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("stdApp").removeAttribute("disabled")
                 document.getElementById("procApp").setAttribute("disabled", true)
+            } else if (statusProc == 0 && groupName == 'Proc') {
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = true;
+                })
+
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true)
+                document.getElementById("category").setAttribute("disabled", true)
+                document.getElementById("inc").setAttribute("disabled", true)
+                document.getElementById("mgc").setAttribute("disabled", true)
+
+                document.getElementById("cataloguer").setAttribute("disabled", true);
+                document.getElementById("stdApp").setAttribute("disabled",true)
+                document.getElementById("procApp").removeAttribute("disabled")
+
+                document.getElementById("btnApply").hidden = false
+            }else if(statusProc == 1 && groupName == 'Proc'){
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = true;
+                })
+
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true)
+                document.getElementById("category").setAttribute("disabled", true)
+                document.getElementById("inc").setAttribute("disabled", true)
+                document.getElementById("mgc").setAttribute("disabled", true)
+
+                document.getElementById("cataloguer").setAttribute("disabled", true);
+                document.getElementById("stdApp").setAttribute("disabled",true)
+                document.getElementById("procApp").setAttribute("disabled", true)
+
+                document.getElementById("btnApply").hidden = true
             }
         }
 
@@ -760,6 +798,15 @@ use Illuminate\Support\Facades\Auth;
                             title: 'Please select std approver'
                         });
                     } else {
+                        materialApplyChange();
+                    }
+                }else if(groupName == 'Proc'){
+                    if(procApp == ''){
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please select proc approver'
+                        });
+                    }else{
                         materialApplyChange();
                     }
                 }
@@ -1137,6 +1184,7 @@ use Illuminate\Support\Facades\Auth;
         function showAbbr(id, descCharacteristic) {
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             document.getElementById("idValueCharacteristic").value = id;
+            document.getElementById("searchDescription").removeAttribute('disabled');
             document.getElementById("descCharacteristic").value = descCharacteristic;
             loadDataAbbr();
         }
