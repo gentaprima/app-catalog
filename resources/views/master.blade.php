@@ -30,6 +30,8 @@
     <script src="{{asset('css_dashboard/plugins/jquery/jquery.min.js')}}"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
     <script>
         var csrf_token = "<?php echo e(csrf_token()); ?>";
         const companyCode = localStorage.getItem('companyCode');
@@ -417,6 +419,7 @@
     <script src="{{asset('css_dashboard/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('css_dashboard/dist/js/adminlte.js')}}"></script>
+    
     <!-- AdminLTE for demo purposes -->
     <!-- <script src="{{asset('css_dashboard/dist/js/demo.js')}}"></script> -->
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

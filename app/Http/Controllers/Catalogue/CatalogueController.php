@@ -89,7 +89,7 @@ class CatalogueController extends Controller
     }
     public function getCatalogM()
     {
-        $sql = "SELECT * FROM vw_catalog_m";
+        $sql = "SELECT * FROM vvw_catalog_m";
         $result = BaseModel::buildSql($sql);;
         return Response::json($result, 200);
     }

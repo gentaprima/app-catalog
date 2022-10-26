@@ -14,39 +14,43 @@
 
 use Illuminate\Support\Facades\Auth;
 
-Auth::routes();
+Auth::routes(); 
 
 // NEW
 // ADR & HISTORY
-Route::get('/revision-material','NavController@revisionMaterial');
-Route::get('/revision-service','NavController@revisionService');
-Route::get('/deletion-material','NavController@deletionMaterial');
-Route::get('/deletion-service','NavController@deletionService');
-Route::get('/addition','NavController@addition');
-Route::get('/addition-history','NavController@additionHistory');
+Route::get('/revision-material', 'NavController@revisionMaterial');
+Route::get('/revision-service', 'NavController@revisionService');
+Route::get('/deletion-material', 'NavController@deletionMaterial');
+Route::get('/deletion-service', 'NavController@deletionService');
+Route::get('/addition', 'NavController@addition');
+Route::get('/addition-history', 'NavController@additionHistory');
 // ADR & HISTORY
+
+//MULTIPLE VIEW
+Route::get('/multiple-view/material', 'NavController@viewMultipleViewService');
+Route::get('/multiple-view/service', 'NavController@viewMultipleViewMaterial');
 
 // SINGLE VIEW
 
-Route::get('/single-view/material','NavController@singleViewMaterial');
-Route::get('/single-view/material/{id}','NavController@singleViewMaterialById');
-Route::post('/add-value-characteristic','Catalogue\CatalogueController@addValueCharacteristic');
-Route::post('/update-value-characteristic','Catalogue\CatalogueController@updateValueCharacteristic');
-Route::get('/get-value-characteristic/{adrItems}','Catalogue\CatalogueController@getValueCharacteristicById');
-Route::get('/get-value-characteristic-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicById');
+Route::get('/single-view/material', 'NavController@singleViewMaterial');
+Route::get('/single-view/material/{id}', 'NavController@singleViewMaterialById');
+Route::post('/add-value-characteristic', 'Catalogue\CatalogueController@addValueCharacteristic');
+Route::post('/update-value-characteristic', 'Catalogue\CatalogueController@updateValueCharacteristic');
+Route::get('/get-value-characteristic/{adrItems}', 'Catalogue\CatalogueController@getValueCharacteristicById');
+Route::get('/get-value-characteristic-all/{adrItems}', 'Catalogue\CatalogueController@getAllValueCharacteristicById');
 
-Route::get('/single-view/service','NavController@singleViewService');
-Route::get('/single-view/service/{id}','NavController@singleViewServiceById');
+Route::get('/single-view/service', 'NavController@singleViewService');
+Route::get('/single-view/service/{id}', 'NavController@singleViewServiceById');
 
 // SINGLE VIEW
 
 // DICTIONARY
-Route::get('/dictionary/material-characteristic','NavController@viewMaterialCharacteristic');
-Route::get('/dictionary/service-characteristic','NavController@viewServiceCharacteristic');
-Route::get('/dictionary/material-group-class','NavController@viewMaterialGroupClass');
-Route::get('/dictionary/service-group-class','NavController@viewServiceGroupClass');
-Route::get('/dictionary/material-type','NavController@viewMaterialType');
-Route::get('/dictionary/service-type','NavController@viewServiceType');
+Route::get('/dictionary/material-characteristic', 'NavController@viewMaterialCharacteristic');
+Route::get('/dictionary/service-characteristic', 'NavController@viewServiceCharacteristic');
+Route::get('/dictionary/material-group-class', 'NavController@viewMaterialGroupClass');
+Route::get('/dictionary/service-group-class', 'NavController@viewServiceGroupClass');
+Route::get('/dictionary/material-type', 'NavController@viewMaterialType');
+Route::get('/dictionary/service-type', 'NavController@viewServiceType');
 
 // DICTIONARY
 
@@ -178,6 +182,10 @@ Route::post('ExportMV/{type}', 'Catalogue\MultipleViewController@downloadExcel')
 Route::post('ExportMV_All/{type}', 'Catalogue\MultipleViewController@downloadExcel_all');
 
 
+
+
+
+
 /*///
 /// Revision
 ///*/
@@ -242,7 +250,7 @@ Route::get('/getDataTableServiceType', 'Dictionary\DictionaryController@getEntit
 Route::get('/getUOM', 'Dictionary\DictionaryController@getEntity');
 //Route::get('/getAbbreviation', 'Dictionary\DictionaryController@getAbbreviation');
 Route::get('/getAbbreviation', 'Dictionary\DictionaryController@getEntity');
-Route::get('/get-abbreviation','Dictionary\DictionaryController@getEntityData');
+Route::get('/get-abbreviation', 'Dictionary\DictionaryController@getEntityData');
 
 //Route::post('/ExportAbrevation', 'Dictionary\DictionaryController@getEntity');
 //Route::post('/ExportAbrevation', 'Dictionary\DictionaryController@DownloadAbbrevation');
@@ -275,4 +283,3 @@ Route::post('/RemoveCharacteristicsM', 'Dictionary\DictionaryController@RemoveCh
 Route::post('/SaveImportDataCleansing', 'CleansingDuplicate\CleansingDuplicateController@SaveImportDataCleansing');
 Route::get('/getTemplateDataCleansing', 'CleansingDuplicate\CleansingDuplicateController@getTemplateDataCleansing');
 Route::get('/getDataCleansing', 'CleansingDuplicate\CleansingDuplicateController@getDataCleansing');
-
