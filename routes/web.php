@@ -60,6 +60,9 @@ Route::get('/dictionary/material-group-class','NavController@viewMaterialGroupCl
 Route::get('/dictionary/service-group-class','NavController@viewServiceGroupClass');
 Route::get('/dictionary/material-type','NavController@viewMaterialType');
 Route::get('/dictionary/service-type','NavController@viewServiceType');
+Route::get('/dictionary/uom','NavController@viewUom');
+Route::get('/dictionary/category','NavController@viewCategory');
+Route::get('/dictionary/plant','NavController@viewPlant');
 
 // DICTIONARY
 
@@ -92,6 +95,7 @@ Route::get('/getOldOwnerCode', 'Setting\SettingUsersController@getOldOwner');
 Route::get('/getNewOwnerCode', 'Setting\SettingUsersController@getUsers');
 
 Route::get('/getCompaniesM', 'Setting\CompaniesMController@getCompaniesM');
+Route::get('/getCompaniesMComboBox', 'Setting\CompaniesMController@getCompaniesMComboBox');
 Route::post('/SaveCompaniesM', 'Setting\CompaniesMController@SaveCompaniesM');
 Route::post('/RemoveCompaniesM', 'Setting\CompaniesMController@RemoveCompaniesM');
 

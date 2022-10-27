@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title','Dictionary | Material Type')
+@section('title','Dictionary | Plant')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -9,13 +9,13 @@
         <div class="container-fluid mt-3">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Material Type</h1>
+                    <h1 class="m-0">List Plant</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item">Dictionary</li>
-                        <li class="breadcrumb-item active">Material Type</li>
+                        <li class="breadcrumb-item active">Plant</li>
                     </ol>
                 </div><!-- /.col -->
                 <p id="menu"></p>
@@ -44,8 +44,10 @@
             <table id="tableData" class="table table-striped mt-3">
                 <thead>
                     <tr>
-                        <th>Code</th>
-                        <th>Characteristics</th>
+                        <th>Company Code</th>
+                        <th>Company</th>
+                        <th>Code Plant</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -85,16 +87,26 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Code</label>
                             <div class="col-sm-10">
-                                <input type="text" id="code" class="form-control">
+                                <input type="text" id="code" readonly class="form-control">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2">Description</label>
+                            <label for="" class="col-sm-2">Select Company</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="desc">
+                                <select class="js-example-data-ajax" onchange="selectCompany(this)" id="company">
+                                    <option value="">Select Company</option>
+                                </select>
                             </div>
                         </div>
-                        <input type="hidden" id="idType">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2">Code Plant</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="codePlant">
+                            </div>
+                        </div>
+                        <input type="hidden" id="idCompany">
+                        <input type="hidden" id="nameCompany">
+
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -109,12 +121,26 @@
         loadData();
         $(document).ready(function() {
             $("#main-menu-MNU10").addClass("nav-item menu-is-opening menu-open")
-            $("#subchild-MNU12").addClass("nav-link active")
+            $("#subchild-MNU13").addClass("nav-link active")
         });
 
+        var delayTimer;
         $('#searchDescription').keyup((e) => {
-            loadData(1, 1, 25, e.currentTarget.value);
+            clearTimeout(delayTimer);
+            delayTimer = setTimeout(function() {
+                // Do the ajax stuff
+                loadData(1, 1, 25, e.currentTarget.value);
+            }, 1000); // Will do the ajax stuff after 1000 ms, or 1 s
         });
+
+
+
+        function doSearch(text) {
+            clearTimeout(delayTimer);
+            delayTimer = setTimeout(function() {
+                // Do the ajax stuff
+            }, 1000); // Will do the ajax stuff after 1000 ms, or 1 s
+        }
 
         if (groupName != `Administrator's`) {
             document.getElementById("btnAdd").hidden = true;
@@ -124,25 +150,80 @@
         }
 
         function addData() {
-            document.getElementById("titlemodalForm").innerHTML = "Add Material Type"
+            $('#company').val([]);
+            $("#company").select2({
+                placeholder: "Select Company",
+            });
+
+
+            getSelectCompany();
+            document.getElementById("titlemodalForm").innerHTML = "Add Plant"
             document.getElementById("code").value = "";
-            document.getElementById("desc").value = "";
+            document.getElementById("codePlant").value = "";
             document.getElementById("btnApply").setAttribute("onclick", 'processAdd()');
         }
 
         function updateData(code, description, id) {
-            document.getElementById("titlemodalForm").innerHTML = "Update Material Type"
+            document.getElementById("titlemodalForm").innerHTML = "Update Plant"
             document.getElementById("code").value = code;
             document.getElementById("desc").value = description;
             document.getElementById("idType").value = id;
             document.getElementById("btnApply").setAttribute("onclick", 'processUpdate()');
         }
 
-        function processAdd() {
-            let code = document.getElementById("code").value;
-            let desc = document.getElementById("desc").value;
 
-            if (code == '' && desc == '') {
+        function selectCompany(val) {
+            let value = val.value;
+            let splitString = value.split('-');
+            document.getElementById("idCompany").value = splitString[0]
+            document.getElementById("nameCompany").value = splitString[1]
+            document.getElementById("code").value = splitString[2]
+        }
+
+        getSelectCompany();
+
+        function getSelectCompany() {
+            $("#company").select2({
+
+                ajax: {
+                    url: `/getCompaniesMComboBox`,
+                    dataType: 'json',
+                    data: function(params) {
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            query: params.term,
+                            page: 1,
+                            start: 0,
+                            limit: 25,
+                            filter: `[{"operator":"like","value":"${params.term}","property":"name","type":"string"}]`
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id + '-' + item.name + '-' + item.code
+                                }
+                            })
+                        };
+                    }
+                }
+            })
+        }
+
+
+
+        function processAdd() {
+            let codeCompany = document.getElementById("code").value;
+            let codePlant = document.getElementById("codePlant").value;
+            let idCompany = document.getElementById("idCompany").value;
+            let nameCompany = document.getElementById("nameCompany").value;
+
+            if (codeCompany == '' && codePlant == '') {
                 Toast.fire({
                     icon: 'error',
                     title: 'Data cannot be null'
@@ -151,11 +232,10 @@
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
-                    url: '/SaveEntityM',
+                    url: '/SavePlant',
                     data: {
                         _token: csrf_token,
-                        entity_name: "material_type",
-                        data_items: `[{"flag":"Insert","id":"model_material_type-1","code":"${code}","description":"${desc}"}]`
+                        data_items: `[{"flag":"Insert","id":"model_plant-5","company_code":"${codeCompany}","companies_m_id":"${idCompany}","plant_code":"${codePlant}","plant_description":"${nameCompany}"}]`
                     },
                     success: function(response) {
                         if (response.success == true) {
@@ -197,21 +277,8 @@
                     url: '/SaveEntityM',
                     data: {
                         _token: csrf_token,
-                        entity_name: "material_type",
-                        data_items: `[{
-                                        "id": ${parseInt(id)},
-                                        "entity_name": "material_type",
-                                        "entity_code_name": "${code} - ${desc}",
-                                        "description": "${desc}",
-                                        "code": "${code}",
-                                        "attribute_definition": null,
-                                        "created_at": "${date}",
-                                        "created_by": null,
-                                        "updated_at": "${date}",
-                                        "updated_by": null,
-                                        "deleted_at": null,
-                                        "deleted_by": null
-                                    }]`
+                        entity_name: "uom",
+                        data_items: `[{"id":${parseInt(id)},"entity_name":"uom","entity_code_name":"${code} - ${desc}","description":"${desc}","code":"${code}","attribute_definition":null,"created_at":"${date}","created_by":null,"updated_at":"${date}","updated_by":null,"deleted_at":null,"deleted_by":null}]`
                     },
                     success: function(response) {
                         if (response.success == true) {
@@ -247,7 +314,7 @@
                     $.ajax({
                         type: "POST",
                         dataType: 'json',
-                        url: '/RemoveEntityM',
+                        url: '/RemovePlant',
                         data: {
                             _token: csrf_token,
                             id: parseInt(id)
@@ -256,7 +323,7 @@
                             $("#closeModalDelete").click();
                             Toast.fire({
                                 icon: 'success',
-                                title: 'Success deleted reference'
+                                title: response.message
                             });
                             loadData();
 
@@ -269,7 +336,7 @@
         function loadData(page = 1, start = 1, limit = 25, search = "") {
             $("#tableData tbody").empty();
             $.ajax({
-                url: `/getDataTableMaterialType?action=getEntity&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"material_type","property":"entity_name","type":"string"},{"operator":"like","value":"${search}","property":"entity_code_name","type":"string"}]`,
+                url: `/getPlant?action=getEntity&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"${search}","property":"plant","type":"string"}]`,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
@@ -278,12 +345,14 @@
                     document.getElementById("total_page").innerHTML = totalPage
                     for (let i = 0; i < response.data.length; i++) {
                         var tr = $("<tr>");
-                        tr.append("<td>" + response.data[i].code + "</td>");
-                        tr.append("<td>" + (response.data[i].description) + "</td>");
+                        tr.append("<td>" + response.data[i].company_code + "</td>");
+                        tr.append("<td>" + response.data[i].plant_description + "</td>");
+                        tr.append("<td>" + response.data[i].plant_code + "</td>");
+                        tr.append("<td>" + response.data[i].status + "</td>");
                         if (groupName == `Administrator's`) {
                             tr.append(`<td>
                                         <center>
-                                            <button data-toggle="modal" data-target="#modalForm" onclick="updateData('${response.data[i].code}','${response.data[i].description}','${response.data[i].id}')" class="btn btn-default btn-sm no-border"><i class="fa fa-edit"></i></button>
+                                            <button data-toggle="modal" data-target="#modalForm" onclick="updateData('${response.data[i].company_code}','${response.data[i].name}','${response.data[i].plant_code}','${response.data[i].status}','${response.data[i].id}','${response.data[i].user_name}')" class="btn btn-default btn-sm no-border"><i class="fa fa-edit"></i></button>
                                             <button onclick="deleteData('${response.data[i].id}')" class="btn btn-default btn-sm no-border"><i class="fa fa-trash"></i></button>
                                         </center>                        
                                      </td>`);

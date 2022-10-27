@@ -107,4 +107,16 @@ class NavController extends Controller
     public function cleansingDuplication(){
         return view('/dashboard/cleansing/duplication');
     }
+
+    public function viewUom(){
+        return view('/dashboard/dictionary/uom');
+    }
+    
+    public function viewCategory(){
+        return view('/dashboard/dictionary/category');
+    }
+    
+    public function viewPlant(){
+        return view('/dashboard/dictionary/plant');
+    }
 }
