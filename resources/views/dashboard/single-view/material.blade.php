@@ -1262,7 +1262,6 @@ use Illuminate\Support\Facades\Auth;
         function selectMgc(val) {
             let inc = val.value;
             $("#mgc").select2({
-
                 ajax: {
                     url: `/getMgcByInc`,
                     dataType: 'json',

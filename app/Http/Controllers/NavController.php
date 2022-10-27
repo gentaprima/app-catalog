@@ -104,4 +104,8 @@ class NavController extends Controller
     {
         return view('/dashboard/multi-view/service');
     }
+    public function viewMultipleViewSyncSAP()
+    {
+        return view('/dashboard/multi-view/sync-sap');
+    }
 }

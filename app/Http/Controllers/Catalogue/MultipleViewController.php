@@ -941,7 +941,7 @@ class MultipleViewController extends Controller
          $headers = array(
                 'Content-Type' => 'text/csv',
             );
-fclose($filename);
+// fclose($filename);
 return Response::download($filename);
      
 /*

@@ -29,6 +29,7 @@ Route::get('/addition-history', 'NavController@additionHistory');
 //MULTIPLE VIEW
 Route::get('/multiple-view/material', 'NavController@viewMultipleViewService');
 Route::get('/multiple-view/service', 'NavController@viewMultipleViewMaterial');
+Route::get('/multiple-view/sync-sap', 'NavController@viewMultipleViewSyncSAP');
 
 // SINGLE VIEW
 
