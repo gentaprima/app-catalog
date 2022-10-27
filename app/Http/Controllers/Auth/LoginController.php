@@ -183,11 +183,11 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         $this->clearLoginAttempts($request);
-        // $user = User::where('user_name', '=', $request->username)
-        //             ->where('is_active', '=', 1)
-        //             ->first();
+        $user = User::where('user_name', '=', $request->username)
+                    ->where('is_active', '=', 1)
+                    ->first();
 
-        $user = DB::table('vw_users')->where('user_name','=','yeni.setyowati')->where('is_active',1)->first();
+        // $user = DB::table('vw_users')->where('user_name','=','yeni.setyowati')->where('is_active',1)->first();
 
         $data = array(
             'success' => true,
@@ -200,7 +200,7 @@ class LoginController extends Controller
                 ?: redirect()->intended($this->redirectPath());*/
     }
 
-    /**
+/**
      * The user has been authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
