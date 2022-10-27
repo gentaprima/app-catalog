@@ -24,21 +24,34 @@ Route::get('/deletion-material','NavController@deletionMaterial');
 Route::get('/deletion-service','NavController@deletionService');
 Route::get('/addition','NavController@addition');
 Route::get('/addition-history','NavController@additionHistory');
+Route::get('/form-revision-material','NavController@formRevisionMaterial');
+Route::get('/form-revision-service','NavController@formRevisionService');
+Route::get('/form-deletion-material','NavController@formDeletionMaterial');
+Route::get('/form-deletion-service','NavController@formDeletionService');
 // ADR & HISTORY
 
 // SINGLE VIEW
 
+Route::get('/single-view/transfer-owner-code','NavController@transferOwnerCode');
+Route::get('/single-view/transfer-back-owner-code','NavController@transferBackOwnerCode');
 Route::get('/single-view/material','NavController@singleViewMaterial');
 Route::get('/single-view/material/{id}','NavController@singleViewMaterialById');
 Route::post('/add-value-characteristic','Catalogue\CatalogueController@addValueCharacteristic');
+Route::post('/add-value-characteristic-revision','Catalogue\CatalogueController@addValueCharacteristicRevision');
 Route::post('/update-value-characteristic','Catalogue\CatalogueController@updateValueCharacteristic');
 Route::get('/get-value-characteristic/{adrItems}','Catalogue\CatalogueController@getValueCharacteristicById');
 Route::get('/get-value-characteristic-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicById');
+Route::get('/get-value-characteristic-revision-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicRevisionById');
 
 Route::get('/single-view/service','NavController@singleViewService');
 Route::get('/single-view/service/{id}','NavController@singleViewServiceById');
 
 // SINGLE VIEW
+
+// CLEANSING & DUPLICATION
+Route::get('/cleansing/duplication','NavController@cleansingDuplication');
+// CLEANSING & DUPLICATION
+
 
 // DICTIONARY
 Route::get('/dictionary/material-characteristic','NavController@viewMaterialCharacteristic');
@@ -66,10 +79,12 @@ Route::resource('/EventMenuDetail', 'Setting\SettingMenuController');
 Route::resource('/Users', 'Setting\SettingUsersController');
 Route::resource('/UsersGroup', 'Setting\SettingUsersGroupController');
 Route::get('/geTrxCode', 'Setting\SettingUsersController@geTrxCode');
+Route::get('/geTrxCodeComboBox', 'Setting\SettingUsersController@geTrxCodeComboBox');
 Route::get('/geTrxCodeHisto', 'Setting\SettingUsersController@geTrxCodeHisto');
 Route::get('/getFlowOwnerCode', 'Setting\SettingUsersController@getFlowOwnerCode');
 
 Route::get('/getUsers', 'Setting\SettingUsersController@getUsers');
+Route::get('/getUsersComboBox', 'Setting\SettingUsersController@getUsersComboBox');
 
 Route::post('/getUserProfile', 'Setting\SettingUsersController@getUserProfile');
 Route::post('/SaveUser', 'Setting\SettingUsersController@SaveUser');
@@ -106,6 +121,7 @@ Route::post('/SaveImportAddition', 'Addition\AdditionController@SaveImportAdditi
 Route::get('/getAdditionHistoryM', 'Addition\AdditionController@getAdditionHistoryM');
 Route::get('/getTransferOwner', 'Addition\AdditionController@getTransferOwner');
 Route::get('/getAdditionHistoryD', 'Addition\AdditionController@getAdditionHistoryD');
+Route::get('/getAdditionHistoryDTable', 'Addition\AdditionController@getAdditionHistoryDTable');
 Route::get('/getTransportOwner_p', 'Addition\AdditionController@getTransportOwner_p');
 
 Route::get('/getAddtionCreator', 'Addition\AdditionController@getAdditionHistoryM');

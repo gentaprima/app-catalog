@@ -1067,7 +1067,6 @@ use Illuminate\Support\Facades\Auth;
                     data.forEach(object => {
                         delete object['id_characteristic_value'];
                     })
-
                     dataCharateristic += JSON.stringify(response.data);
                 }
             })
@@ -1123,6 +1122,7 @@ use Illuminate\Support\Facades\Auth;
                         let data = response.data
                         for (let i = 0; i < data.length; i++) {
                             data[i].id_characteristic_value = data[i].id
+                            data[i].type_adr = 'Addition'
                         }
 
                         data.forEach(object => {

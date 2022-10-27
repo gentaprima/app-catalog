@@ -266,6 +266,13 @@ class AdditionController extends Controller
         // return \Response::json($result,200);
         return \Response::json($result['data'],200);
     }
+
+    public function getAdditionHistoryDTable(Request $request){
+        $sql = "SELECT * FROM vw_adr_d_items ";
+        $result = BaseModel::buildSql($sql);
+        // return \Response::json($result,200);
+        return \Response::json($result,200);
+    }
     public function getTransferOwner(Request $request){
         $sql = "SELECT * FROM vw_adr_d_items_transfer";
         $result = BaseModel::buildSql($sql);;
@@ -938,7 +945,7 @@ class AdditionController extends Controller
 
                 }
                 // NEW UPDATE
-                DB::table('value_characteristic')->where('adr_d_items_id',$request->adr_d_items_id)->delete();
+                DB::table('value_characteristic')->where('adr_d_items_id',$request->adr_d_items_id)->where('type_adr','Addition')->delete();
                 // NEW UPDATE
                 $adrDitems->save();
                 $checkOnProcess = AdrDItemsStatus::select(DB::raw("count(adr_d_items_status.item_status) AS OnProcess"))

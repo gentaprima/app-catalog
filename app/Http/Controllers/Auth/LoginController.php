@@ -187,7 +187,7 @@ class LoginController extends Controller
         //     ->where('is_active', '=', 1)
         //     ->first();
 
-        $user = DB::table('vw_users')->where('user_name',$request->username)->where('is_active',1)->first();
+        $user = DB::table('vw_users')->where('user_name',"$request->username")->where('is_active',1)->first();
 
         $data = array(
             'success' => true,

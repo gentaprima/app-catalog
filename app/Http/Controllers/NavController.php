@@ -79,4 +79,32 @@ class NavController extends Controller
     public function viewServiceType(){
         return view('/dashboard/dictionary/service-type');
     }
+
+    public function formRevisionMaterial(){
+        return view('dashboard/adr/form-revision-material');
+    }
+    
+    public function formRevisionService(){
+        return view('dashboard/adr/form-revision-service');
+    }
+    
+    public function formDeletionMaterial(){
+        return view('dashboard/adr/form-deletion-material');
+    }
+    
+    public function formDeletionService(){
+        return view('dashboard/adr/form-deletion-service');
+    }
+    
+    public function transferOwnerCode(){
+        return view('dashboard/single-view/transfer-owner-code');
+    }
+    
+    public function transferBackOwnerCode(){
+        return view('dashboard/single-view/transfer-back-owner-code');
+    }
+
+    public function cleansingDuplication(){
+        return view('/dashboard/cleansing/duplication');
+    }
 }

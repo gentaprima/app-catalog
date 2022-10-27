@@ -174,10 +174,20 @@ class SettingUsersController extends Controller
         $result = BaseModel::buildSql($sql);;
         return \Response::json($result,200);        
     }
+    public function getUsersComboBox(){
+        $sql = "SELECT * FROM vw_users" ;
+        $result = BaseModel::buildSql($sql);;
+        return \Response::json($result['data'],200);        
+    }
     public function geTrxCode(){
         $sql = "SELECT * FROM vw_transfer_owner" ;
         $result = BaseModel::buildSql($sql);;
         return \Response::json($result,200);        
+    }
+    public function geTrxCodeComboBox(){
+        $sql = "SELECT * FROM vw_transfer_owner" ;
+        $result = BaseModel::buildSql($sql);;
+        return \Response::json($result['data'],200);        
     }
     public function geTrxCodeHisto(){
         $sql = "SELECT * FROM vw_transferHisto_owner" ;

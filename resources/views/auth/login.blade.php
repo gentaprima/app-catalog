@@ -140,8 +140,9 @@
                         localStorage.setItem('realName',response.data.real_name);
                         localStorage.setItem('username',response.data.user_name);
                         localStorage.setItem('groupName',response.data.group_name);
+                        localStorage.setItem('userId',response.data.user_id);
 
-                        window.location = "/home";
+                        // window.location = "/home";
                     } else {
                         Toast.fire({
                             icon: 'error',

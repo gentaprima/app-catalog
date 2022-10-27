@@ -9,7 +9,7 @@
         <div class="container-fluid mt-3">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Material</h1>
+                    <h1 class="m-0">Deletion Service</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -29,9 +29,10 @@
     <section class="content">
 
         <div class="card p-4 mb-5 m-2">
-            <div class="row">
+        <div class="row">
                 <div class="col-sm-6">
-                    <!-- <button class="btn btn-outline-primary"><i class="fa fa-plus"></i> Addition</button> -->
+                    <a href="/form-deletion-service" class="btn btn-outline-primary" id="btnReqDeletion"><i class="fa fa-plus"></i> Add Blocked Request X</a>
+                    <a href="/form-deletion-service" class="btn btn-outline-primary" id="btnApproveDeletion"><i class="fa fa-plus"></i> Approve Blocked Request X</a>
                 </div>
             </div>
             <table id="tableData" class="table table-striped mt-3">
@@ -77,6 +78,14 @@
             $("#subchild-MNU4").addClass("nnav-item menu-open")
             $("#children-MNU31").addClass("nav-link active")
         });
+
+        if (groupName == 'User') {
+            document.getElementById("btnReqDeletion").hidden = false
+            document.getElementById("btnApproveDeletion").hidden = true
+        } else {
+            document.getElementById("btnReqDeletion").hidden = true
+            document.getElementById("btnApproveDeletion").hidden = false
+        }
 
         function loadData(page = 1, start = 1, limit = 25) {
             $("#tableData tbody").empty();

@@ -27,8 +27,13 @@
 
     <!-- Main content -->
     <section class="content">
-
         <div class="card p-4 mb-5 m-2">
+            <div class="row">
+                <div class="col-sm-6">
+                    <a href="/form-revision-service" class="btn btn-outline-primary" id="btnReqRevision"><i class="fa fa-plus"></i> Add Rev Request X</a>
+                    <a href="/form-revision-service" class="btn btn-outline-primary" id="btnApproveRevision"><i class="fa fa-plus"></i> Approve Rev Request X</a>
+                </div>
+            </div>
             <table id="tableData" class="table table-striped mt-3">
                 <thead>
                     <tr>
@@ -67,7 +72,7 @@
 
     <script>
         loadData(1);
-        
+
         $(document).ready(function() {
             console.log("ready!");
             $("#main-menu-MNU1").addClass("nav-item menu-is-opening menu-open")
@@ -75,10 +80,14 @@
             $("#children-MNU29").addClass("nav-link active")
         });
 
-
-        function setActiveSidebar() {
-
+        if(groupName == 'User'){
+            document.getElementById("btnReqRevision").hidden = false
+            document.getElementById("btnApproveRevision").hidden = true
+        }else{
+            document.getElementById("btnReqRevision").hidden = true
+            document.getElementById("btnApproveRevision").hidden = false
         }
+
 
         function loadData(page = 1, start = 1, limit = 25) {
             $("#tableData tbody").empty();
