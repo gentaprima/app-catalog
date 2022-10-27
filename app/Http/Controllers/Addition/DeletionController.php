@@ -48,6 +48,49 @@ class DeletionController extends Controller
             return FALSE;
         }
     }
+    public function getMaterialOwner($catno){
+        $data =array(); $row = array();$x=0;
+        $sql = "SELECT real_name FROM users WHERE user_id IN (SELECT created_by FROM adr_d_items WHERE catalog_no=$catno)";
+        $result = BaseModel::buildSql($sql);;
+        foreach ($result as $data){
+                if ($x==0) {
+                   foreach ($data as $data2){
+                       $row=(array)$data2;
+                       $realname =trim($row['real_name']);
+                   }
+                   $x++;
+                }
+          }
+        return $realname;
+    }
+    public function getNote($catno){
+        $data =array(); $row = array();$x=0;
+        $sql = "SELECT GROUP_CONCAT(notes SEPARATOR '// -') as Note FROM adr_d_items_view_notes WHERE adr_d_items_id IN  (SELECT id FROM adr_d_items WHERE catalog_no=$catno)";
+        $result = BaseModel::buildSql($sql);;
+        foreach ($result as $data){
+            if ($x==0) {
+               foreach ($data as $data2){
+                   $row=(array)$data2;
+                   $note =trim($row['Note']);
+               }
+               $x++;
+            }
+      }
+    return $note;
+    }
+    public function getCatagory($catgo){
+        $Catgor='Anonymous';
+           if ($catgo=='O'){$Catgor='Operation';}
+           elseif ($catgo=='H'){$Catgor='Safety';}
+           elseif ($catgo=='I'){$Catgor='ITC';}
+           elseif ($catgo=='M'){$Catgor='Maintaining';}
+           elseif ($catgo=='T'){$Catgor='Trashipment';}
+           elseif ($catgo=='G'){$Catgor='Office Supplier';}
+           else {$Catgor='Unidentified';}
+    
+    
+            return $catgo.' - '.$Catgor;
+        }
     public function getBlockedRequestM(Request $request){
         $sql = "SELECT * FROM vw_deletion_request_m ";
         $result = BaseModel::buildSql($sql);
@@ -213,26 +256,26 @@ class DeletionController extends Controller
                                 'Note'=>$Note,
                                     'regard'=> $senderName
                                 );
-                                $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                $beautymail->send('emails.UserRequest', $data, function($message) use($row)
-                                {
-                                    $emailSender = Auth::user()->email;
-                                    $to = User::select(DB::raw("users.*"))
-                                        ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
-                                        ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
-                                        ->where('group_name','=','Cat')
-                                        ->where('users.companies_m_id','=',Auth::user()->companies_m_id)
-                                        ->get();
-                                    $toCatalogue = array();
-                                    foreach ($to as $arrEmailRow){
-                                        $toCatalogue[] = $arrEmailRow->email ;
-                                    }
+                                // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                // $beautymail->send('emails.UserRequest', $data, function($message) use($row)
+                                // {
+                                //     $emailSender = Auth::user()->email;
+                                //     $to = User::select(DB::raw("users.*"))
+                                //         ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                //         ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                //         ->where('group_name','=','Cat')
+                                //         ->where('users.companies_m_id','=',Auth::user()->companies_m_id)
+                                //         ->get();
+                                //     $toCatalogue = array();
+                                //     foreach ($to as $arrEmailRow){
+                                //         $toCatalogue[] = $arrEmailRow->email ;
+                                //     }
 
-                                    $message->from($emailSender ,'ABM E-Cataloguing Systems')
-                                        ->to($toCatalogue, 'ABM E-Cataloguing Systems')
-                                        //->bcc('bqsoft77@gmail.com', 'Development')
-                                        ->subject('Request Blocked '.$row->transaction_type);
-                                });
+                                //     $message->from($emailSender ,'ABM E-Cataloguing Systems')
+                                //         ->to($toCatalogue, 'ABM E-Cataloguing Systems')
+                                //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                //         ->subject('Request Blocked '.$row->transaction_type);
+                                // });
                             }
                             if($levelUser == 'Cat'){
                                 if($row->cataloguer == 'Validate') {
@@ -255,26 +298,26 @@ class DeletionController extends Controller
                                         'Note'=>$Note,
                                         'regard' => $dataUserProfile[0]['real_name']
                                     );
-                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    $beautymail->send('emails.CatValidate', $data, function ($message) use($row)  {
-                                        $input = Input::all();
-                                        $emailSender = Auth::user()->email;
-                                        $type = $input['category'];
-                                        $sttdApp = 'Std App ' . $type;
-                                        $to = User::select(DB::raw("users.*"))
-                                            ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
-                                            ->where('group_name', '=', $sttdApp)
-                                            ->get();
-                                        $toStdApp = array();
-                                        foreach ($to as $arrEmailRow) {
-                                            $toStdApp[] = $arrEmailRow->email;
-                                        }
-                                        $message
-                                            ->from($emailSender, 'ABM E-Cataloguing Systems')
-                                            ->to($toStdApp, 'ABM E-Cataloguing Systems')
-                                            //->bcc('bqsoft77@gmail.com', 'Development')
-                                            ->subject('Request Blocked '.$row->transaction_type);
-                                    });
+                                    // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                    // $beautymail->send('emails.CatValidate', $data, function ($message) use($row)  {
+                                    //     $input = Input::all();
+                                    //     $emailSender = Auth::user()->email;
+                                    //     $type = $input['category'];
+                                    //     $sttdApp = 'Std App ' . $type;
+                                    //     $to = User::select(DB::raw("users.*"))
+                                    //         ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                    //         ->where('group_name', '=', $sttdApp)
+                                    //         ->get();
+                                    //     $toStdApp = array();
+                                    //     foreach ($to as $arrEmailRow) {
+                                    //         $toStdApp[] = $arrEmailRow->email;
+                                    //     }
+                                    //     $message
+                                    //         ->from($emailSender, 'ABM E-Cataloguing Systems')
+                                    //         ->to($toStdApp, 'ABM E-Cataloguing Systems')
+                                    //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                    //         ->subject('Request Blocked '.$row->transaction_type);
+                                    // });
                                 }else{
                                     $update_blocked_adr_d_items->cataloguer = $row->cataloguer ;
                                     $update_blocked_adr_d_items->cataloguer_by_id = $user_id ;
@@ -297,24 +340,24 @@ class DeletionController extends Controller
                                             'Note'=>$Note,
                                             'regard'=> $dataUserProfile[0]['real_name']
                                         );
-                                        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                        $beautymail->send('emails.CatNotValidate', $data, function($message) use($row)
-                                        {
-                                            $emailSender = Auth::user()->email;
-                                            $input = Input::all();
-                                            $query = DB::table('vw_catalog_m_owner');
-                                            $query->where('catalog_no',"=",$row->catalog_no);
-                                            $search = $query->get();
-                                            $toOwner = array();
-                                            foreach ($search as $arrEmailRow){
-                                                $toOwner[] = $arrEmailRow->email ;
-                                            }
-                                            $message
-                                                ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                                ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                                //->bcc('bqsoft77@gmail.com', 'Development')
-                                                ->subject('Request Blocked '.$row->transaction_type);
-                                        });
+                                        // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                        // $beautymail->send('emails.CatNotValidate', $data, function($message) use($row)
+                                        // {
+                                        //     $emailSender = Auth::user()->email;
+                                        //     $input = Input::all();
+                                        //     $query = DB::table('vw_catalog_m_owner');
+                                        //     $query->where('catalog_no',"=",$row->catalog_no);
+                                        //     $search = $query->get();
+                                        //     $toOwner = array();
+                                        //     foreach ($search as $arrEmailRow){
+                                        //         $toOwner[] = $arrEmailRow->email ;
+                                        //     }
+                                        //     $message
+                                        //         ->from($emailSender ,'ABM E-Cataloguing Systems')
+                                        //         ->to($toOwner, 'ABM E-Cataloguing Systems')
+                                        //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                        //         ->subject('Request Blocked '.$row->transaction_type);
+                                        // });
                                     }
                                 }
                             }
@@ -341,23 +384,23 @@ class DeletionController extends Controller
                                         'Note'=>$Note,
                                         'regard' => $dataUserProfile[0]['real_name']
                                     );
-                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    $beautymail->send('emails.StdAppValidate', $data, function ($message) use($row) {
-                                        $emailSender = Auth::user()->email;
-                                        $to = User::select(DB::raw("users.*"))
-                                            ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
-                                            ->where('group_name', '=', 'Proc')
-                                            ->get();
-                                        $toProc = array();
-                                        foreach ($to as $arrEmailRow) {
-                                            $toProc[] = $arrEmailRow->email;
-                                        }
-                                        $message
-                                            ->from($emailSender, 'ABM E-Cataloguing Systems')
-                                            ->to($toProc, 'ABM E-Cataloguing Systems')
-                                            //->bcc('bqsoft77@gmail.com', 'Development')
-                                            ->subject('Request Blocked '.$row->transaction_type);
-                                    });
+                                    // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                    // $beautymail->send('emails.StdAppValidate', $data, function ($message) use($row) {
+                                    //     $emailSender = Auth::user()->email;
+                                    //     $to = User::select(DB::raw("users.*"))
+                                    //         ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                    //         ->where('group_name', '=', 'Proc')
+                                    //         ->get();
+                                    //     $toProc = array();
+                                    //     foreach ($to as $arrEmailRow) {
+                                    //         $toProc[] = $arrEmailRow->email;
+                                    //     }
+                                    //     $message
+                                    //         ->from($emailSender, 'ABM E-Cataloguing Systems')
+                                    //         ->to($toProc, 'ABM E-Cataloguing Systems')
+                                    //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                    //         ->subject('Request Blocked '.$row->transaction_type);
+                                    // });
                                 }else{
 
                                     $update_blocked_adr_d_items->std_approval = $row->std_approval;
@@ -380,24 +423,24 @@ class DeletionController extends Controller
                                         'Note'=>$Note,
                                         'regard'=> $dataUserProfile[0]['real_name']
                                     );
-                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    $beautymail->send('emails.StdAppNotValidate', $data, function($message) use($row)
-                                    {
-                                        $emailSender = Auth::user()->email;
-                                        $input = Input::all();
-                                        $query = DB::table('vw_catalog_m_owner');
-                                        $query->where('catalog_no',"=",$row->catalog_no);
-                                        $search = $query->get();
-                                        $toOwner = array();
-                                        foreach ($search as $arrEmailRow){
-                                            $toOwner[] = $arrEmailRow->email ;
-                                        }
-                                        $message
-                                            ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                            ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                            //->bcc('bqsoft77@gmail.com', 'Development')
-                                            ->subject('Request Blocked '.$row->transaction_type);
-                                    });
+                                    // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                    // $beautymail->send('emails.StdAppNotValidate', $data, function($message) use($row)
+                                    // {
+                                    //     $emailSender = Auth::user()->email;
+                                    //     $input = Input::all();
+                                    //     $query = DB::table('vw_catalog_m_owner');
+                                    //     $query->where('catalog_no',"=",$row->catalog_no);
+                                    //     $search = $query->get();
+                                    //     $toOwner = array();
+                                    //     foreach ($search as $arrEmailRow){
+                                    //         $toOwner[] = $arrEmailRow->email ;
+                                    //     }
+                                    //     $message
+                                    //         ->from($emailSender ,'ABM E-Cataloguing Systems')
+                                    //         ->to($toOwner, 'ABM E-Cataloguing Systems')
+                                    //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                    //         ->subject('Request Blocked '.$row->transaction_type);
+                                    // });
                                 }
                             }
                             if($levelUser == 'Proc'){
@@ -429,23 +472,23 @@ class DeletionController extends Controller
                                         'Note'=>$Note,
                                         'regard' => $dataUserProfile[0]['real_name']
                                     );
-                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    $beautymail->send('emails.ProcStatusValidate', $data, function ($message) use($row) {
-                                        $emailSender = Auth::user()->email;
-                                        $input = Input::all();
-                                        $query = DB::table('vw_catalog_m_owner');
-                                        $query->where('catalog_no',"=",$row->catalog_no);
-                                        $search = $query->get();
-                                        $toOwner = array();
-                                        foreach ($search as $arrEmailRow){
-                                            $toOwner[] = $arrEmailRow->email ;
-                                        }
-                                        $message
-                                            ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                            ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                            //->bcc('bqsoft77@gmail.com', 'Development')
-                                            ->subject('Request Blocked '.$row->transaction_type);
-                                    });
+                                    // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                    // $beautymail->send('emails.ProcStatusValidate', $data, function ($message) use($row) {
+                                    //     $emailSender = Auth::user()->email;
+                                    //     $input = Input::all();
+                                    //     $query = DB::table('vw_catalog_m_owner');
+                                    //     $query->where('catalog_no',"=",$row->catalog_no);
+                                    //     $search = $query->get();
+                                    //     $toOwner = array();
+                                    //     foreach ($search as $arrEmailRow){
+                                    //         $toOwner[] = $arrEmailRow->email ;
+                                    //     }
+                                    //     $message
+                                    //         ->from($emailSender ,'ABM E-Cataloguing Systems')
+                                    //         ->to($toOwner, 'ABM E-Cataloguing Systems')
+                                    //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                    //         ->subject('Request Blocked '.$row->transaction_type);
+                                    // });
 
                                 }else{
                                     $update_blocked_adr_d_items->proc_approver = $row->proc_approver;
@@ -468,24 +511,24 @@ class DeletionController extends Controller
                                         'Note'=>$Note,
                                         'regard'=> $dataUserProfile[0]['real_name']
                                     );
-                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    $beautymail->send('emails.ProcNotValidate', $data, function($message) use($row)
-                                    {
-                                        $emailSender = Auth::user()->email;
-                                        $input = Input::all();
-                                        $query = DB::table('vw_catalog_m_owner');
-                                        $query->where('catalog_no',"=",$row->catalog_no);
-                                        $search = $query->get();
-                                        $toOwner = array();
-                                        foreach ($search as $arrEmailRow){
-                                            $toOwner[] = $arrEmailRow->email ;
-                                        }
-                                        $message
-                                            ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                            ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                            //->bcc('bqsoft77@gmail.com', 'Development')
-                                            ->subject('Request Blocked '.$row->transaction_type);
-                                    });
+                                    // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                    // $beautymail->send('emails.ProcNotValidate', $data, function($message) use($row)
+                                    // {
+                                    //     $emailSender = Auth::user()->email;
+                                    //     $input = Input::all();
+                                    //     $query = DB::table('vw_catalog_m_owner');
+                                    //     $query->where('catalog_no',"=",$row->catalog_no);
+                                    //     $search = $query->get();
+                                    //     $toOwner = array();
+                                    //     foreach ($search as $arrEmailRow){
+                                    //         $toOwner[] = $arrEmailRow->email ;
+                                    //     }
+                                    //     $message
+                                    //         ->from($emailSender ,'ABM E-Cataloguing Systems')
+                                    //         ->to($toOwner, 'ABM E-Cataloguing Systems')
+                                    //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                    //         ->subject('Request Blocked '.$row->transaction_type);
+                                    // });
                                 }
                             }
 
@@ -579,25 +622,25 @@ class DeletionController extends Controller
                                     'Note'=>$Note,
                                     'regard' => $senderName
                                 );
-                                $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                $beautymail->send('emails.UserRequest', $data, function ($message) use ($row) {
-                                    $emailSender = Auth::user()->email;
-                                    $to = User::select(DB::raw("users.*"))
-                                        ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
-                                        ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
-                                        ->where('group_name', '=', 'Cat')
-                                        ->where('users.companies_m_id', '=', Auth::user()->companies_m_id)
-                                        ->get();
-                                    $toCatalogue = array();
-                                    foreach ($to as $arrEmailRow) {
-                                        $toCatalogue[] = $arrEmailRow->email;
-                                    }
+                                // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                // $beautymail->send('emails.UserRequest', $data, function ($message) use ($row) {
+                                //     $emailSender = Auth::user()->email;
+                                //     $to = User::select(DB::raw("users.*"))
+                                //         ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                //         ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                //         ->where('group_name', '=', 'Cat')
+                                //         ->where('users.companies_m_id', '=', Auth::user()->companies_m_id)
+                                //         ->get();
+                                //     $toCatalogue = array();
+                                //     foreach ($to as $arrEmailRow) {
+                                //         $toCatalogue[] = $arrEmailRow->email;
+                                //     }
 
-                                    $message->from($emailSender, 'ABM E-Cataloguing Systems')
-                                        ->to($toCatalogue, 'ABM E-Cataloguing Systems')
-                                        //->bcc('bqsoft77@gmail.com', 'Development')
-                                        ->subject('Request Blocked '.$row->transaction_type);
-                                });
+                                //     $message->from($emailSender, 'ABM E-Cataloguing Systems')
+                                //         ->to($toCatalogue, 'ABM E-Cataloguing Systems')
+                                //         //->bcc('bqsoft77@gmail.com', 'Development')
+                                //         ->subject('Request Blocked '.$row->transaction_type);
+                                // });
                             }
                         }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 ?>
 @extends('master')
 
-@section('title','Single View | Material')
+@section('title','Form Revision | Material')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -13,13 +13,14 @@ use Illuminate\Support\Facades\Auth;
         <div class="container-fluid mt-3">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Single View Material</h1>
+
+                    <h1 class="m-0">Form Revision Material</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item">Single View</li>
-                        <li class="breadcrumb-item active">Material</li>
+                        <li class="breadcrumb-item">ADR & History</li>
+                        <li class="breadcrumb-item active">Form Revision Material</li>
                     </ol>
                 </div><!-- /.col -->
                 <p id="menu"></p>
@@ -34,13 +35,14 @@ use Illuminate\Support\Facades\Auth;
         <div class="row">
             <div class="col-sm-7">
                 <div class="card p-4 mb-5 m-2">
-                    <h4>Material Item</h4>
+                    <a href="/revision-material" class="btn btn-primary" style="max-width: 100px;"><i class="fa fa-arrow-left"></i> Back</a>
+                    <h4 class="mt-3">Material Item</h4>
                     <hr>
                     <div class="row" id="button" hidden="true">
                         <div class="col-sm-8">
-                            <button class="btn btn-default"><i class="fa fa-table"></i> Raw</button>
+                            <!-- <button class="btn btn-default"><i class="fa fa-table"></i> Raw</button>
                             <button class="btn btn-default"><i class="fa fa-table"></i> Document</button>
-                            <button class="btn btn-default"><i class="fa fa-table"></i> Image</button>
+                            <button class="btn btn-default"><i class="fa fa-table"></i> Image</button> -->
                         </div>
                         <div class="col-sm-4">
                             <div class="row">
@@ -61,7 +63,7 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-2">Catologue No</label>
                             <div class="col-sm-10">
                                 <div class="input-group mb-2">
-                                    <input type="text" class="form-control" id="catologueNo" value="{{$id}}" placeholder="">
+                                    <input type="number" class="form-control" id="catologueNo" placeholder="">
                                     <div class="input-group-prepend">
                                         <div id="btnSearch" onclick="searchCatolog()" class="input-group-text"><i class="fa fa-search"></i></div>
                                     </div>
@@ -111,13 +113,13 @@ use Illuminate\Support\Facades\Auth;
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Short Desc</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="shortDesc">
+                                <input type="text" class="form-control" id="shortDesc" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Long Desc</label>
                             <div class="col-sm-10">
-                                <textarea type="text" class="form-control" rows="5" id="longDesc"></textarea>
+                                <textarea type="text" class="form-control" rows="5" id="longDesc" readonly></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -125,7 +127,7 @@ use Illuminate\Support\Facades\Auth;
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <select class="js-example-data-ajax" id="materialType">
+                                        <select readonly class="js-example-data-ajax" id="materialType">
                                             <option value="">Select Material Type</option>
                                         </select>
                                     </div>
@@ -170,6 +172,35 @@ use Illuminate\Support\Facades\Auth;
                                 </div>
                             </div>
                         </div>
+
+
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2">Reason</label>
+                            <div class="col-sm-10">
+                                <textarea name="" id="reason" rows="5" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <table id="tableDataReason" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Users</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
@@ -178,14 +209,8 @@ use Illuminate\Support\Facades\Auth;
                                     <div class="left right" id="arrowCat">CAT</div>
                                     <div class="left right" id="arrowStd">Std App</div>
                                     <div class="left right" id="arrowProc">Proc App</div>
-                                    <div class="left right" id="arrowSap">SAP</div>
+                                    <!-- <div class="left right" id="arrowSap">SAP</div> -->
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <button class="btn btn-primary" id="btnApply" type="button" onclick="applyChanges()">Apply Changes</button>
                             </div>
                         </div>
                         <input type="hidden" name="" id="useremail">
@@ -195,14 +220,8 @@ use Illuminate\Support\Facades\Auth;
                         <input type="hidden" name="" id="adr_status">
                         <input type="hidden" name="" id="adr_m_id">
                         <input type="hidden" name="" id="item_status">
-                        <input type="hidden" id="itemIsActive">
-                        <input type="hidden" id="sapMaterialCode">
-                        <input type="hidden" id="sapMaterialCodeBy">
-                        <input type="hidden" id="sapMaterialCodeDate">
-                        <input type="hidden" id="updatedBy">
-                        <input type="hidden" id="cataloguerBy">
-                        <input type="hidden" id="stdAprovalBy">
-                        <input type="hidden" id="procAproverBy">
+                        <input type="hidden" name="" id="userId">
+                        <input type="hidden" name="" id="revisionId">
                     </form>
 
                 </div>
@@ -264,6 +283,7 @@ use Illuminate\Support\Facades\Auth;
             </div>
         </div>
         <p hidden="true" id="adrDItems"></p>
+        <p hidden="true" id="adrDItemsReal"></p>
         <p hidden="true" id="incMId"></p>
 
     </section>
@@ -449,36 +469,37 @@ use Illuminate\Support\Facades\Auth;
             $('.js-example-basic-single5').select2();
         });
         $(document).ready(function() {
-            $("#main-menu-MNU6").addClass("nav-item menu-is-opening menu-open")
-            $("#subchild-MNU7").addClass("nav-link active")
+            $("#main-menu-MNU1").addClass("nav-item menu-is-opening menu-open")
+            $("#subchild-MNU3").addClass("nnav-item menu-open")
+            $("#children-MNU28").addClass("nav-link active")
         });
 
 
         function searchCatolog() {
             let catologueNo = document.getElementById("catologueNo").value;
             document.getElementById("button").hidden = false
-            document.getElementById("btnAddReference").hidden = false
-            document.getElementById("btnAddFunction").hidden = false
+            // document.getElementById("btnAddReference").hidden = false
+            // document.getElementById("btnAddFunction").hidden = false
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
-                url: `/getCatalogM_p?filter=[{"operator":"eq","value":"${catologueNo}","property":"catalog_no","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]&action=getCatalogM_p&_token=${csrf_token}`,
+                url: `/getRevisionCatalogM?filter=[{"operator":"eq","value":"${catologueNo}","property":"catalog_no","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]&action=getRevisionCatalogM&_token=${csrf_token}`,
                 success: function(response) {
-                    if (response.length > 0) {
-                        let data = response;
+                    if (response.toString() != '') {
+                        let data = response.data;
                         checkUser(data[0].user_name);
                         checkApproval(data[0].company_code);
-                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc);
+                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc, data[0].status_sap);
                         document.getElementById("adrStatus").innerHTML = data[0].adr_status;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").value = data[0].sap_material_code;
                         document.getElementById("inc").value = data[0].inc;
                         var incSelect = $('#inc');
-                        var option = new Option(data[0].class_inc_name, data[0].inc, true, true);
+                        var option = new Option(data[0].item_name, data[0].inc, true, true);
                         incSelect.append(option).trigger('change');
 
                         var mgcSelect = $("#mgc")
-                        var optiobMgc = new Option(data[0].group_class_name, data[0].groupclass, true, true)
+                        var optiobMgc = new Option(data[0].groupclass, data[0].groupclass, true, true)
                         mgcSelect.append(optiobMgc).trigger('change');
 
                         if (data[0].material_type != null) {
@@ -501,7 +522,8 @@ use Illuminate\Support\Facades\Auth;
 
                         document.getElementById("nameCode").value = data[0].item_name;
                         document.getElementById("shortNameCode").value = data[0].short_name_code;
-                        document.getElementById("adrDItems").innerHTML = data[0].adr_d_items_id;
+                        document.getElementById("adrDItems").innerHTML = data[0].id;
+                        document.getElementById("adrDItemsReal").innerHTML = data[0].adr_d_items_id;
                         document.getElementById("incMId").innerHTML = data[0].inc_m_id;
                         document.getElementById("useremail").value = data[0].email_user;
                         document.getElementById("catemail").value = data[0].email_cat;
@@ -512,14 +534,8 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("item_status").value = data[0].item_status;
                         document.getElementById("shortDesc").value = data[0].short_description;
                         document.getElementById("longDesc").value = data[0].long_description;
-                        document.getElementById("itemIsActive").value = data[0].items_is_active;
-                        document.getElementById("sapMaterialCode").value = data[0].sap_material_code;
-                        document.getElementById("sapMaterialCodeBy").value = data[0].sap_material_code_by;
-                        document.getElementById("sapMaterialCodeDate").value = data[0].sap_material_code_date;
-                        document.getElementById("updatedBy").value = userId;
-                        document.getElementById("cataloguerBy").value = data[0].cataloguer_by;
-                        document.getElementById("stdAprovalBy").value = data[0].std_approval_by;
-                        document.getElementById("procAproverBy").value = data[0].proc_approver_by;
+                        document.getElementById("revisionId").value = data[0].id;
+                        document.getElementById("userId").value = data[0].user_name;
                         if (data[0].cataloguer != null) {
                             document.getElementById("cataloguer").value = data[0].cataloguer;
                         }
@@ -534,7 +550,8 @@ use Illuminate\Support\Facades\Auth;
 
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
-                        getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id);
+                        getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, data[0].id);
+                        loadReason(data[0].id);
 
                         // check status
 
@@ -649,8 +666,8 @@ use Illuminate\Support\Facades\Auth;
             }
         }
 
-        function checkStatus(status, statusCat, statusStd, statusProc) {
-            if (status == "1" && groupName == 'User') {
+        function checkStatus(status, statusCat, statusStd, statusProc, statusSap) {
+            if (statusSap == 1) {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -661,6 +678,24 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("inc").setAttribute("disabled", true)
                 document.getElementById("mgc").setAttribute("disabled", true)
 
+                document.getElementById("cataloguer").setAttribute("disabled", true);
+                document.getElementById("stdApp").setAttribute("disabled", true)
+                document.getElementById("procApp").setAttribute("disabled", true)
+                document.getElementById("reason").setAttribute("disabled", true);
+
+                document.getElementById("btnApply").hidden = true
+            } else if (status == "1" && groupName == 'User') {
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = true;
+                })
+
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true)
+                document.getElementById("category").setAttribute("disabled", true)
+                document.getElementById("inc").setAttribute("disabled", true)
+                document.getElementById("mgc").setAttribute("disabled", true)
+                document.getElementById("reason").setAttribute("disabled", true)
+
                 document.getElementById("btnApply").hidden = true
             } else if (statusCat == "1" && groupName == 'Cat') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
@@ -670,6 +705,9 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("materialType").setAttribute("disabled", true);
                 document.getElementById("uom").setAttribute("disabled", true)
                 document.getElementById("category").setAttribute("disabled", true)
+                document.getElementById("inc").setAttribute("disabled", true);
+                document.getElementById("mgc").setAttribute("disabled", true);
+                document.getElementById("reason").setAttribute("disabled", true);
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("btnApply").hidden = true
@@ -678,6 +716,9 @@ use Illuminate\Support\Facades\Auth;
                     input.disabled = true;
                 })
 
+                document.getElementById("inc").setAttribute("disabled", true);
+                document.getElementById("mgc").setAttribute("disabled", true);
+                document.getElementById("reason").setAttribute("disabled", true);
                 document.getElementById("materialType").setAttribute("disabled", true);
                 document.getElementById("uom").setAttribute("disabled", true)
                 document.getElementById("category").setAttribute("disabled", true)
@@ -706,12 +747,14 @@ use Illuminate\Support\Facades\Auth;
                 })
 
 
-                document.getElementById("materialType").removeAttribute("disabled");
-                document.getElementById("uom").removeAttribute("disabled");
-                document.getElementById("category").removeAttribute("disabled");
-                document.getElementById("cataloguer").removeAttribute("disabled", true);
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true);
+                document.getElementById("category").setAttribute("disabled", true);
+                document.getElementById("cataloguer").removeAttribute("disabled");
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
+                document.getElementById("inc").setAttribute("disabled", true)
+                document.getElementById("mgc").setAttribute("disabled", true)
             } else if (statusStd == 0 && groupName.substr(0, 3) == 'Std') {
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
@@ -727,6 +770,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("stdApp").removeAttribute("disabled")
                 document.getElementById("procApp").setAttribute("disabled", true)
+                document.getElementById("reason").removeAttribute("disabled");
             } else if (statusProc == 0 && groupName == 'Proc') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
@@ -740,7 +784,8 @@ use Illuminate\Support\Facades\Auth;
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("stdApp").setAttribute("disabled", true)
-                document.getElementById("procApp").removeAttribute("disabled")
+                document.getElementById("procApp").removeAttribute("disabled");
+                document.getElementById("reason").removeAttribute("disabled");
 
                 document.getElementById("btnApply").hidden = false
             } else if (statusProc == 1 && groupName == 'Proc') {
@@ -757,6 +802,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
+                document.getElementById("reason").setAttribute("disabled", true);
 
                 document.getElementById("btnApply").hidden = true
             }
@@ -786,9 +832,10 @@ use Illuminate\Support\Facades\Auth;
             let cataloguer = document.getElementById("cataloguer").value;
             let stdApp = document.getElementById("stdApp").value;
             let procApp = document.getElementById("procApp").value;
+            let reason = document.getElementById("reason").value;
 
 
-            if (catologueNo == '' || materialType == '' || uom == '' || category == '') {
+            if (catologueNo == '' || materialType == '' || uom == '' || category == '' || reason == '') {
 
                 Toast.fire({
                     icon: 'error',
@@ -836,6 +883,7 @@ use Illuminate\Support\Facades\Auth;
             let uom = document.getElementById("uom").value;
             let category = document.getElementById("category").value;
             let adrDItems = document.getElementById("adrDItems").innerHTML
+            let adrDItemsReal = document.getElementById("adrDItemsReal").innerHTML
             let inc = document.getElementById("inc").value;
             let mgc = document.getElementById("mgc").value;
             let userEmail = document.getElementById("useremail").value;
@@ -852,19 +900,14 @@ use Illuminate\Support\Facades\Auth;
             let sap = document.getElementById("SAP").value;
             let cataloguer = document.getElementById("cataloguer").value;
             let stdApp = document.getElementById("stdApp").value;
+            let reason = document.getElementById("reason").value;
             let procApp = document.getElementById("procApp").value;
-            let itemIsActive = document.getElementById("itemIsActive").value 
-            let sapMaterialCode = document.getElementById("sapMaterialCode").value 
-            let sapMaterialCodeBy = document.getElementById("sapMaterialCodeBy").value 
-            let sapMaterialCodeDate = document.getElementById("sapMaterialCodeDate").value 
-            let updatedBy = document.getElementById("updatedBy").value = userId;
-            let cataloguerBy = document.getElementById("cataloguerBy").value 
-            let stdBy = document.getElementById("stdAprovalBy").value 
-            let procBy = document.getElementById("procAproverBy").value 
+            let userId = document.getElementById("userId").value;
+            let revisionId = document.getElementById("revisionId").value;
 
             $.ajax({
                 type: "post",
-                url: '/MaterialApplyChanges',
+                url: '/ApproveItemsRevision',
                 dataType: 'json',
                 data: {
                     items_characteristic: dataCharateristic,
@@ -893,13 +936,9 @@ use Illuminate\Support\Facades\Auth;
                     cataloguer: cataloguer,
                     std_approval: stdApp,
                     proc_approver: procApp,
-                    sap_material_code_by: sapMaterialCodeBy,
-                    sap_material_code_date: sapMaterialCodeDate,
-                    items_is_active : itemIsActive,
-                    updated_by : updatedBy,
-                    cataloguer_by: cataloguerBy,
-                    std_approval_by: stdBy,
-                    proc_approver_by : procBy
+                    revision_adr_d_items_id: revisionId,
+                    "User ID": userId,
+                    "reason": reason
 
                 },
                 success: function(response) {
@@ -1109,7 +1148,7 @@ use Illuminate\Support\Facades\Auth;
             $.ajax({
                 type: 'get',
                 dataType: 'json',
-                url: `/get-value-characteristic-all/${adrDItems}`,
+                url: `/get-value-characteristic-revision-all/${adrDItems}`,
                 async: false,
                 success: function(response) {
                     // let data = JSON.parse(response).data;
@@ -1134,11 +1173,14 @@ use Illuminate\Support\Facades\Auth;
                     }
                     for (let i = 0; i < data.length; i++) {
                         data[i].id = data[i].id_characteristic_value;
+                        data[i].revision_adr_d_items_id = data[i].adr_d_items_id;
                     }
 
                     data.forEach(object => {
                         delete object['id_characteristic_value'];
+                        delete object['adr_d_items_id'];
                     })
+
                     dataCharateristic += JSON.stringify(response.data);
                 }
             })
@@ -1151,7 +1193,7 @@ use Illuminate\Support\Facades\Auth;
             $.ajax({
                 type: 'post',
                 dataType: 'json',
-                url: '/add-value-characteristic',
+                url: '/add-value-characteristic-revision',
                 data: {
                     characteristic: data,
                     adr_d_items_id: adrDItems,
@@ -1181,12 +1223,12 @@ use Illuminate\Support\Facades\Auth;
             })
         }
 
-        function getCharacteristic(adrDItems, incMId) {
+        function getCharacteristic(adrDItems, incMId, id) {
             dataCharateristic = "";
             $.ajax({
                 type: 'get',
                 dataType: 'json',
-                url: `/getItemsIncCharacteristics?start=0&limit=300&_token=${csrf_token}&inc_m_id=${incMId}&adr_d_items_id=${adrDItems}&sort=[{"property":"sequence","direction":"ASC"}]&page=1`,
+                url: `/getRevisionItemsIncCharacteristics?start=0&limit=300&_token=${csrf_token}&inc_m_id=${incMId}&adr_d_items_id=${adrDItems}&revision_adr_d_items_id=${id}&sort=[{"property":"sequence","direction":"ASC"}]&page=1`,
                 async: false,
                 success: function(response) {
                     if (response.total > 0) {
@@ -1194,11 +1236,13 @@ use Illuminate\Support\Facades\Auth;
                         let data = response.data
                         for (let i = 0; i < data.length; i++) {
                             data[i].id_characteristic_value = data[i].id
-                            data[i].type_adr = 'Addition';
+                            data[i].type_adr = 'Revision'
+                            data[i].adr_d_items_id = data[i].revision_adr_d_items_id
                         }
 
                         data.forEach(object => {
                             delete object['id'];
+                            delete object['revision_adr_d_items_id'];
                         })
 
 
@@ -1332,7 +1376,7 @@ use Illuminate\Support\Facades\Auth;
             $.ajax({
                 type: "GET",
                 dataType: 'json',
-                url: `/getItemsFuncloc?start=0&limit=25&_token=${csrf_token}&page=1&filter=[{"operator":"eq","value":${adrDItems},"property":"adr_d_items_id","type":"numeric"}]`,
+                url: `/getRevisionItemsFuncloc?start=0&limit=25&_token=${csrf_token}&page=1&filter=[{"operator":"eq","value":${adrDItems},"property":"adr_d_items_id","type":"numeric"}]`,
                 success: function(response) {
                     let data = response.data;
                     for (let i = 0; i < data.length; i++) {
@@ -1491,7 +1535,7 @@ use Illuminate\Support\Facades\Auth;
             $.ajax({
                 type: "GET",
                 dataType: 'json',
-                url: `/getItemsCrossReferences?start=0&limit=300&_token=${csrf_token}&page=1&filter=[{"operator":"eq","value":${adrDItems},"property":"adr_d_items_id","type":"numeric"}]`,
+                url: `/getRevisionItemsCrossReferences?start=0&limit=300&_token=${csrf_token}&page=1&filter=[{"operator":"eq","value":${adrDItems},"property":"adr_d_items_id","type":"numeric"}]`,
                 success: function(response) {
                     let data = response.data;
                     for (let i = 0; i < data.length; i++) {
@@ -1655,5 +1699,26 @@ use Illuminate\Support\Facades\Auth;
         }
 
         // Referenrence
+
+        // REASON
+        function loadReason(id) {
+            $("#tableDataReason tbody").empty();
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: `/getReason?start=0&limit=300&_token=${csrf_token}&filter=[{"operator":"eq","value":"revision_adr_d_items","property":"table_name","type":"string"},{"operator":"eq","value":${id},"property":"table_id","type":"numeric"}]&page=1`,
+                success: function(response) {
+                    let data = response.data;
+                    for (let i = 0; i < data.length; i++) {
+                        var tr = $("<tr>");
+                        tr.append("<td>" + data[i].real_name + "</td>");
+                        tr.append("<td>" + (data[i].description) + "</td>");
+
+                        $("#tableDataReason").append(tr);
+                    }
+                }
+            })
+        }
+        // REASON
     </script>
     @endsection

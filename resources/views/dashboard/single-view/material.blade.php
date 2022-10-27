@@ -195,6 +195,14 @@ use Illuminate\Support\Facades\Auth;
                         <input type="hidden" name="" id="adr_status">
                         <input type="hidden" name="" id="adr_m_id">
                         <input type="hidden" name="" id="item_status">
+                        <input type="hidden" id="itemIsActive">
+                        <input type="hidden" id="sapMaterialCode">
+                        <input type="hidden" id="sapMaterialCodeBy">
+                        <input type="hidden" id="sapMaterialCodeDate">
+                        <input type="hidden" id="updatedBy">
+                        <input type="hidden" id="cataloguerBy">
+                        <input type="hidden" id="stdAprovalBy">
+                        <input type="hidden" id="procAproverBy">
                     </form>
 
                 </div>
@@ -463,7 +471,7 @@ use Illuminate\Support\Facades\Auth;
                         checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc);
                         document.getElementById("adrStatus").innerHTML = data[0].adr_status;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
-                        document.getElementById("SAP").innerHTML = data[0].sap_material_code;
+                        document.getElementById("SAP").value = data[0].sap_material_code;
                         document.getElementById("inc").value = data[0].inc;
                         var incSelect = $('#inc');
                         var option = new Option(data[0].class_inc_name, data[0].inc, true, true);
@@ -504,6 +512,14 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("item_status").value = data[0].item_status;
                         document.getElementById("shortDesc").value = data[0].short_description;
                         document.getElementById("longDesc").value = data[0].long_description;
+                        document.getElementById("itemIsActive").value = data[0].items_is_active;
+                        document.getElementById("sapMaterialCode").value = data[0].sap_material_code;
+                        document.getElementById("sapMaterialCodeBy").value = data[0].sap_material_code_by;
+                        document.getElementById("sapMaterialCodeDate").value = data[0].sap_material_code_date;
+                        document.getElementById("updatedBy").value = userId;
+                        document.getElementById("cataloguerBy").value = data[0].cataloguer_by;
+                        document.getElementById("stdAprovalBy").value = data[0].std_approval_by;
+                        document.getElementById("procAproverBy").value = data[0].proc_approver_by;
                         if (data[0].cataloguer != null) {
                             document.getElementById("cataloguer").value = data[0].cataloguer;
                         }
@@ -511,8 +527,8 @@ use Illuminate\Support\Facades\Auth;
                         if (data[0].std_approval != null) {
                             document.getElementById("stdApp").value = data[0].std_approval;
                         }
-                        
-                        if(data[0].proc_approver != null){
+
+                        if (data[0].proc_approver != null) {
                             document.getElementById("procApp").value = data[0].proc_approver;
                         }
 
@@ -723,11 +739,11 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("mgc").setAttribute("disabled", true)
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").setAttribute("disabled",true)
+                document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").removeAttribute("disabled")
 
                 document.getElementById("btnApply").hidden = false
-            }else if(statusProc == 1 && groupName == 'Proc'){
+            } else if (statusProc == 1 && groupName == 'Proc') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -739,7 +755,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("mgc").setAttribute("disabled", true)
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").setAttribute("disabled",true)
+                document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
 
                 document.getElementById("btnApply").hidden = true
@@ -800,13 +816,13 @@ use Illuminate\Support\Facades\Auth;
                     } else {
                         materialApplyChange();
                     }
-                }else if(groupName == 'Proc'){
-                    if(procApp == ''){
+                } else if (groupName == 'Proc') {
+                    if (procApp == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please select proc approver'
                         });
-                    }else{
+                    } else {
                         materialApplyChange();
                     }
                 }
@@ -837,6 +853,14 @@ use Illuminate\Support\Facades\Auth;
             let cataloguer = document.getElementById("cataloguer").value;
             let stdApp = document.getElementById("stdApp").value;
             let procApp = document.getElementById("procApp").value;
+            let itemIsActive = document.getElementById("itemIsActive").value 
+            let sapMaterialCode = document.getElementById("sapMaterialCode").value 
+            let sapMaterialCodeBy = document.getElementById("sapMaterialCodeBy").value 
+            let sapMaterialCodeDate = document.getElementById("sapMaterialCodeDate").value 
+            let updatedBy = document.getElementById("updatedBy").value = userId;
+            let cataloguerBy = document.getElementById("cataloguerBy").value 
+            let stdBy = document.getElementById("stdAprovalBy").value 
+            let procBy = document.getElementById("procAproverBy").value 
 
             $.ajax({
                 type: "post",
@@ -868,7 +892,14 @@ use Illuminate\Support\Facades\Auth;
                     category: category,
                     cataloguer: cataloguer,
                     std_approval: stdApp,
-                    proc_approver: procApp
+                    proc_approver: procApp,
+                    sap_material_code_by: sapMaterialCodeBy,
+                    sap_material_code_date: sapMaterialCodeDate,
+                    items_is_active : itemIsActive,
+                    updated_by : updatedBy,
+                    cataloguer_by: cataloguerBy,
+                    std_approval_by: stdBy,
+                    proc_approver_by : procBy
 
                 },
                 success: function(response) {
@@ -1108,7 +1139,6 @@ use Illuminate\Support\Facades\Auth;
                     data.forEach(object => {
                         delete object['id_characteristic_value'];
                     })
-
                     dataCharateristic += JSON.stringify(response.data);
                 }
             })
@@ -1164,6 +1194,7 @@ use Illuminate\Support\Facades\Auth;
                         let data = response.data
                         for (let i = 0; i < data.length; i++) {
                             data[i].id_characteristic_value = data[i].id
+                            data[i].type_adr = 'Addition';
                         }
 
                         data.forEach(object => {

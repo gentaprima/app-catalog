@@ -113,8 +113,13 @@
             $("#subchild-MNU37").addClass("nav-link active")
         });
 
+        var delayTimer;
         $('#searchDescription').keyup((e) => {
-            loadData(1, 1, 25, e.currentTarget.value);
+            clearTimeout(delayTimer);
+            delayTimer = setTimeout(function() {
+                // Do the ajax stuff
+                loadData(1, 1, 25, e.currentTarget.value);
+            }, 1000); // Will do the ajax stuff after 1000 ms, or 1 s
         });
 
         if (groupName != `Administrator's`) {
@@ -199,7 +204,7 @@
                     data: {
                         _token: csrf_token,
                         entity_name: "service_type",
-                        data_items: `[{"id":${id},"entity_name":"service_type","entity_code_name":"${code} - ${desc}","description":"${desc}","code":"${code}","attribute_definition":null,"created_at":"${date}","created_by":null,"updated_at":"${date}","updated_by":null,"deleted_at":null,"deleted_by":null}]`
+                        data_items: `[{"id":${parseInt(id)},"entity_name":"service_type","entity_code_name":"${code} - ${desc}","description":"${desc}","code":"${code}","attribute_definition":null,"created_at":"${date}","created_by":null,"updated_at":"${date}","updated_by":null,"deleted_at":null,"deleted_by":null}]`
                     },
                     success: function(response) {
                         if (response.success == true) {
@@ -238,7 +243,7 @@
                         url: '/RemoveEntityM',
                         data: {
                             _token: csrf_token,
-                            id: id
+                            id: parseInt(id)
                         },
                         success: function(response) {
                             $("#closeModalDelete").click();
@@ -272,7 +277,7 @@
                             tr.append(`<td>
                                         <center>
                                             <button data-toggle="modal" data-target="#modalForm" onclick="updateData('${response.data[i].code}','${response.data[i].description}','${response.data[i].id}')" class="btn btn-default btn-sm no-border"><i class="fa fa-edit"></i></button>
-                                            <button onclick="deleteData(${response.data[i].id})" class="btn btn-default btn-sm no-border"><i class="fa fa-trash"></i></button>
+                                            <button onclick="deleteData('${response.data[i].id}')" class="btn btn-default btn-sm no-border"><i class="fa fa-trash"></i></button>
                                         </center>                        
                                      </td>`);
                         } else {

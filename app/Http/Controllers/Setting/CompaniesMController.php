@@ -18,6 +18,12 @@ class CompaniesMController extends Controller
         return \Response::json($result,200);
     }
 
+    public function getCompaniesMComboBox(Request $request){
+        $sql = "SELECT * FROM vw_companies_m" ;
+        $result = BaseModel::buildSql($sql);;
+        return \Response::json($result['data'],200);
+    }
+
  	public  function SaveCompaniesM(Request $request){
         DB::beginTransaction();
         try {

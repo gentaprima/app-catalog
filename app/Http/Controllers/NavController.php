@@ -108,4 +108,43 @@ class NavController extends Controller
     {
         return view('/dashboard/multi-view/sync-sap');
     }
+    public function formRevisionMaterial(){
+        return view('dashboard/adr/form-revision-material');
+    }
+    
+    public function formRevisionService(){
+        return view('dashboard/adr/form-revision-service');
+    }
+    
+    public function formDeletionMaterial(){
+        return view('dashboard/adr/form-deletion-material');
+    }
+    
+    public function formDeletionService(){
+        return view('dashboard/adr/form-deletion-service');
+    }
+    
+    public function transferOwnerCode(){
+        return view('dashboard/single-view/transfer-owner-code');
+    }
+    
+    public function transferBackOwnerCode(){
+        return view('dashboard/single-view/transfer-back-owner-code');
+    }
+
+    public function cleansingDuplication(){
+        return view('/dashboard/cleansing/duplication');
+    }
+
+    public function viewUom(){
+        return view('/dashboard/dictionary/uom');
+    }
+    
+    public function viewCategory(){
+        return view('/dashboard/dictionary/category');
+    }
+    
+    public function viewPlant(){
+        return view('/dashboard/dictionary/plant');
+    }
 }

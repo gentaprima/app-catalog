@@ -147,7 +147,8 @@ class DictionaryController extends Controller
             $input = Input::all();
             $id = EntityM::where('id','=',$input['id'])->first();
             if($id == null ){
-                $message =  app::abort(404);
+                // $message =  app::abort(404);
+                $message =  'error';
                 $success = false ;
             }else{
                 $message =  'Process Succes';
@@ -194,7 +195,8 @@ class DictionaryController extends Controller
             $i = 1;
             foreach ($data_items as $row) {
                 $UpdatePlantM = PlantM::find($row->id);
-                if(count($UpdatePlantM) > 0 ){
+                // if(count($UpdatePlantM) > 0 ){
+                if($UpdatePlantM != null ){
                     $UpdatePlantM->plant_code = $row->plant_code ;
                     $UpdatePlantM->save();
                 }else{

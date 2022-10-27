@@ -38,6 +38,7 @@
         const realName = localStorage.getItem('realName');
         const userName = localStorage.getItem('username');
         const groupName = localStorage.getItem('groupName');
+        const userId = localStorage.getItem('userId');
     </script>
     <style>
         #realName {
@@ -90,6 +91,15 @@
         }
 
         #tableDataCharacteristic td {
+            word-wrap: break-word;
+            white-space: initial;
+        }
+        
+        #tableData td{
+            word-wrap: break-word;
+            white-space: initial;
+        }
+        #dataTableDetail td{
             word-wrap: break-word;
             white-space: initial;
         }

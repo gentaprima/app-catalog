@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title','Dictionary | Material Type')
+@section('title','Dictionary | Category')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -9,13 +9,13 @@
         <div class="container-fluid mt-3">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Material Type</h1>
+                    <h1 class="m-0">Category</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item">Dictionary</li>
-                        <li class="breadcrumb-item active">Material Type</li>
+                        <li class="breadcrumb-item active">Category</li>
                     </ol>
                 </div><!-- /.col -->
                 <p id="menu"></p>
@@ -45,7 +45,7 @@
                 <thead>
                     <tr>
                         <th>Code</th>
-                        <th>Characteristics</th>
+                        <th>Description</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -95,6 +95,7 @@
                             </div>
                         </div>
                         <input type="hidden" id="idType">
+
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -109,12 +110,26 @@
         loadData();
         $(document).ready(function() {
             $("#main-menu-MNU10").addClass("nav-item menu-is-opening menu-open")
-            $("#subchild-MNU12").addClass("nav-link active")
+            $("#subchild-MNU14").addClass("nav-link active")
         });
 
+        var delayTimer;
         $('#searchDescription').keyup((e) => {
-            loadData(1, 1, 25, e.currentTarget.value);
+            clearTimeout(delayTimer);
+            delayTimer = setTimeout(function() {
+                // Do the ajax stuff
+                loadData(1, 1, 25, e.currentTarget.value);
+            }, 1000); // Will do the ajax stuff after 1000 ms, or 1 s
         });
+
+
+
+        function doSearch(text) {
+            clearTimeout(delayTimer);
+            delayTimer = setTimeout(function() {
+                // Do the ajax stuff
+            }, 1000); // Will do the ajax stuff after 1000 ms, or 1 s
+        }
 
         if (groupName != `Administrator's`) {
             document.getElementById("btnAdd").hidden = true;
@@ -124,14 +139,14 @@
         }
 
         function addData() {
-            document.getElementById("titlemodalForm").innerHTML = "Add Material Type"
+            document.getElementById("titlemodalForm").innerHTML = "Add Category"
             document.getElementById("code").value = "";
             document.getElementById("desc").value = "";
             document.getElementById("btnApply").setAttribute("onclick", 'processAdd()');
         }
 
         function updateData(code, description, id) {
-            document.getElementById("titlemodalForm").innerHTML = "Update Material Type"
+            document.getElementById("titlemodalForm").innerHTML = "Update Category"
             document.getElementById("code").value = code;
             document.getElementById("desc").value = description;
             document.getElementById("idType").value = id;
@@ -154,8 +169,8 @@
                     url: '/SaveEntityM',
                     data: {
                         _token: csrf_token,
-                        entity_name: "material_type",
-                        data_items: `[{"flag":"Insert","id":"model_material_type-1","code":"${code}","description":"${desc}"}]`
+                        entity_name: "itemcategory",
+                        data_items: `[{"flag":"Insert","id":"model_material_category-1","code":"${code}","description":"${desc}"}]`
                     },
                     success: function(response) {
                         if (response.success == true) {
@@ -197,21 +212,8 @@
                     url: '/SaveEntityM',
                     data: {
                         _token: csrf_token,
-                        entity_name: "material_type",
-                        data_items: `[{
-                                        "id": ${parseInt(id)},
-                                        "entity_name": "material_type",
-                                        "entity_code_name": "${code} - ${desc}",
-                                        "description": "${desc}",
-                                        "code": "${code}",
-                                        "attribute_definition": null,
-                                        "created_at": "${date}",
-                                        "created_by": null,
-                                        "updated_at": "${date}",
-                                        "updated_by": null,
-                                        "deleted_at": null,
-                                        "deleted_by": null
-                                    }]`
+                        entity_name: "itemcategory",
+                        data_items: `[{"id":${parseInt(id)},"entity_name":"itemcategory","entity_code_name":"${code} - ${desc}","description":"${desc}","code":"${code}","attribute_definition":null,"created_at":"${date}","created_by":null,"updated_at":"${date}","updated_by":null,"deleted_at":null,"deleted_by":null}]`
                     },
                     success: function(response) {
                         if (response.success == true) {
@@ -256,7 +258,7 @@
                             $("#closeModalDelete").click();
                             Toast.fire({
                                 icon: 'success',
-                                title: 'Success deleted reference'
+                                title: response.message
                             });
                             loadData();
 
@@ -269,7 +271,7 @@
         function loadData(page = 1, start = 1, limit = 25, search = "") {
             $("#tableData tbody").empty();
             $.ajax({
-                url: `/getDataTableMaterialType?action=getEntity&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"material_type","property":"entity_name","type":"string"},{"operator":"like","value":"${search}","property":"entity_code_name","type":"string"}]`,
+                url: `/get-abbreviation?action=getEntity&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"itemcategory","property":"entity_name","type":"string"},{"operator":"like","value":"${search}","property":"entity_code_name","type":"string"}]`,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
