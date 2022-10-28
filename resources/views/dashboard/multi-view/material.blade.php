@@ -617,6 +617,7 @@ use Illuminate\Support\Facades\Auth;
                         function(e) {
                             $(this).each(function() {
                                 var value = $(this).text();
+                                console.log(value);
                                 // var value = "3146"
                                 //Characteristics
                                 $("#tb-characteristic tbody").empty();

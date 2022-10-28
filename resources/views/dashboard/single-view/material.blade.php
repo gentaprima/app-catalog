@@ -1203,6 +1203,8 @@ use Illuminate\Support\Facades\Auth;
 
 
                         addValueCharacteristic(response.data);
+                    }else{
+                        $("#tableDataCharacteristic tbody").empty();
                     }
                 }
             })
