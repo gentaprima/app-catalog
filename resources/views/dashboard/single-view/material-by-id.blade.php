@@ -61,7 +61,7 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-2">Catologue No</label>
                             <div class="col-sm-10">
                                 <div class="input-group mb-2">
-                                    <input type="text" class="form-control" id="catologueNo" value="{{$id}}" placeholder="">
+                                    <input type="number" class="form-control" id="catologueNo" value="{{$id}}" placeholder="">
                                     <div class="input-group-prepend">
                                         <div id="btnSearch" onclick="searchCatolog()" class="input-group-text"><i class="fa fa-search"></i></div>
                                     </div>
@@ -1146,7 +1146,7 @@ use Illuminate\Support\Facades\Auth;
 
 
         function addValueCharacteristic(data) {
-            $("#tableDataCharacteristic tbody").empty();
+          
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             $.ajax({
                 type: 'post',
@@ -1182,6 +1182,7 @@ use Illuminate\Support\Facades\Auth;
         }
 
         function getCharacteristic(adrDItems, incMId) {
+            $("#tableDataCharacteristic tbody").empty();
             dataCharateristic = "";
             $.ajax({
                 type: 'get',
@@ -1201,7 +1202,7 @@ use Illuminate\Support\Facades\Auth;
                             delete object['id'];
                         })
 
-
+                       
                         addValueCharacteristic(response.data);
                     }
                 }

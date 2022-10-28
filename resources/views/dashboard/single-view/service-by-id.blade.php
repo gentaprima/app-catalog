@@ -1074,7 +1074,7 @@ use Illuminate\Support\Facades\Auth;
 
 
         function addValueCharacteristic(data) {
-            $("#tableDataCharacteristic tbody").empty();
+            
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             $.ajax({
                 type: 'post',
@@ -1110,6 +1110,7 @@ use Illuminate\Support\Facades\Auth;
         }
 
         function getCharacteristic(adrDItems, incMId) {
+            $("#tableDataCharacteristic tbody").empty();
             dataCharateristic = "";
             $.ajax({
                 type: 'get',

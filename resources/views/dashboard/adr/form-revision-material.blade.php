@@ -667,24 +667,7 @@ use Illuminate\Support\Facades\Auth;
         }
 
         function checkStatus(status, statusCat, statusStd, statusProc, statusSap) {
-            if (statusSap == 1) {
-                document.querySelectorAll("input[type='text']").forEach(input => {
-                    input.disabled = true;
-                })
-
-                document.getElementById("materialType").setAttribute("disabled", true);
-                document.getElementById("uom").setAttribute("disabled", true)
-                document.getElementById("category").setAttribute("disabled", true)
-                document.getElementById("inc").setAttribute("disabled", true)
-                document.getElementById("mgc").setAttribute("disabled", true)
-
-                document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").setAttribute("disabled", true)
-                document.getElementById("procApp").setAttribute("disabled", true)
-                document.getElementById("reason").setAttribute("disabled", true);
-
-                document.getElementById("btnApply").hidden = true
-            } else if (status == "1" && groupName == 'User') {
+            if (status == "1" && groupName == 'User'&& statusSap == 0) {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -697,7 +680,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("reason").setAttribute("disabled", true)
 
                 document.getElementById("btnApply").hidden = true
-            } else if (statusCat == "1" && groupName == 'Cat') {
+            } else if (statusCat == "1" && groupName == 'Cat' && statusSap == 0) {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -711,7 +694,7 @@ use Illuminate\Support\Facades\Auth;
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("btnApply").hidden = true
-            } else if (statusStd == '1' && groupName.substr(0, 3) == 'Std') {
+            } else if (statusStd == '1' && groupName.substr(0, 3) == 'Std' && statusSap == 0) {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -725,7 +708,7 @@ use Illuminate\Support\Facades\Auth;
 
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("btnApply").hidden = true
-            } else if (status == 0 && groupName == 'User') {
+            } else if (status == 0 && groupName == 'User' && statusSap == 0) {
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = false;
@@ -740,7 +723,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("procApp").setAttribute("disabled", true)
                 document.getElementById("inc").removeAttribute("disabled")
                 document.getElementById("mgc").removeAttribute("disabled")
-            } else if (statusCat == 0 && groupName == 'Cat') {
+            } else if (statusCat == 0 && groupName == 'Cat' && statusSap == 0) {
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = false;
@@ -755,7 +738,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("procApp").setAttribute("disabled", true)
                 document.getElementById("inc").setAttribute("disabled", true)
                 document.getElementById("mgc").setAttribute("disabled", true)
-            } else if (statusStd == 0 && groupName.substr(0, 3) == 'Std') {
+            } else if (statusStd == 0 && groupName.substr(0, 3) == 'Std' && statusSap == 0) {
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = false;
@@ -771,7 +754,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("stdApp").removeAttribute("disabled")
                 document.getElementById("procApp").setAttribute("disabled", true)
                 document.getElementById("reason").removeAttribute("disabled");
-            } else if (statusProc == 0 && groupName == 'Proc') {
+            } else if (statusProc == 0 && groupName == 'Proc' && statusSap == 0) {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -788,7 +771,24 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("reason").removeAttribute("disabled");
 
                 document.getElementById("btnApply").hidden = false
-            } else if (statusProc == 1 && groupName == 'Proc') {
+            } else if (statusProc == 1 && groupName == 'Proc' && statusSap == 0) {
+                document.querySelectorAll("input[type='text']").forEach(input => {
+                    input.disabled = true;
+                })
+
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true)
+                document.getElementById("category").setAttribute("disabled", true)
+                document.getElementById("inc").setAttribute("disabled", true)
+                document.getElementById("mgc").setAttribute("disabled", true)
+
+                document.getElementById("cataloguer").setAttribute("disabled", true);
+                document.getElementById("stdApp").setAttribute("disabled", true)
+                document.getElementById("procApp").setAttribute("disabled", true)
+                document.getElementById("reason").setAttribute("disabled", true);
+
+                document.getElementById("btnApply").hidden = true
+            }else if(status == 0 && statusCat  == 0 && statusProc == 0 && statusStd == 0 && statusSap == 1){
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
