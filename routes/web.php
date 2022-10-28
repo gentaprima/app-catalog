@@ -18,14 +18,12 @@ Auth::routes();
 
 // NEW
 // ADR & HISTORY
-<<<<<<< HEAD
 Route::get('/revision-material', 'NavController@revisionMaterial');
 Route::get('/revision-service', 'NavController@revisionService');
 Route::get('/deletion-material', 'NavController@deletionMaterial');
 Route::get('/deletion-service', 'NavController@deletionService');
 Route::get('/addition', 'NavController@addition');
 Route::get('/addition-history', 'NavController@additionHistory');
-=======
 Route::get('/revision-material','NavController@revisionMaterial');
 Route::get('/revision-service','NavController@revisionService');
 Route::get('/deletion-material','NavController@deletionMaterial');
@@ -36,7 +34,6 @@ Route::get('/form-revision-material','NavController@formRevisionMaterial');
 Route::get('/form-revision-service','NavController@formRevisionService');
 Route::get('/form-deletion-material','NavController@formDeletionMaterial');
 Route::get('/form-deletion-service','NavController@formDeletionService');
->>>>>>> 39353de6724ef8bf05331c8589e4726c022fdcb6
 // ADR & HISTORY
 
 //MULTIPLE VIEW
@@ -46,14 +43,12 @@ Route::get('/multiple-view/sync-sap', 'NavController@viewMultipleViewSyncSAP');
 
 // SINGLE VIEW
 
-<<<<<<< HEAD
 Route::get('/single-view/material', 'NavController@singleViewMaterial');
 Route::get('/single-view/material/{id}', 'NavController@singleViewMaterialById');
 Route::post('/add-value-characteristic', 'Catalogue\CatalogueController@addValueCharacteristic');
 Route::post('/update-value-characteristic', 'Catalogue\CatalogueController@updateValueCharacteristic');
 Route::get('/get-value-characteristic/{adrItems}', 'Catalogue\CatalogueController@getValueCharacteristicById');
 Route::get('/get-value-characteristic-all/{adrItems}', 'Catalogue\CatalogueController@getAllValueCharacteristicById');
-=======
 Route::get('/single-view/transfer-owner-code','NavController@transferOwnerCode');
 Route::get('/single-view/transfer-back-owner-code','NavController@transferBackOwnerCode');
 Route::get('/single-view/material','NavController@singleViewMaterial');
@@ -64,7 +59,6 @@ Route::post('/update-value-characteristic','Catalogue\CatalogueController@update
 Route::get('/get-value-characteristic/{adrItems}','Catalogue\CatalogueController@getValueCharacteristicById');
 Route::get('/get-value-characteristic-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicById');
 Route::get('/get-value-characteristic-revision-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicRevisionById');
->>>>>>> 39353de6724ef8bf05331c8589e4726c022fdcb6
 
 Route::get('/single-view/service', 'NavController@singleViewService');
 Route::get('/single-view/service/{id}', 'NavController@singleViewServiceById');
@@ -77,14 +71,12 @@ Route::get('/cleansing/duplication','NavController@cleansingDuplication');
 
 
 // DICTIONARY
-<<<<<<< HEAD
 Route::get('/dictionary/material-characteristic', 'NavController@viewMaterialCharacteristic');
 Route::get('/dictionary/service-characteristic', 'NavController@viewServiceCharacteristic');
 Route::get('/dictionary/material-group-class', 'NavController@viewMaterialGroupClass');
 Route::get('/dictionary/service-group-class', 'NavController@viewServiceGroupClass');
 Route::get('/dictionary/material-type', 'NavController@viewMaterialType');
 Route::get('/dictionary/service-type', 'NavController@viewServiceType');
-=======
 Route::get('/dictionary/material-characteristic','NavController@viewMaterialCharacteristic');
 Route::get('/dictionary/service-characteristic','NavController@viewServiceCharacteristic');
 Route::get('/dictionary/material-group-class','NavController@viewMaterialGroupClass');
@@ -94,7 +86,6 @@ Route::get('/dictionary/service-type','NavController@viewServiceType');
 Route::get('/dictionary/uom','NavController@viewUom');
 Route::get('/dictionary/category','NavController@viewCategory');
 Route::get('/dictionary/plant','NavController@viewPlant');
->>>>>>> 39353de6724ef8bf05331c8589e4726c022fdcb6
 
 // DICTIONARY
 
