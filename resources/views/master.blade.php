@@ -85,21 +85,24 @@
         }
 
         #tableDataCharacteristic {
-            display: block;
+            /* display: block;
             white-space: nowrap;
-            table-layout: fixed;
+            table-layout: fixed; */
+            width: 100%;
+            border: 1px solid blue;
         }
 
         #tableDataCharacteristic td {
             word-wrap: break-word;
             white-space: initial;
         }
-        
-        #tableData td{
+
+        #tableData td {
             word-wrap: break-word;
             white-space: initial;
         }
-        #dataTableDetail td{
+
+        #dataTableDetail td {
             word-wrap: break-word;
             white-space: initial;
         }
@@ -110,11 +113,25 @@
             white-space: nowrap;
         }
 
-        .container-table {
+        #tableDataHistory {
+            width: 100%;
+            border: 1px solid blue;
+        }
+
+        .scrollwrapper {
+            overflow: auto;
+        }
+        .scrollwrapperCharacteristic {
+            overflow: auto;
+            max-height: 400px;
+        }
+
+       
+        /* .container-table {
             overflow: scroll;
             max-height: 400px;
-            max-width: 451px;
-        }
+            max-width: 700px;
+        } */
 
         table {
             border-collapse: collapse;
@@ -238,8 +255,6 @@
             border-top-right-radius: 0px !important;
             border-bottom-right-radius: 0px !important;
         }
-
-       
     </style>
 </head>
 
@@ -429,7 +444,7 @@
     <script src="{{asset('css_dashboard/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('css_dashboard/dist/js/adminlte.js')}}"></script>
-    
+
     <!-- AdminLTE for demo purposes -->
     <!-- <script src="{{asset('css_dashboard/dist/js/demo.js')}}"></script> -->
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

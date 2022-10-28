@@ -211,7 +211,7 @@ use Illuminate\Support\Facades\Auth;
                 <div class="card p-4 mb-5 m-2">
                     <h4>Characteristic</h4>
                     <hr>
-                    <div class="container-table">
+                    <div class="scrollwrapperCharacteristic">
                         <table id="tableDataCharacteristic" class="table table-striped mt-3">
                             <thead>
                                 <tr>
