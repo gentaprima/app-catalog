@@ -667,24 +667,7 @@ use Illuminate\Support\Facades\Auth;
         }
 
         function checkStatus(status, statusCat, statusStd, statusProc, statusSap) {
-            if (statusSap == 1) {
-                document.querySelectorAll("input[type='text']").forEach(input => {
-                    input.disabled = true;
-                })
-
-                document.getElementById("materialType").setAttribute("disabled", true);
-                document.getElementById("uom").setAttribute("disabled", true)
-                document.getElementById("category").setAttribute("disabled", true)
-                document.getElementById("inc").setAttribute("disabled", true)
-                document.getElementById("mgc").setAttribute("disabled", true)
-
-                document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").setAttribute("disabled", true)
-                document.getElementById("procApp").setAttribute("disabled", true)
-                document.getElementById("reason").setAttribute("disabled", true);
-
-                document.getElementById("btnApply").hidden = true
-            } else if (status == "1" && groupName == 'User') {
+            if (status == "1" && groupName == 'User') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })

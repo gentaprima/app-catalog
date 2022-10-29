@@ -211,7 +211,7 @@ use Illuminate\Support\Facades\Auth;
                 <div class="card p-4 mb-5 m-2">
                     <h4>Characteristic</h4>
                     <hr>
-                    <div class="container-table">
+                    <div class="scrollwrapperCharacteristic">
                         <table id="tableDataCharacteristic" class="table table-striped mt-3">
                             <thead>
                                 <tr>
@@ -1146,7 +1146,7 @@ use Illuminate\Support\Facades\Auth;
 
 
         function addValueCharacteristic(data) {
-            $("#tableDataCharacteristic tbody").empty();
+           
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             $.ajax({
                 type: 'post',
@@ -1182,6 +1182,7 @@ use Illuminate\Support\Facades\Auth;
         }
 
         function getCharacteristic(adrDItems, incMId) {
+            $("#tableDataCharacteristic tbody").empty();
             dataCharateristic = "";
             $.ajax({
                 type: 'get',
@@ -1201,7 +1202,7 @@ use Illuminate\Support\Facades\Auth;
                             delete object['id'];
                         })
 
-
+                      
                         addValueCharacteristic(response.data);
                     }
                 }

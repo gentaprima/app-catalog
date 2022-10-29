@@ -109,20 +109,22 @@ use Illuminate\Support\Facades\Auth;
 
             </form>
             <hr>
-            <table id="tableData" class="table table-striped mt-3" style="display: table;">
-                <thead>
-                    <tr>
-                        <th>ADR No</th>
-                        <th>ADR Status</th>
-                        <th>Created At</th>
-                        <th>Creator</th>
-                        <th>Company Code</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate" hidden="true">
+            <div class="scrollwrapper">
+                <table id="tableDataHistory" class="table table-striped mt-3" >
+                    <thead>
+                        <tr>
+                            <th>ADR No</th>
+                            <th>ADR Status</th>
+                            <th>Created At</th>
+                            <th>Creator</th>
+                            <th>Company Code</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="dataTables_paginate paging_simple_numbers mt-3" id="example2_paginate" hidden="true">
                 <ul class="pagination">
                     <li>Halaman</li>
                     <li class="paginate_button active mr-2"><a href="#" aria-controls="example1" id="current_page" data-dt-idx="1" tabindex="0">1</a></li>
@@ -244,7 +246,7 @@ use Illuminate\Support\Facades\Auth;
         function loadData(page = 1, start = 0, limit = 25) {
             $("#example1_previous").removeClass("disabledd")
             $("#example1_next").removeClass("disabledd")
-            $("#tableData tbody").empty();
+            $("#tableDataHistory tbody").empty();
             document.getElementById("page").innerHTML = parseInt(page)
             document.getElementById("start").innerHTML = parseInt(start)
             document.getElementById("current_page").innerHTML = parseInt(page)
@@ -306,7 +308,7 @@ use Illuminate\Support\Facades\Auth;
                                         <button type="button" onclick="showDetail('${response.data[i].id}')" data-toggle="modal" data-target="#modalDetail" class="btn btn-default btn-xs"><i class="fa fa-table""></i></button>
                                      </center>
                                     </td>`);
-                        $("#tableData").append(tr);
+                        $("#tableDataHistory").append(tr);
                     }
                     if (document.getElementById("page").innerHTML == document.getElementById("totalData").innerHTML) {
                         $("#example1_next").addClass("paginate_button next prev disabledd")
@@ -357,7 +359,7 @@ use Illuminate\Support\Facades\Auth;
         }
 
         function nextPage() {
-            $("#tableData tbody").empty();
+            $("#tableDataHistory tbody").empty();
             var page = document.getElementById("page").innerHTML;
             var start = document.getElementById("start").innerHTML;
 
@@ -374,7 +376,7 @@ use Illuminate\Support\Facades\Auth;
         }
 
         function prevPage() {
-            $("#tableData tbody").empty();
+            $("#tableDataHistory tbody").empty();
             var page = document.getElementById("page").innerHTML;
             var start = document.getElementById("start").innerHTML;
 
