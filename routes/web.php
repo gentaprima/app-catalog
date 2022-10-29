@@ -41,8 +41,13 @@ Route::get('/multiple-view/material', 'NavController@viewMultipleViewService');
 Route::get('/multiple-view/service', 'NavController@viewMultipleViewMaterial');
 Route::get('/multiple-view/sync-sap', 'NavController@viewMultipleViewSyncSAP');
 
-// SINGLE VIEW
 
+//material & tools
+Route::get('/material-tools/ncs', 'NavController@viewMaterialToolsNcs');
+Route::get('/material-tools/unspsc', 'NavController@viewMaterialToolsUnspsc');
+
+
+// SINGLE VIEW
 Route::get('/single-view/material', 'NavController@singleViewMaterial');
 Route::get('/single-view/material/{id}', 'NavController@singleViewMaterialById');
 Route::post('/add-value-characteristic', 'Catalogue\CatalogueController@addValueCharacteristic');

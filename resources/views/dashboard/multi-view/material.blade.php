@@ -393,7 +393,7 @@ use Illuminate\Support\Facades\Auth;
             totalData = 0;
             likeFilter = "";
             exportData = "";
-            loadData(0, 25);
+            // loadData(0, 25);
             var page = $('#page');
             page.val(1);
             $('.next').click(function() {
