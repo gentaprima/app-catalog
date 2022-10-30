@@ -347,7 +347,6 @@ use Illuminate\Support\Facades\Auth;
                             '<td class=" text-danger"> <i class="fas fa-trash"></i></td></tr>'
                         );
                         $("#tb-inc").append(row);
-
                     })
                     $(".tr-tab-1").click(function(e) {
                         $(this).each(function() {
@@ -392,6 +391,8 @@ use Illuminate\Support\Facades\Auth;
                     })
                 });
             }
+
+            function 
 
             function loadInc(start, limit, page) {
                 $.ajax({
