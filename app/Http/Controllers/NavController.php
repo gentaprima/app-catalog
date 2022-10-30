@@ -147,4 +147,11 @@ class NavController extends Controller
     public function viewPlant(){
         return view('/dashboard/dictionary/plant');
     }
+
+    public function viewMaterialToolsNcs(){
+        return view('/dashboard/material-tools/ncs');
+    }
+    public function viewMaterialToolsUnspsc(){
+        return view('/dashboard/material-tools/unspsc');
+    }
 }
