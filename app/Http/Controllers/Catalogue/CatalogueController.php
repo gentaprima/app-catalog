@@ -449,17 +449,34 @@ class CatalogueController extends Controller
 
         DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->delete();
         DB::table('value_characteristic')->insert($request->characteristic);
-        $data = DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->where('type_adr','Addition')->get();
+        $data = DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->where('type_adr', 'Addition')->get();
         return response()->json([
             'success' => true,
             'data' => $data
         ], 200);
     }
 
-    public function addValueCharacteristicRevision(Request $request){
+    public function updateAllValueCharacteristic(Request $request)
+    {
+        $data = $request->characteristic;
+        foreach ($data as $key => $item) {
+            $item["adr_d_items_id"] = $request->adr_d_items_id;
+            $data[$key] = $item;
+        }
+        DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->delete();
+        DB::table('value_characteristic')->insert($data);
+        $getData = DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->where('type_adr', 'Addition')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $getData
+        ], 200);
+    }
+
+    public function addValueCharacteristicRevision(Request $request)
+    {
         DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->delete();
         DB::table('value_characteristic')->insert($request->characteristic);
-        $data = DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->where('type_adr','Revision')->get();
+        $data = DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->where('type_adr', 'Revision')->get();
         return response()->json([
             'success' => true,
             'data' => $data
@@ -477,24 +494,27 @@ class CatalogueController extends Controller
         ], 200);
     }
 
-    public function getValueCharacteristicById($adrItems){
-        $data = DB::table('value_characteristic')->where('adr_d_items_id', $adrItems)->where('nvalue','!=',null)->get();
+    public function getValueCharacteristicById($adrItems)
+    {
+        $data = DB::table('value_characteristic')->where('adr_d_items_id', $adrItems)->where('nvalue', '!=', null)->get();
         return response()->json([
             'success' => true,
             'data' => $data
         ], 200);
     }
 
-    public function getAllValueCharacteristicById($adr){
-        $data = DB::table('value_characteristic')->where('adr_d_items_id', $adr)->where('type_adr','Addition')->get();
+    public function getAllValueCharacteristicById($adr)
+    {
+        $data = DB::table('value_characteristic')->where('adr_d_items_id', $adr)->where('type_adr', 'Addition')->get();
         return response()->json([
             'success' => true,
             'data' => $data
         ], 200);
     }
 
-    public function getAllValueCharacteristicRevisionById($adr){
-        $data = DB::table('value_characteristic')->where('adr_d_items_id', $adr)->where('type_adr','Revision')->get();
+    public function getAllValueCharacteristicRevisionById($adr)
+    {
+        $data = DB::table('value_characteristic')->where('adr_d_items_id', $adr)->where('type_adr', 'Revision')->get();
         return response()->json([
             'success' => true,
             'data' => $data
