@@ -59,6 +59,7 @@ Route::post('/update-value-characteristic','Catalogue\CatalogueController@update
 Route::get('/get-value-characteristic/{adrItems}','Catalogue\CatalogueController@getValueCharacteristicById');
 Route::get('/get-value-characteristic-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicById');
 Route::get('/get-value-characteristic-revision-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicRevisionById');
+Route::post('/update-all-value-characteristic','Catalogue\CatalogueController@updateAllValueCharacteristic');
 
 Route::get('/single-view/service', 'NavController@singleViewService');
 Route::get('/single-view/service/{id}', 'NavController@singleViewServiceById');

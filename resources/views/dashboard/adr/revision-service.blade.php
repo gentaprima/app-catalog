@@ -30,8 +30,8 @@
         <div class="card p-4 mb-5 m-2">
             <div class="row">
                 <div class="col-sm-6">
-                    <a href="/form-revision-service" class="btn btn-outline-primary" id="btnReqRevision"><i class="fa fa-plus"></i> Add Rev Request X</a>
-                    <a href="/form-revision-service" class="btn btn-outline-primary" id="btnApproveRevision"><i class="fa fa-plus"></i> Approve Rev Request X</a>
+                    <a href="/form-revision-service" class="btn btn-outline-primary" id="btnReqRevision"><i class="fa fa-plus"></i> Add Rev Request</a>
+                    <a href="/form-revision-service" class="btn btn-outline-primary" id="btnApproveRevision"><i class="fa fa-plus"></i> Approve Rev Request</a>
                 </div>
             </div>
             <table id="tableData" class="table table-striped mt-3">

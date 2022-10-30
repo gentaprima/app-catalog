@@ -163,12 +163,19 @@
             document.getElementById("btnApply").setAttribute("onclick", 'processAdd()');
         }
 
-        function updateData(code, description, id) {
+        function updateData(companyCode, name, plantCode, status, id, username, companiesId, plantDesc) {
+            console.log(companyCode);
             document.getElementById("titlemodalForm").innerHTML = "Update Plant"
-            document.getElementById("code").value = code;
-            document.getElementById("desc").value = description;
-            document.getElementById("idType").value = id;
-            document.getElementById("btnApply").setAttribute("onclick", 'processUpdate()');
+            document.getElementById("code").value = companyCode;
+            document.getElementById("codePlant").value = plantCode;
+            document.getElementById("idCompany").value = companiesId
+            document.getElementById("nameCompany").value = name
+            var companySelect = $("#company")
+            let idComboBox = companiesId + '-' + name + '-' + companyCode
+            var optionSCompany = new Option(name, idComboBox, true, true)
+            companySelect.append(optionSCompany).trigger('change');
+
+            document.getElementById("btnApply").setAttribute("onclick", `processUpdate('${username}','${id}')`);
         }
 
 
@@ -257,15 +264,18 @@
             }
         }
 
-        function processUpdate() {
-            let code = document.getElementById("code").value;
-            let desc = document.getElementById("desc").value;
-            let id = document.getElementById("idType").value;
+
+        function processUpdate(username,id) {
+            let codeCompany = document.getElementById("code").value;
+            let codePlant = document.getElementById("codePlant").value;
+            let idCompany = document.getElementById("idCompany").value;
+            let nameCompany = document.getElementById("nameCompany").value;
+
             const d = new Date();
             let date = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 
 
-            if (code == '' && characteristic == '' && status == '') {
+            if (codeCompany == '' && codePlant == '') {
                 Toast.fire({
                     icon: 'error',
                     title: 'Data cannot be null'
@@ -274,11 +284,10 @@
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
-                    url: '/SaveEntityM',
+                    url: '/SavePlant',
                     data: {
                         _token: csrf_token,
-                        entity_name: "uom",
-                        data_items: `[{"id":${parseInt(id)},"entity_name":"uom","entity_code_name":"${code} - ${desc}","description":"${desc}","code":"${code}","attribute_definition":null,"created_at":"${date}","created_by":null,"updated_at":"${date}","updated_by":null,"deleted_at":null,"deleted_by":null}]`
+                        data_items: `[{"user_name": "${username}","name": "${nameCompany}","company_code": "${codeCompany}","id": ${id},"companies_m_id": "${idCompany}", "plant_code": "${codePlant}","plant_description": "${nameCompany}","plant": "${codePlant} - ${nameCompany}","range_rate": null,"approver1": null,"approver2": null,"approver3": null,"status": "Not Used"}]`
                     },
                     success: function(response) {
                         if (response.success == true) {
@@ -352,7 +361,7 @@
                         if (groupName == `Administrator's`) {
                             tr.append(`<td>
                                         <center>
-                                            <button data-toggle="modal" data-target="#modalForm" onclick="updateData('${response.data[i].company_code}','${response.data[i].name}','${response.data[i].plant_code}','${response.data[i].status}','${response.data[i].id}','${response.data[i].user_name}')" class="btn btn-default btn-sm no-border"><i class="fa fa-edit"></i></button>
+                                            <button data-toggle="modal" data-target="#modalForm" onclick="updateData('${response.data[i].company_code}','${response.data[i].name}','${response.data[i].plant_code}','${response.data[i].status}','${response.data[i].id}','${response.data[i].user_name}','${response.data[i].companies_m_id}','${response.data[i].plant_description}')" class="btn btn-default btn-sm no-border"><i class="fa fa-edit"></i></button>
                                             <button onclick="deleteData('${response.data[i].id}')" class="btn btn-default btn-sm no-border"><i class="fa fa-trash"></i></button>
                                         </center>                        
                                      </td>`);
