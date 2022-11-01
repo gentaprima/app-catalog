@@ -310,27 +310,27 @@ class RevisionController extends Controller
                                     'mat_owner'=>$mat_owner,
                                     'regard' => $senderName
                                 );
-                                if($email) {
-                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    $beautymail->send('emails.UserRequest', $data, function ($message) use ($row) {
-                                        $emailSender = Auth::user()->email;
-                                        $to = User::select(DB::raw("users.*"))
-                                            ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
-                                            ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
-                                            ->where('group_name', '=', 'Cat')
-                                            ->where('users.companies_m_id', '=', Auth::user()->companies_m_id)
-                                            ->get();
-                                        $toCatalogue = array();
-                                        foreach ($to as $arrEmailRow) {
-                                            $toCatalogue[] = $arrEmailRow->email;
-                                        }
+                                // if($email) {
+                                //     $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                //     $beautymail->send('emails.UserRequest', $data, function ($message) use ($row) {
+                                //         $emailSender = Auth::user()->email;
+                                //         $to = User::select(DB::raw("users.*"))
+                                //             ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                //             ->leftJoin('companies_m', 'users.companies_m_id', '=', 'companies_m.id')
+                                //             ->where('group_name', '=', 'Cat')
+                                //             ->where('users.companies_m_id', '=', Auth::user()->companies_m_id)
+                                //             ->get();
+                                //         $toCatalogue = array();
+                                //         foreach ($to as $arrEmailRow) {
+                                //             $toCatalogue[] = $arrEmailRow->email;
+                                //         }
 
-                                        $message->from($emailSender, 'ABM E-Cataloguing Systems')
-                                            ->to($toCatalogue, 'ABM E-Cataloguing Systems')
-                                            //->bcc('bqsoft77@gmail.com', 'Development')
-                                            ->subject('Request Revision ' . $row['transaction_type']);
-                                    });
-                                }
+                                //         $message->from($emailSender, 'ABM E-Cataloguing Systems')
+                                //             ->to($toCatalogue, 'ABM E-Cataloguing Systems')
+                                //             //->bcc('bqsoft77@gmail.com', 'Development')
+                                //             ->subject('Request Revision ' . $row['transaction_type']);
+                                //     });
+                                // }
                             }
                         }
 

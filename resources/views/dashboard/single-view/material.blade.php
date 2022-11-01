@@ -468,13 +468,13 @@ use Illuminate\Support\Facades\Auth;
                         let data = response;
                         checkUser(data[0].user_name);
                         checkApproval(data[0].company_code);
-                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc);
+                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc,data[0].category);
                         document.getElementById("adrStatus").innerHTML = data[0].adr_status;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").value = data[0].sap_material_code;
                         document.getElementById("inc").value = data[0].inc;
                         var incSelect = $('#inc');
-                        var option = new Option(data[0].class_inc_name, data[0].inc, true, true);
+                        var option = new Option(data[0].class_inc_name, data[0].inc + '-' + data[0].inc_m_id + '-' + data[0].item_name + '-' + data[0].short_name_code, true, true);
                         incSelect.append(option).trigger('change');
 
                         var mgcSelect = $("#mgc")
@@ -522,14 +522,23 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("procAproverBy").value = data[0].proc_approver_by;
                         if (data[0].cataloguer != null) {
                             document.getElementById("cataloguer").value = data[0].cataloguer;
+                        }else{
+                            document.getElementById("cataloguer").value = "";
+
                         }
 
                         if (data[0].std_approval != null) {
                             document.getElementById("stdApp").value = data[0].std_approval;
+                        }else{
+                            document.getElementById("stdApp").value = "";
+                            
                         }
 
                         if (data[0].proc_approver != null) {
                             document.getElementById("procApp").value = data[0].proc_approver;
+                        }else{
+                            document.getElementById("procApp").value = "";
+
                         }
 
                         getReference(data[0].adr_d_items_id);
@@ -649,7 +658,7 @@ use Illuminate\Support\Facades\Auth;
             }
         }
 
-        function checkStatus(status, statusCat, statusStd, statusProc) {
+        function checkStatus(status, statusCat, statusStd, statusProc,category) {
             if (status == "1" && groupName == 'User') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
@@ -670,6 +679,8 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("materialType").setAttribute("disabled", true);
                 document.getElementById("uom").setAttribute("disabled", true)
                 document.getElementById("category").setAttribute("disabled", true)
+                document.getElementById("inc").setAttribute("disabled", true)
+                document.getElementById("mgc").setAttribute("disabled", true)
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("btnApply").hidden = true
@@ -713,6 +724,10 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
             } else if (statusStd == 0 && groupName.substr(0, 3) == 'Std') {
+
+                let splitGroup = groupName.split(" ");
+
+
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = false;
@@ -725,8 +740,14 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("uom").setAttribute("disabled", true);
                 document.getElementById("category").setAttribute("disabled", true);
                 document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").removeAttribute("disabled")
                 document.getElementById("procApp").setAttribute("disabled", true)
+                if(splitGroup[2] == category){
+                    document.getElementById("stdApp").removeAttribute("disabled")
+                }else{
+                    document.getElementById("stdApp").setAttribute("disabled",true);
+
+                }
+
             } else if (statusProc == 0 && groupName == 'Proc') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
