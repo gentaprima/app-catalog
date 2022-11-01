@@ -1227,6 +1227,7 @@ use Illuminate\Support\Facades\Auth;
             document.getElementById("idValueCharacteristic").value = id;
             document.getElementById("searchDescription").removeAttribute('disabled');
             document.getElementById("descCharacteristic").value = descCharacteristic;
+            document.getElementById("valueCharacteristic").value = "";
             loadDataAbbr();
         }
         function loadDataAbbr(page = 1, start = 1, limit = 10, search = "") {
