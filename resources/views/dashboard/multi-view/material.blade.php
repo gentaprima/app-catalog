@@ -291,14 +291,14 @@ use Illuminate\Support\Facades\Auth;
                             <input type="text" class="form-control" id="functional">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Category:</label>
+                            <label for="exampleInputEmail1">Filter Date:</label>
                             <select class="js-example-basic-single js-example-basic-filter-date" id="select-filter-date">
-                                <option value="">Additional Date</option>
-                                <option value="">SAP Chek Date</option>
-                                <option value="">User Submit</option>
-                                <option value="">Cataloguer Chek Date</option>
-                                <option value="">STD APP Chek Date</option>
-                                <option value="">Proc APP Chek Date</option>
+                                <option value="addition_datef">Additional Date</option>
+                                <option value="sap_material_code_datef">SAP Chek Date</option>
+                                <option value="user_submit_datef">User Submit</option>
+                                <option value="cataloguer_datef">Cataloguer Chek Date</option>
+                                <option value="std_approval_datef">STD APP Chek Date</option>
+                                <option value="proc_approver_datef">Proc APP Chek Date</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -344,8 +344,11 @@ use Illuminate\Support\Facades\Auth;
                 })
             })
             // {"operator":"like","value":"old","property":"old_material_code","type":"string"}
+            totalData = 0;
+            likeFilter = "";
+            exportData = "";
+            // loadData(0, 25);
             $('#btn-filter').click(function() {
-
                 if ($('#material-code').val() != null && $('#material-code').val() != "") {
                     likeFilter += '{"operator":"like","value":"' + $('#material-code').val() +
                         '","property":"old_material_code","type":"string"}';
@@ -378,10 +381,10 @@ use Illuminate\Support\Facades\Auth;
                     likeFilter += '{"operator":"like","value":"' + $('#functional').val() +
                         '","property":"funcloc","type":"string"},';
                 }
-
+                console.log($('#on-date').val())
                 if ($('#on-date').val() != null && $('#on-date').val() != "") {
                     likeFilter += '{"operator":"eq","value":"' + $('#on-date').val() +
-                        '","property":"std_approval_datef","type":"string"},';
+                        '","property":"'+$('#select-filter-date').val()+'","type":"string"}';
                 }
                 loadData(0, 25);
                 // $.ajax({
@@ -390,10 +393,6 @@ use Illuminate\Support\Facades\Auth;
                 // })
                 // [{"operator":"like","value":"old","property":"old_material_code","type":"string"},{"operator":"like","value":"ZMAT","property":"material_type","type":"string"},{"operator":"like","value":"H","property":"category","type":"string"},{"operator":"like","value":"dsa","property":"refno","type":"string"},{"operator":"like","value":"dadsa","property":"manufactur","type":"string"},{"operator":"like","value":"dsadsa","property":"funcloc","type":"string"},{"operator":"eq","value":"2022-10-11","property":"std_approval_datef","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]
             })
-            totalData = 0;
-            likeFilter = "";
-            exportData = "";
-            loadData(0, 25);
             var page = $('#page');
             page.val(1);
             $('.next').click(function() {
@@ -468,7 +467,7 @@ use Illuminate\Support\Facades\Auth;
                 $.ajax({
                     method: "GET",
                     url: '/getMultiViewCatalogM?action=getMultiView&page=' + parseInt(page) +
-                        '&start=25&limit=25&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}' +
+                        '&start='+start+'&limit=25&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},' +
                         likeFilter.toString() + ']',
                     dataType: "json"
                 }).done(function(result) {

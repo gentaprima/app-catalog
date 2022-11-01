@@ -149,5 +149,11 @@ class NavController extends Controller
     }
     public function viewMovingType(){
         return view('/dashboard/dictionary/moving-type');
+
+    public function viewMaterialToolsNcs(){
+        return view('/dashboard/material-tools/ncs');
+    }
+    public function viewMaterialToolsUnspsc(){
+        return view('/dashboard/material-tools/unspsc');
     }
 }
