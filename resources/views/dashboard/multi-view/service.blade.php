@@ -55,7 +55,7 @@ use Illuminate\Support\Facades\Auth;
                             <input type="text" name="table_search" id="short-desc-search"
                                 class="form-control float-right" placeholder="Search">
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-default">
+                                <button type="submit" id="short-desc-btn" class="btn btn-default">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -67,7 +67,7 @@ use Illuminate\Support\Facades\Auth;
                             <input type="text" name="table_search" id="raw-search" class="form-control float-right"
                                 placeholder="Search">
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-default">
+                                <button type="submit" id="btn-raw-search" class="btn btn-default">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -76,17 +76,17 @@ use Illuminate\Support\Facades\Auth;
                 </div>
                 <div class="row">
                     <div class="col-lg-6 table-responsive">
-                        <table class="table table-striped w-100" id="material-table">
+                        <table class="table table-striped w-100 multiple-table" id="material-table">
                             <thead>
                                 <tr class="d-flex">
-                                    <th class="col-2 text-center">User</th>
-                                    <th class="col-2 text-center">Cat</th>
-                                    <th class="col-2 text-center">Std App</th>
-                                    <th class="col-2 text-center">Proc App</th>
-                                    <th class="col-2 text-center">SAP</th>
-                                    <th class="col-3 text-center">Catalogue No</th>
-                                    <th class="col-3 text-center">Short Description</th>
-                                    <th class="col-3 text-center">ADR Number</th>
+                                    <th class="col-2">User</th>
+                                    <th class="col-2">Cat</th>
+                                    <th class="col-2">Std App</th>
+                                    <th class="col-2">Proc App</th>
+                                    <th class="col-2">SAP</th>
+                                    <th class="col-3">Catalogue No</th>
+                                    <th class="col-5">Short Description</th>
+                                    <th class="col-3">ADR Number</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -95,34 +95,34 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                     </div>
                     <div class="col-lg-6 table-responsive">
-                        <table class="table table-striped" id="material-table2">
+                        <table class="table table-striped multiple-table" id="material-table2">
                             <thead>
                                 <tr class="d-flex">
-                                    <th class="col-1 text-center">Addition Date</th>
-                                    <th class="col-1 text-center">SAP No</th>
-                                    <th class="col-1 text-center">SAP Check Data</th>
-                                    <th class="col-1 text-center">SAP Check Name</th>
-                                    <th class="col-1 text-center">Material Owner</th>
-                                    <th class="col-1 text-center">Submit Date</th>
-                                    <th class="col-1 text-center">Status Adr</th>
-                                    <th class="col-1 text-center">Item Status</th>
-                                    <th class="col-1 text-center">Sync Status</th>
-                                    <th class="col-1 text-center">Inc</th>
-                                    <th class="col-1 text-center">MGC</th>
-                                    <th class="col-1 text-center">Long Description</th>
-                                    <th class="col-1 text-center">Raw Data</th>
-                                    <th class="col-1 text-center">Material Type</th>
-                                    <th class="col-1 text-center">UOM</th>
-                                    <th class="col-1 text-center">Category</th>
-                                    <th class="col-1 text-center">Cataloguer</th>
-                                    <th class="col-1 text-center">Cataloguer Name</th>
-                                    <th class="col-1 text-center">Cataloguer Check Date</th>
-                                    <th class="col-1 text-center">Std App</th>
-                                    <th class="col-1 text-center">Std Name App</th>
-                                    <th class="col-1 text-center">Std App Check Date</th>
-                                    <th class="col-1 text-center">Proc App</th>
-                                    <th class="col-1 text-center">Proc App Name</th>
-                                    <th class="col-1 text-center">Proc App Check Date</th>
+                                    <th class="col-1">Addition Date</th>
+                                    <th class="col-1">SAP No</th>
+                                    <th class="col-1">SAP Check Data</th>
+                                    <th class="col-1">SAP Check Name</th>
+                                    <th class="col-1">Material Owner</th>
+                                    <th class="col-1">Submit Date</th>
+                                    <th class="col-1">Status Adr</th>
+                                    <th class="col-1">Item Status</th>
+                                    <th class="col-1">Sync Status</th>
+                                    <th class="col-1">Inc</th>
+                                    <th class="col-1">MGC</th>
+                                    <th class="col-2">Long Description</th>
+                                    <th class="col-1">Raw Data</th>
+                                    <th class="col-1">Material Type</th>
+                                    <th class="col-1">UOM</th>
+                                    <th class="col-1">Category</th>
+                                    <th class="col-1">Cataloguer</th>
+                                    <th class="col-1">Cataloguer Name</th>
+                                    <th class="col-1">Cataloguer Check Date</th>
+                                    <th class="col-1">Std App</th>
+                                    <th class="col-1">Std Name App</th>
+                                    <th class="col-1">Std App Check Date</th>
+                                    <th class="col-1">Proc App</th>
+                                    <th class="col-1">Proc App Name</th>
+                                    <th class="col-1">Proc App Check Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,13 +136,13 @@ use Illuminate\Support\Facades\Auth;
                             <li class="paginate_button active mr-2"><a href="#" aria-controls="example1"
                                     id="current_page" data-dt-idx="1" tabindex="0">1</a></li>
                             <li>Dari</li>
-                            <li class="ml-2" id="total_page">25</li>
-                            <li class="paginate_button next prev " id="example1_previous" data-page="prev"><a
+                            <li class="ml-2" id="total_page">0</li>
+                            <li class="paginate_button next prev" id="previous" data-page="prev"><a
                                     href="#"" aria-controls="example1" id="link_next" data-dt-idx="0"
                                     tabindex="0"><i class="fa fa-chevron-left"></i></a></li>
-                            <li class="paginate_button next prev" id="next-step" data-page="next"><a id="link_next"
-                                    href="#" aria-controls="example1" data-dt-idx="2" tabindex="0"><i
-                                        class="fa fa-chevron-right"></i></a></li>
+                            <li class="paginate_button next prev" id="next-step" data-page="next"><a
+                                    id="link_next" href="#" aria-controls="example1" data-dt-idx="2"
+                                    tabindex="0"><i class="fa fa-chevron-right"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -204,7 +204,7 @@ use Illuminate\Support\Facades\Auth;
                     <div class="col-lg-6 table-responsive" style="overflow: scroll;height:650px">
                         <h4>Characteristic</h4>
                         <hr>
-                        <table class="table table-striped" id="tb-characteristic">
+                        <table class="table table-striped multiple-table" id="tb-characteristic">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -220,7 +220,7 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                         <h4>Cross References</h4>
                         <hr>
-                        <table class="table table-striped" id="tb-crossref">
+                        <table class="table table-striped multiple-table" id="tb-crossref">
                             <thead>
                                 <tr>
                                     <th>No. Ref.</th>
@@ -235,7 +235,7 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                         <h4>Functional Locations</h4>
                         <hr>
-                        <table class="table table-striped" id="tb-functional">
+                        <table class="table table-striped multiple-table" id="tb-functional">
                             <thead>
                                 <tr>
                                     <th>Loc Name</th>
@@ -291,14 +291,14 @@ use Illuminate\Support\Facades\Auth;
                             <input type="text" class="form-control" id="functional">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Category:</label>
+                            <label for="exampleInputEmail1">Filter Date:</label>
                             <select class="js-example-basic-single js-example-basic-filter-date" id="select-filter-date">
-                                <option value="">Additional Date</option>
-                                <option value="">SAP Chek Date</option>
-                                <option value="">User Submit</option>
-                                <option value="">Cataloguer Chek Date</option>
-                                <option value="">STD APP Chek Date</option>
-                                <option value="">Proc APP Chek Date</option>
+                                <option value="addition_datef">Additional Date</option>
+                                <option value="sap_material_code_datef">SAP Chek Date</option>
+                                <option value="user_submit_datef">User Submit</option>
+                                <option value="cataloguer_datef">Cataloguer Chek Date</option>
+                                <option value="std_approval_datef">STD APP Chek Date</option>
+                                <option value="proc_approver_datef">Proc APP Chek Date</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -315,12 +315,19 @@ use Illuminate\Support\Facades\Auth;
         </div>
         <!-- /.content -->
         <script>
+            totalData = 0;
+            var page = 1;
+            var likeFilter = "";
+            var aexportData = "";
             $('.js-example-basic-single').select2({
                 tags: false
             });
-            $('#btn-reset').click(function(){
+            $('#btn-reset').click(function() {
                 location.reload();
             })
+            String.prototype.replaceAt = function(index, replacement) {
+                return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+            }
             $.ajax({
                 method: "GET",
                 url: '/getMaterialType?query=&filter=[{"operator":"eq","value":"material_type","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=25',
@@ -344,69 +351,83 @@ use Illuminate\Support\Facades\Auth;
                 })
             })
             // {"operator":"like","value":"old","property":"old_material_code","type":"string"}
-            $('#btn-filter').click(function() {
 
+            // loadData(0, 25);
+            $('#btn-filter').click(function() {
+                likeFilter = "";
+                page = 1;
                 if ($('#material-code').val() != null && $('#material-code').val() != "") {
-                    likeFilter += '{"operator":"like","value":"' + $('#material-code').val() +
-                        '","property":"old_material_code","type":"string"}';
+                    likeFilter += ',{"operator":"like","value":"' + $('#material-code').val() +
+                        '","property":"old_material_code","type":"string"},';
                 }
                 var selectType = $("#select-type option:selected").val();
                 console.log(selectType);
                 if (selectType != null && selectType != "") {
-                    likeFilter += '{"operator":"like","value":"' + selectType +
-                        '","property":"type","material_type":"string"}';
+                    likeFilter += ',{"operator":"like","value":"' + selectType +
+                        '","property":"material_type","type":"string"},';
                 }
 
                 var selectCategory = $("#select-category option:selected").val();
-
                 if (selectCategory != null && selectCategory != "") {
-                    likeFilter += '{"operator":"like","value":"' + selectCategory +
+                    likeFilter += ',{"operator":"like","value":"' + selectCategory +
                         '","property":"category","type":"string"},';
                 }
 
                 if ($('#ref-no').val() != null && $('#ref-no').val() != "") {
-                    likeFilter += '{"operator":"like","value":"' + $('#ref-no').val() +
+                    likeFilter += ',{"operator":"like","value":"' + $('#ref-no').val() +
                         '","property":"refno","type":"string"},';
                 }
 
                 if ($('#manufacture').val() != null && $('#manufacture').val() != "") {
-                    likeFilter += '{"operator":"like","value":"' + $('#manufacture').val() +
+                    likeFilter += ',{"operator":"like","value":"' + $('#manufacture').val() +
                         '","property":"manufactur","type":"string"},';
                 }
 
                 if ($('#functional').val() != null && $('#functional').val() != "") {
-                    likeFilter += '{"operator":"like","value":"' + $('#functional').val() +
+                    likeFilter += ',{"operator":"like","value":"' + $('#functional').val() +
                         '","property":"funcloc","type":"string"},';
                 }
-
+                console.log($('#on-date').val())
                 if ($('#on-date').val() != null && $('#on-date').val() != "") {
-                    likeFilter += '{"operator":"eq","value":"' + $('#on-date').val() +
-                        '","property":"std_approval_datef","type":"string"},';
+                    likeFilter += ',{"operator":"eq","value":"' + $('#on-date').val() +
+                        '","property":"' + $('#select-filter-date').val() + '","type":"string"},';
                 }
-                loadData(0, 25);
+                console.log(likeFilter);
+                likeFilter = likeFilter.replaceAt(0, "").replaceAt(likeFilter.length - 1, " ").replaceAll(",,", ",")
+                loadData(page, 25);
                 // $.ajax({
                 //     method: "GET",
                 //     url: '/getMultiViewCatalogM?start=0&limit=25&action=getMultiView&page=1&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=["'+moreFilter+']'
                 // })
                 // [{"operator":"like","value":"old","property":"old_material_code","type":"string"},{"operator":"like","value":"ZMAT","property":"material_type","type":"string"},{"operator":"like","value":"H","property":"category","type":"string"},{"operator":"like","value":"dsa","property":"refno","type":"string"},{"operator":"like","value":"dadsa","property":"manufactur","type":"string"},{"operator":"like","value":"dsadsa","property":"funcloc","type":"string"},{"operator":"eq","value":"2022-10-11","property":"std_approval_datef","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]
             })
-            totalData = 0;
-            likeFilter = "";
-            exportData = "";
-            loadData(0, 25);
-            var page = $('#page');
-            page.val(1);
+            // var page = $('#page');
             $('.next').click(function() {
                 var start = $('#current_page');
-                pageCurr = $(this).data("page");
+                var pageCurr = $(this).data("page");
+                // if(parseInt($('#total_page').html()) >= page){
+                //     $('#next-step').addClass("Disabledd");
+                //     $('#previous').removeClass("Disabledd");
+                // }
+
+                // if(parseInt($('#total_page').html() <= page)){
+                //     $('#previous').addClass("Disabledd");
+                //     $('#next-step').removeClass("Disabledd");
+                // }
+
                 if (pageCurr == "next") {
-                    page.val(parseInt(page.val()) + 1);
+                    // page.val((parseInt(page.val()) + 1));
+                    console.log("NEXT");
+                    page = page + 1;
+                    console.log(page + "NEXT")
                 }
                 if (pageCurr == "prev") {
-                    page.val(parseInt(page.val()) - 1);
+                    console.log("Prev");
+                    page = page + 1;
+
                 }
-                loadData(page.val(), start);
-                start.html(page.val());
+                start.text(page);;
+                loadData(page, 0);
             })
 
             $('#short-desc-search').keypress(function(e) {
@@ -415,35 +436,42 @@ use Illuminate\Support\Facades\Auth;
                 {
                     likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                         '","property": "short_description","type": "string"}';
-                    page = 1;
-                    loadData(0, 25)
+                    loadData(page, 25)
                 }
             });
+            $('#short-desc-btn').click(function() {
+                likeFilter = ',{"operator": "like","value": "' + $(this).val() +
+                    '","property": "short_description","type": "string"}';
+                loadData(page, 25);
+            })
             $('#raw-search').keypress(function(e) {
                 var key = e.which;
                 if (key == 13) // the enter key code
                 {
                     likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                         '","property": "raw","type": "string"}';
-                    page = 1;
                     loadData(0, 25)
                 }
             });
+            $('#btn-raw-search').click(function(){
+                likeFilter = ',{"operator": "like","value": "' + $(this).val() +
+                    '","property": "raw","type": "string"}';
+                loadData(0, 25)
+            })
             $('#btn-search').click(function(e) {
+                page = 1;
                 if ($('#raw-search').val() != null && $('#raw-search').val() != "") {
-                    likeFilter += ',{"operator": "like","value": "' + $('#short-desc-search').val() +
+                    likeFilter = ',{"operator": "like","value": "' + $('#short-desc-search').val() +
                         '","property": "raw","type": "string"}';
                 }
                 if ($('#short-desc-search').val() != null && $('#short-desc-search').val() != "") {
-                    likeFilter += ',{"operator": "like","value": "' + $('#short-desc-search').val() +
+                    likeFilter = ',{"operator": "like","value": "' + $('#short-desc-search').val() +
                         '","property": "short_description","type": "string"}';
                 }
-                page = 1
-                loadData(0, 25)
+                loadData(page, 25)
                 likeFilter = "";
             })
             // {"operator":"like","value":"PLATE:ASTM A36;45MM","property":"short_description","type":"string"}
-            console.log("EXPORT DATA" + exportData.toString());
             $('#btn-export').click(function() {
                 $.ajax({
                     method: "POST",
@@ -451,6 +479,7 @@ use Illuminate\Support\Facades\Auth;
                     data: {
                         'transaction_type': 'Service',
                         'data': JSON.stringify(exportData),
+                        '_token': 'vgCCbWBT8X7Miwg2mBqKhc1iscrXpGHxd31FkihY',
                         'filter': '',
                         'page': '1',
                         'start': '0',
@@ -467,7 +496,8 @@ use Illuminate\Support\Facades\Auth;
                 $.ajax({
                     method: "GET",
                     url: '/getMultiViewCatalogM?action=getMultiView&page=' + parseInt(page) +
-                        '&start=25&limit=25&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}' +
+                        '&start=' + start +
+                        '&limit=25&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}' +
                         likeFilter.toString() + ']',
                     dataType: "json"
                 }).done(function(result) {
@@ -480,95 +510,96 @@ use Illuminate\Support\Facades\Auth;
                     result.data.forEach(element => {
                         var rowMaterial2 = $('<tr class="d-flex tr-tab-2">');
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.addition_date + '</td></tr>'
+                            '<td class="col-1">' + element.addition_date + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.sap_material_code + '</td></tr>'
+                            '<td class="col-1">' + element.sap_material_code + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.sap_material_code_date +
+                            '<td class="col-1">' + element.sap_material_code_date +
                             '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.sap_material_code_by +
+                            '<td class="col-1">' + element.sap_material_code_by +
                             '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.owner + '</td></tr>'
+                            '<td class="col-1">' + element.owner + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.user_submit_date + '</td></tr>'
+                            '<td class="col-1">' + element.user_submit_date + '</td></tr>'
                         )
                         rowMaterial2.append(
                             element.adr_status === "FINISH" ?
-                            '<td class="col-1 text-center"> <span class="badge bg-success">' + element
+                            '<td class="col-1"> <span class="badge bg-success">' + element
                             .adr_status + '</span></td></tr>' :
-                            '<td class="col-1 text-center"> <span class="badge bg-danger">' + element
+                            '<td class="col-1"> <span class="badge bg-danger">' + element
                             .adr_status + '</span></td></tr>'
                         )
                         rowMaterial2.append(
                             element.item_status === "ORIGIN" ?
-                            '<td class="col-1 text-center"> <span class="badge bg-success">' + element
+                            '<td class="col-1"> <span class="badge bg-success">' + element
                             .item_status + '</span></td></tr>' :
-                            '<td class="col-1 text-center"> <span class="badge bg-danger">' + element
+                            '<td class="col-1"> <span class="badge bg-danger">' + element
                             .item_status + '</span></td></tr>'
                         )
 
 
                         rowMaterial2.append(
                             element.sync_status === "success" ?
-                            '<td class="col-1 text-center"> <span class="badge bg-success">' + element
+                            '<td class="col-1"> <span class="badge bg-success">' + element
                             .sync_status + '</span></td></tr>' :
-                            '<td class="col-1 text-center"> <span class="badge bg-danger">' + element
+                            '<td class="col-1"> <span class="badge bg-danger">' + element
                             .sync_status + '</span></td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.inc + '</td></tr>'
+                            '<td class="col-1">' + element.inc + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.groupclass + '</td></tr>'
+                            '<td class="col-1">' + element.groupclass + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.long_description + '</td></tr>'
+                            '<td class="col-2"  role="button" data-tooltip="tooltip" title="' + element
+                            .long_description + '">' + element.long_description + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.raw + '</td></tr>'
+                            '<td class="col-1" role="button" data-tooltip="tooltip" title="'+element.raw+'">' + element.raw + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.material_type + '</td></tr>'
+                            '<td class="col-1">' + element.material_type + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.uom + '</td></tr>'
+                            '<td class="col-1">' + element.uom + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.category + '</td></tr>'
+                            '<td class="col-1">' + element.category + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.cataloguer + '</td></tr>'
+                            '<td class="col-1">' + element.cataloguer + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.cataloguer_by + '</td></tr>'
+                            '<td class="col-1">' + element.cataloguer_by + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.cataloguer_date + '</td></tr>'
+                            '<td class="col-1">' + element.cataloguer_date + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.proc_approver + '</td></tr>'
+                            '<td class="col-1">' + element.proc_approver + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.std_approval_by + '</td></tr>'
+                            '<td class="col-1">' + element.std_approval_by + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.std_approval_date + '</td></tr>'
+                            '<td class="col-1">' + element.std_approval_date + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.proc_approver + '</td></tr>'
+                            '<td class="col-1">' + element.proc_approver + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.proc_approver_by + '</td></tr>'
+                            '<td class="col-1">' + element.proc_approver_by + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1 text-center">' + element.proc_approver_date + '</td></tr>'
+                            '<td class="col-1">' + element.proc_approver_date + '</td></tr>'
                         )
 
                         $("#material-table2").append(rowMaterial2);
@@ -577,33 +608,33 @@ use Illuminate\Support\Facades\Auth;
                         var rowMaterial = $('<tr class="d-flex tr-tab-1">');
                         rowMaterial.append(
                             element.status_user == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_cat == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_stdapp == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_proc == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_sap == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
-                        rowMaterial.append('<td class="col-3 text-center">' + element.catalog_no + ' </td>')
-                        rowMaterial.append('<td class="col-3 text-center">' + element.short_description +
+                        rowMaterial.append('<td class="col-3">' + element.catalog_no + ' </td>')
+                        rowMaterial.append('<td class="col-5">' + element.short_description +
                             '</td>')
-                        rowMaterial.append('<td class="col-3 text-center">' + element
+                        rowMaterial.append('<td class="col-3">' + element
                             .adr_no + '</td>')
 
                         $("#material-table").append(rowMaterial);
@@ -616,6 +647,7 @@ use Illuminate\Support\Facades\Auth;
                         function(e) {
                             $(this).each(function() {
                                 var value = $(this).text();
+                                console.log(value);
                                 // var value = "3146"
                                 //Characteristics
                                 $("#tb-characteristic tbody").empty();
