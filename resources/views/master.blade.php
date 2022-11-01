@@ -92,10 +92,22 @@
             border: 1px solid blue;
         }
 
+        /* .multiple-table td{
+            word-wrap: break-word;
+            white-space: initial;
+        } */
+
+        .select2-selection__choice__display{
+            color: black;
+        }
+        .select2-selection__choice{
+            border: none;
+        }
         #tableDataCharacteristic td {
             word-wrap: break-word;
             white-space: initial;
         }
+
 
         #tableData td {
             word-wrap: break-word;

@@ -2,11 +2,11 @@
 
 use Illuminate\Support\Facades\Auth;
 ?>
+
 @extends('master')
 
 @section('title', 'Material & Tools | NCS')
 @section('content')
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
@@ -66,7 +66,7 @@ use Illuminate\Support\Facades\Auth;
                                     <label for="" class="col-sm-3">MGC: </label>
                                     <div class="col-sm-9">
                                         <div class="input-group mb-2">
-                                            <select class="js-example-basic-multiple js-example-basic-mgc form-control"
+                                            <select class="js-example-basic-single js-example-basic-mgc form-control"
                                                 id="select-mgc">
                                                 <option value="">Select MGC</option>
                                             </select>
@@ -144,7 +144,8 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-3">INC: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <input type="text" readonly class="form-control" id="inc" placeholder="">
+                                    <input type="text" readonly class="form-control" id="inc-id-detail"
+                                        placeholder="">
                                 </div>
                             </div>
                             <label for="" class="col-sm-3">Name: </label>
@@ -158,7 +159,7 @@ use Illuminate\Support\Facades\Auth;
                                 <div class="input-group mb-2">
                                     <input type="text" class="form-control" id="short_inc" placeholder="">
                                     <div class="input-group-append">
-                                        <button type="submit" class="btn btn-default">
+                                        <button type="submit" id="save-short-desc" class="btn btn-default">
                                             <i class="fas fa-save"></i>
                                         </button>
                                     </div>
@@ -173,15 +174,15 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-3">MGC: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <select class="js-example-basic-single js-example-basic-type form-control"
-                                        id="select-mgc">
+                                    <select multiple="multiple" class="js-example-basic-multiple js-example-basic-type"
+                                        id="select-mgc-2">
                                         <option value="">Select MGC</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer bg-white ml-auto mr-0 pr-0">
-                            <button id="btn-reset" type="button" class="btn btn-primary">
+                            <button id="btn-save-inc" type="button" class="btn btn-primary">
                                 Save &nbsp; <i class="fas fa-save"></i>
                             </button>
                         </div>
@@ -284,9 +285,15 @@ use Illuminate\Support\Facades\Auth;
             $('.js-example-basic-single').select2({
                 tags: false
             });
-            $('.js-example-basic-multiple').select2({
-                tags: false
-            });
+            var MGCMultipleselect2 =
+                $(document).ready(function() {
+                    MGCMultipleselect2 = $('.js-example-basic-multiple').select2({
+                        multiple: true,
+                    });
+                });
+
+            $('#test_id').val($("#test_id option:contains('Option 4')").val()).change();
+
             loadInc(0, 25, 1);
             $('#select-inc').change(function() {
                 $(".js-example-basic-mgc").empty();
@@ -297,7 +304,27 @@ use Illuminate\Support\Facades\Auth;
                 loadSearch(1, 0, 25);
             })
 
+            $('#save-short-desc').click(function() {
+                $.ajax({
+                    method: "POST",
+                    url: "/ChangeShortText",
+                    data: {
+                        inc: $('#inc-id-detail').val(),
+                        short_name_code: $("#short_inc").val(),
+                        _token: csrf_token,
+                    }
+                }).done(function(v) {
+                    Toast.fire(
+                        v.success ? 'Successfully' : "Failed",
+                        v.message,
+                        v.success ? "success" : "error"
+                    )
+                });
+            });
+
             // {{-- select-status,select-inc,select-mgc,name-code --}}
+            var transactionType = "";
+
             function loadSearch(page, start, limit) {
                 page = page == 0 ? 1 : page;
                 var filter = "";
@@ -365,18 +392,97 @@ use Illuminate\Support\Facades\Auth;
                                     url: '/getIncColloquialName?&start=0&limit=25&page=1&filter=[{"operator":"eq","value":"' +
                                         inc[1] + '","property":"inc","type":"string"}]'
                                 }).done(function(v) {
-                                    $("#inc").val(inc[1]);
-                                    console.log(v);
+                                    $("#inc-id-detail").val(inc[1]);
                                     $("#name_inc").val(v.data[0].item_name);
                                     $("#short_inc").val(v.data[0].item_name);
                                     $("#desc_inc").val(v.data[0].description);
+                                    $.ajax({
+                                        method: "GET",
+                                        url: '/getMgcByInc?start=0&limit=25&_token="' +
+                                            csrf_token +
+                                            '"&filter=[{"operator":"eq","value":"' +
+                                            inc[1] +
+                                            '","property":"inc","type":"string"}]&page=1&sort=[{"property":"inc","direction":"ASC"}]'
+                                    }).done(function(val) {
+                                        transactionType = val[0]
+                                            .transaction_type;
+                                        console.log(transactionType);
+                                        val.forEach(function(v) {
+                                            var option = new Option(v
+                                                .name, v.id,
+                                                true, true);
+                                            MGCMultipleselect2.append(
+                                                    option)
+                                                .trigger('change');
+                                        })
+
+                                    });
                                 })
+                                loadCharact(0, 25, "inc");
                             })
 
                         });
+
                     });
                 });
             }
+
+            function loadCharact(start, limit, property) {
+                $.ajax({
+                    method: "GET",
+                    url: '/getIncCharacteristicsM?start=' + start + '&limit=' + limit +
+                        '&page=1&sort=[{"property":"sequence","direction":"ASC"}]&filter=[{"operator":"eq","value":"' +
+                        inc[1] + '","property":"' + property + '","type":"string"}]'
+                }).done(function(v) {
+                    console.log(v);
+                })
+            }
+
+            $('#btn-save-inc').click(function() {
+                // console.log(MGCMultipleselect2.val().toString());
+                var data = {
+                    _token: csrf_token,
+                    transaction_type: transactionType,
+                    inc: inc[1],
+                    "detail_item_nameMNU26-inputEl": $("#name_inc").val(),
+                    "detail_short_name_codeMNU26-inputEl": $('#short_inc').val(),
+                    "mgc_list1MNU26-inputEl": MGCMultipleselect2.val().toString()
+                };
+                var i = 0;
+                MGCMultipleselect2.val().forEach(function(v) {
+                    data["groupclass[" + i + "]"] = v;
+                    i++;
+                })
+                $.ajax({
+                    method: "POST",
+                    url: "/SaveMCG",
+                    data: data,
+                    success: function(msg) {
+                        Toast.fire(
+                            true,
+                            JSON.stringify(msg),
+                            "success"
+                        )
+                        console.log(msg);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                        Toast.fire(
+                            false,
+                            XMLHttpRequest.responseText,
+                            "error"
+                        )
+                        console.log(JSON.stringify(XMLHttpRequest.responseText));
+
+                    },
+                }).done(function(v) {
+                    Toast.fire(
+                        v.success,
+                        v.message,
+                        "error"
+                    )
+                });
+            });
 
             function loadMgcByInc(inc, start, limit, page) {
                 $.ajax({
@@ -391,13 +497,36 @@ use Illuminate\Support\Facades\Auth;
                     })
                 });
             }
+            $('#select-mgc-2').change(function() {
+                console.log($(this).text());
+            })
+            // function 
+            // $('#js-example-basic-type').click(function() {
+            loadMGCAll(0, 25, 1);
+            // })
 
-            function 
+            function loadMGCAll(start, limit, page) {
+                $.ajax({
+                    method: "GET",
+                    url: '/getGroupClassM?query=&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]&page=' +
+                        page + '&start=' + start + '&limit=' + limit,
+                    data: {
+                        _token: csrf_token
+                    }
+                }).done(function(v) {
+                    v.data.forEach(function(vv) {
+                        $('.js-example-basic-type').append('<option value="' + vv.groupclass + '">' + vv
+                            .name +
+                            '</option>');
+                    })
+                })
+
+            }
 
             function loadInc(start, limit, page) {
                 $.ajax({
                     method: "GET",
-                    url: '/getIncMgc?_dc=1666943250979&query=&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"like","value":"%","property":"class_inc_name","type":"string"}]&limit=' +
+                    url: '/getIncMgc?query=&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"like","value":"%","property":"class_inc_name","type":"string"}]&limit=' +
                         limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]',
                     dataType: "json"
                 }).done(function(v) {
@@ -411,4 +540,4 @@ use Illuminate\Support\Facades\Auth;
                 })
             }
         </script>
-    @endsection
+@endsection
