@@ -522,14 +522,23 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("procAproverBy").value = data[0].proc_approver_by;
                         if (data[0].cataloguer != null) {
                             document.getElementById("cataloguer").value = data[0].cataloguer;
+                        }else{
+                            document.getElementById("cataloguer").value = "";
+
                         }
 
                         if (data[0].std_approval != null) {
                             document.getElementById("stdApp").value = data[0].std_approval;
+                        }else{
+                            document.getElementById("stdApp").value = "";
+                            
                         }
 
                         if (data[0].proc_approver != null) {
                             document.getElementById("procApp").value = data[0].proc_approver;
+                        }else{
+                            document.getElementById("procApp").value = "";
+
                         }
 
                         getReference(data[0].adr_d_items_id);

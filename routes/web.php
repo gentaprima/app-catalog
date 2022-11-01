@@ -65,6 +65,7 @@ Route::get('/get-value-characteristic/{adrItems}','Catalogue\CatalogueController
 Route::get('/get-value-characteristic-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicById');
 Route::get('/get-value-characteristic-revision-all/{adrItems}','Catalogue\CatalogueController@getAllValueCharacteristicRevisionById');
 Route::post('/update-all-value-characteristic','Catalogue\CatalogueController@updateAllValueCharacteristic');
+Route::post('/update-all-value-characteristic-revision','Catalogue\CatalogueController@updateAllValueCharacteristicRevision');
 
 Route::get('/single-view/service', 'NavController@singleViewService');
 Route::get('/single-view/service/{id}', 'NavController@singleViewServiceById');
@@ -92,6 +93,7 @@ Route::get('/dictionary/service-type','NavController@viewServiceType');
 Route::get('/dictionary/uom','NavController@viewUom');
 Route::get('/dictionary/category','NavController@viewCategory');
 Route::get('/dictionary/plant','NavController@viewPlant');
+Route::get('/dictionary/moving-type','NavController@viewMovingType');
 
 // DICTIONARY
 

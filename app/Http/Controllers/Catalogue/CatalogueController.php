@@ -31,6 +31,7 @@ use App\Models\BaseModel;
 use Session;
 use Excel;
 use File;
+use Illuminate\Foundation\Console\Presets\React;
 
 class CatalogueController extends Controller
 {
@@ -474,12 +475,33 @@ class CatalogueController extends Controller
 
     public function addValueCharacteristicRevision(Request $request)
     {
+        $data = $request->characteristic;
+        foreach ($data as $key => $item) {
+            $item["adr_d_items_id"] = $request->adr_d_items_id;
+            $data[$key] = $item;
+        }
+
         DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->delete();
-        DB::table('value_characteristic')->insert($request->characteristic);
+        DB::table('value_characteristic')->insert($data);
         $data = DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->where('type_adr', 'Revision')->get();
         return response()->json([
             'success' => true,
             'data' => $data
+        ], 200);
+    }
+
+    public function updateAllValueCharacteristicRevision(Request $request){
+        $data = $request->characteristic;
+        foreach ($data as $key => $item) {
+            $item["adr_d_items_id"] = $request->adr_d_items_id;
+            $data[$key] = $item;
+        }
+        DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->delete();
+        DB::table('value_characteristic')->insert($data);
+        $getData = DB::table('value_characteristic')->where('adr_d_items_id', $request->adr_d_items_id)->where('type_adr', 'Revision')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $getData
         ], 200);
     }
 

@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title','Dictionary | Plant')
+@section('title','Dictionary | Moving Type')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -9,13 +9,13 @@
         <div class="container-fluid mt-3">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">List Plant</h1>
+                    <h1 class="m-0">List Moving Type</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item">Dictionary</li>
-                        <li class="breadcrumb-item active">Plant</li>
+                        <li class="breadcrumb-item active">Moving Type</li>
                     </ol>
                 </div><!-- /.col -->
                 <p id="menu"></p>
@@ -44,10 +44,8 @@
             <table id="tableData" class="table table-striped mt-3">
                 <thead>
                     <tr>
-                        <th>Company Code</th>
-                        <th>Company</th>
-                        <th>Code Plant</th>
-                        <th>Status</th>
+                        <th>Code</th>
+                        <th>Description</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -87,25 +85,16 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Code</label>
                             <div class="col-sm-10">
-                                <input type="text" id="code" readonly class="form-control">
+                                <input type="text" id="code" class="form-control">
                             </div>
                         </div>
+
                         <div class="form-group row">
-                            <label for="" class="col-sm-2">Select Company</label>
+                            <label for="" class="col-sm-2">Description</label>
                             <div class="col-sm-10">
-                                <select class="js-example-data-ajax" onchange="selectCompany(this)" id="company">
-                                    <option value="">Select Company</option>
-                                </select>
+                                <input type="text" class="form-control" id="description">
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2">Code Plant</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="codePlant">
-                            </div>
-                        </div>
-                        <input type="hidden" id="idCompany">
-                        <input type="hidden" id="nameCompany">
 
                     </form>
                 </div>
@@ -157,25 +146,19 @@
 
 
             getSelectCompany();
-            document.getElementById("titlemodalForm").innerHTML = "Add Plant"
+            document.getElementById("titlemodalForm").innerHTML = "Add Moving Type"
             document.getElementById("code").value = "";
-            document.getElementById("codePlant").value = "";
+            document.getElementById("description").value = "";
             document.getElementById("btnApply").setAttribute("onclick", 'processAdd()');
         }
 
-        function updateData(companyCode, name, plantCode, status, id, username, companiesId, plantDesc) {
+        function updateData(code, desc, id) {
             console.log(companyCode);
-            document.getElementById("titlemodalForm").innerHTML = "Update Plant"
-            document.getElementById("code").value = companyCode;
-            document.getElementById("codePlant").value = plantCode;
-            document.getElementById("idCompany").value = companiesId
-            document.getElementById("nameCompany").value = name
-            var companySelect = $("#company")
-            let idComboBox = companiesId + '-' + name + '-' + companyCode
-            var optionSCompany = new Option(name, idComboBox, true, true)
-            companySelect.append(optionSCompany).trigger('change');
+            document.getElementById("titlemodalForm").innerHTML = "Update Moving Type"
+            document.getElementById("code").value = code;
+            document.getElementById("description").value = desc;
 
-            document.getElementById("btnApply").setAttribute("onclick", `processUpdate('${username}','${id}')`);
+            document.getElementById("btnApply").setAttribute("onclick", `processUpdate('${id}')`);
         }
 
 
@@ -225,57 +208,68 @@
 
 
         function processAdd() {
-            let codeCompany = document.getElementById("code").value;
-            let codePlant = document.getElementById("codePlant").value;
-            let idCompany = document.getElementById("idCompany").value;
-            let nameCompany = document.getElementById("nameCompany").value;
+            let code = document.getElementById("code").value;
+            let description = document.getElementById("description").value;
 
-            if (codeCompany == '' && codePlant == '') {
+
+            if (code == '' && description == '') {
                 Toast.fire({
                     icon: 'error',
                     title: 'Data cannot be null'
                 });
             } else {
-                $.ajax({
-                    type: 'post',
-                    dataType: 'json',
-                    url: '/SavePlant',
-                    data: {
-                        _token: csrf_token,
-                        data_items: `[{"flag":"Insert","id":"model_plant-5","company_code":"${codeCompany}","companies_m_id":"${idCompany}","plant_code":"${codePlant}","plant_description":"${nameCompany}"}]`
-                    },
-                    success: function(response) {
-                        if (response.success == true) {
-                            $("#btnCloseModalForm").click();
-                            Toast.fire({
-                                icon: 'success',
-                                title: response.message
-                            });
-                            loadData();
-                        } else {
-                            Toast.fire({
-                                icon: 'error',
-                                title: response.message
-                            });
 
-                        }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to add this data!",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, create it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            url: '/SaveEntityM',
+                            data: {
+                                _token: csrf_token,
+                                entity_name: 'movingtype',
+                                data_items: `[{"flag":"Insert","id":"model_moving_type-1","code":"${code}","description":"${description}"}]`
+                            },
+                            success: function(response) {
+                                if (response.success == true) {
+                                    $("#btnCloseModalForm").click();
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: response.message
+                                    });
+                                    loadData();
+                                } else {
+                                    Toast.fire({
+                                        icon: 'error',
+                                        title: response.message
+                                    });
+
+                                }
+                            }
+                        })
                     }
                 })
+
+
             }
         }
 
 
-        function processUpdate(username,id) {
-            let codeCompany = document.getElementById("code").value;
-            let codePlant = document.getElementById("codePlant").value;
-            let idCompany = document.getElementById("idCompany").value;
-            let nameCompany = document.getElementById("nameCompany").value;
-
-            const d = new Date();
-            let date = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+        function processUpdate(id) {
+            let code = document.getElementById("code").value;
+            let description = document.getElementById("description").value;
 
 
-            if (codeCompany == '' && codePlant == '') {
+
+            if (code == '' && description == '') {
                 Toast.fire({
                     icon: 'error',
                     title: 'Data cannot be null'
@@ -323,7 +317,7 @@
                     $.ajax({
                         type: "POST",
                         dataType: 'json',
-                        url: '/RemovePlant',
+                        url: '/RemoveEntityM',
                         data: {
                             _token: csrf_token,
                             id: parseInt(id)
@@ -345,7 +339,7 @@
         function loadData(page = 1, start = 1, limit = 25, search = "") {
             $("#tableData tbody").empty();
             $.ajax({
-                url: `/getPlant?action=getEntity&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"${search}","property":"plant","type":"string"}]`,
+                url: `/get-abbreviation?action=getEntity&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"${search}","property":"entity_code_name","type":"string"},{"operator":"like","value":"movingtype","property":"entity_name","type":"string"}]`,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
@@ -354,14 +348,12 @@
                     document.getElementById("total_page").innerHTML = totalPage
                     for (let i = 0; i < response.data.length; i++) {
                         var tr = $("<tr>");
-                        tr.append("<td>" + response.data[i].company_code + "</td>");
-                        tr.append("<td>" + response.data[i].plant_description + "</td>");
-                        tr.append("<td>" + response.data[i].plant_code + "</td>");
-                        tr.append("<td>" + response.data[i].status + "</td>");
+                        tr.append("<td>" + response.data[i].code + "</td>");
+                        tr.append("<td>" + response.data[i].description + "</td>");
                         if (groupName == `Administrator's`) {
                             tr.append(`<td>
                                         <center>
-                                            <button data-toggle="modal" data-target="#modalForm" onclick="updateData('${response.data[i].company_code}','${response.data[i].name}','${response.data[i].plant_code}','${response.data[i].status}','${response.data[i].id}','${response.data[i].user_name}','${response.data[i].companies_m_id}','${response.data[i].plant_description}')" class="btn btn-default btn-sm no-border"><i class="fa fa-edit"></i></button>
+                                            <button data-toggle="modal" data-target="#modalForm" onclick="updateData('${response.data[i].code}','${response.data[i].description}','${response.data[i].id}')" class="btn btn-default btn-sm no-border"><i class="fa fa-edit"></i></button>
                                             <button onclick="deleteData('${response.data[i].id}')" class="btn btn-default btn-sm no-border"><i class="fa fa-trash"></i></button>
                                         </center>                        
                                      </td>`);
