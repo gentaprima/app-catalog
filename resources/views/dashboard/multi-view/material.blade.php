@@ -138,10 +138,10 @@ use Illuminate\Support\Facades\Auth;
                             <li>Dari</li>
                             <li class="ml-2" id="total_page">0</li>
                             <li class="paginate_button next prev" id="previous" data-page="prev"><a
-                                    href="#"" aria-controls="example1" id="link_next" data-dt-idx="0"
+                                     aria-controls="example1" id="link_next" data-dt-idx="0"
                                     tabindex="0"><i class="fa fa-chevron-left"></i></a></li>
                             <li class="paginate_button next prev" id="next-step" data-page="next"><a
-                                    id="link_next" href="#" aria-controls="example1" data-dt-idx="2"
+                                    id="link_next" aria-controls="example1" data-dt-idx="2"
                                     tabindex="0"><i class="fa fa-chevron-right"></i></a></li>
                         </ul>
                     </div>
