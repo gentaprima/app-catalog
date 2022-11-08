@@ -494,31 +494,7 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").value = data[0].sap_material_code;
                         document.getElementById("inc").value = data[0].inc;
-                        var incSelect = $('#inc');
-                        var option = new Option(data[0].item_name, data[0].inc, true, true);
-                        incSelect.append(option).trigger('change');
-
-                        var mgcSelect = $("#mgc")
-                        var optiobMgc = new Option(data[0].groupclass, data[0].groupclass, true, true)
-                        mgcSelect.append(optiobMgc).trigger('change');
-
-                        if (data[0].material_type != null) {
-                            var materialType = $("#materialType")
-                            var optiobMaterial = new Option(data[0].material_type, data[0].material_type, true, true)
-                            materialType.append(optiobMaterial).trigger('change');
-                        }
-
-                        if (data[0].uom != null) {
-                            var uom = $("#uom")
-                            var optionUom = new Option(data[0].uom, data[0].uom, true, true)
-                            uom.append(optionUom).trigger('change');
-                        }
-
-                        if (data[0].category != null) {
-                            var category = $("#category")
-                            var optionCategory = new Option(data[0].category, data[0].category, true, true)
-                            category.append(optionCategory).trigger('change');
-                        }
+                       
 
                         document.getElementById("nameCode").value = data[0].item_name;
                         document.getElementById("shortNameCode").value = data[0].short_name_code;
@@ -552,6 +528,32 @@ use Illuminate\Support\Facades\Auth;
                         getItemsFuncloc(data[0].adr_d_items_id);
                         getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, data[0].id);
                         loadReason(data[0].id);
+
+                        var incSelect = $('#inc');
+                        var option = new Option(data[0].item_name, data[0].inc, true, true);
+                        incSelect.append(option).trigger('change');
+
+                        var mgcSelect = $("#mgc")
+                        var optiobMgc = new Option(data[0].groupclass, data[0].groupclass, true, true)
+                        mgcSelect.append(optiobMgc).trigger('change');
+
+                        if (data[0].material_type != null) {
+                            var materialType = $("#materialType")
+                            var optiobMaterial = new Option(data[0].material_type, data[0].material_type, true, true)
+                            materialType.append(optiobMaterial).trigger('change');
+                        }
+
+                        if (data[0].uom != null) {
+                            var uom = $("#uom")
+                            var optionUom = new Option(data[0].uom, data[0].uom, true, true)
+                            uom.append(optionUom).trigger('change');
+                        }
+
+                        if (data[0].category != null) {
+                            var category = $("#category")
+                            var optionCategory = new Option(data[0].category, data[0].category, true, true)
+                            category.append(optionCategory).trigger('change');
+                        }
 
                         // check status
 

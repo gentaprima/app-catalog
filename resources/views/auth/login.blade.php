@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="container-login100-form-btn">
-                        <button onclick="login()" type="button" class="login100-form-btn">
+                        <button onclick="login()" type="button" id="btnLogin" class="login100-form-btn">
                             Login
                         </button>
                     </div>
@@ -65,7 +65,7 @@
                             
                         </span>
                         <a class="txt2" href="">
-                            Username / Password?
+                            <!-- Username / Password? -->
                         </a>
                     </div>
 
@@ -152,6 +152,15 @@
                 }
             })
         }
+
+        let inputPass = document.getElementById("password");
+        inputPass.addEventListener("keypress",function(event){
+            if(event.key == "Enter"){
+                event.preventDefault();
+                document.getElementById("btnLogin").click();
+                // console.log("asdas");
+            }
+        })
     </script>
 
 </body>

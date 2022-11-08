@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Auth;
         <div class="container-fluid mt-3">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Single View Material</h1>
+                    <h1 class="m-0">Single View Service</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item">Single View</li>
-                        <li class="breadcrumb-item active">Material</li>
+                        <li class="breadcrumb-item active">Service</li>
                     </ol>
                 </div><!-- /.col -->
                 <p id="menu"></p>
@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Auth;
         <div class="row">
             <div class="col-sm-7">
                 <div class="card p-4 mb-5 m-2">
-                    <h4>Material Item</h4>
+                    <h4>Service Item</h4>
                     <hr>
                     <div class="row" id="button" hidden="true">
                         <div class="col-sm-8">
@@ -465,31 +465,7 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").innerHTML = data[0].sap_material_code;
                         document.getElementById("inc").value = data[0].inc;
-                        var incSelect = $('#inc');
-                        var option = new Option(data[0].class_inc_name, data[0].inc + '-' + data[0].inc_m_id + '-' + data[0].item_name + '-' + data[0].short_name_code, true, true);
-                        incSelect.append(option).trigger('change');
-
-                        var mgcSelect = $("#mgc")
-                        var optiobMgc = new Option(data[0].group_class_name, data[0].groupclass, true, true)
-                        mgcSelect.append(optiobMgc).trigger('change');
-
-                        if (data[0].material_type != null) {
-                            var materialType = $("#materialType")
-                            var optiobMaterial = new Option(data[0].material_type, data[0].material_type, true, true)
-                            materialType.append(optiobMaterial).trigger('change');
-                        }
-
-                        if (data[0].uom != null) {
-                            var uom = $("#uom")
-                            var optionUom = new Option(data[0].uom, data[0].uom, true, true)
-                            uom.append(optionUom).trigger('change');
-                        }
-
-                        if (data[0].category != null) {
-                            var category = $("#category")
-                            var optionCategory = new Option(data[0].category, data[0].category, true, true)
-                            category.append(optionCategory).trigger('change');
-                        }
+                       
 
                         document.getElementById("nameCode").value = data[0].item_name;
                         document.getElementById("shortNameCode").value = data[0].short_name_code;
@@ -520,6 +496,31 @@ use Illuminate\Support\Facades\Auth;
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
                         getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id);
+                        var incSelect = $('#inc');
+                        var option = new Option(data[0].class_inc_name, data[0].inc + '-' + data[0].inc_m_id + '-' + data[0].item_name + '-' + data[0].short_name_code, true, true);
+                        incSelect.append(option).trigger('change');
+
+                        var mgcSelect = $("#mgc")
+                        var optiobMgc = new Option(data[0].group_class_name, data[0].groupclass, true, true)
+                        mgcSelect.append(optiobMgc).trigger('change');
+
+                        if (data[0].material_type != null) {
+                            var materialType = $("#materialType")
+                            var optiobMaterial = new Option(data[0].material_type, data[0].material_type, true, true)
+                            materialType.append(optiobMaterial).trigger('change');
+                        }
+
+                        if (data[0].uom != null) {
+                            var uom = $("#uom")
+                            var optionUom = new Option(data[0].uom, data[0].uom, true, true)
+                            uom.append(optionUom).trigger('change');
+                        }
+
+                        if (data[0].category != null) {
+                            var category = $("#category")
+                            var optionCategory = new Option(data[0].category, data[0].category, true, true)
+                            category.append(optionCategory).trigger('change');
+                        }
 
                         // check status
 
@@ -1261,11 +1262,11 @@ use Illuminate\Support\Facades\Auth;
                             delete object['id'];
                         })
 
-                        if(type == 'new'){
-                            addValueCharacteristic(response.data);
-                        }else{
-                            updateAllValueCharacteristic(response.data);
-                        }
+                        addValueCharacteristic(response.data);
+                        // if(type == 'new'){
+                        // }else{
+                        //     updateAllValueCharacteristic(response.data);
+                        // }
                     }
                 }
             })
