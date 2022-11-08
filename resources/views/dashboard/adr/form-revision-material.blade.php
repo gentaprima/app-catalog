@@ -551,7 +551,7 @@ use Illuminate\Support\Facades\Auth;
 
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
-                        getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, data[0].id);
+                        // getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, data[0].id);
                         loadReason(data[0].id);
 
 

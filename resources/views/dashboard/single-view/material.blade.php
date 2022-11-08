@@ -510,7 +510,7 @@ use Illuminate\Support\Facades\Auth;
                         }
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
-                        getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, 'new');
+                        // getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, 'new');
                         
                         var incSelect = $('#inc');
                         var option = new Option(data[0].class_inc_name, data[0].inc + '-' + data[0].inc_m_id + '-' + data[0].item_name + '-' + data[0].short_name_code, true, true);
@@ -1311,6 +1311,7 @@ use Illuminate\Support\Facades\Auth;
         function selectMgc(val) {
             let inc = val.value.split('-');
             let adrDItems = document.getElementById("adrDItems").innerHTML;
+            $("#tableDataCharacteristic tbody").empty();
             getCharacteristic(adrDItems, inc[1], 'update');
             document.getElementById("nameCode").value = inc[2];
             document.getElementById("shortNameCode").value = inc[3];
