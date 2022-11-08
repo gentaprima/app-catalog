@@ -205,8 +205,7 @@ use Illuminate\Support\Facades\Auth;
                         max-height: 383px;
                         object-fit: cover;
                         ;"
-                            src="https://awsimages.detik.net.id/community/media/visual/2020/10/15/toyota-new-kijang-innova.png?w=700&q=90"
-                            alt="">
+                            id="image-inc" alt="">
                         <div class="card-footer bg-white ml-auto mr-0 pr-0">
                             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
                                 <ul class="pagination">
@@ -312,8 +311,8 @@ use Illuminate\Support\Facades\Auth;
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">MGC:</label>
-                            <select multiple="multiple" class="js-example-basic-multiple js-example-basic-type"
-                                id="select-mgc-2">
+                            <select multiple="multiple" class="js-example-basic-multiple js-example-basic-type-add"
+                                id="select-mgc-3">
                                 <option value="">Select MGC</option>
                             </select>
                         </div>
@@ -337,6 +336,9 @@ use Illuminate\Support\Facades\Auth;
                     MGCMultipleselect2 = $('.js-example-basic-multiple').select2({
                         multiple: true,
                     });
+                    // MGCMultipleselect2Add = $('.js-example-basic-multiple-add').select2({
+                    //     multiple: true,
+                    // });
                 });
 
             $('#test_id').val($("#test_id option:contains('Option 4')").val()).change();
@@ -442,57 +444,9 @@ use Illuminate\Support\Facades\Auth;
                     }
 
                     loadResultInc(pageInc, 0, 25, filter);
+
                 });
             }
-            $(".tr-tab-1").click(function(e) {
-                $(this).each(function() {
-                    var value = $(this).text();
-                    inc = value.split(" ");
-                    namePick = value.split("-");
-                    $.ajax({
-                        url: '/getMgcByInc?start=0&limit=25&filter=[{"operator":"eq","value":"' +
-                            inc[1] +
-                            '","property":"inc","type":"string"}]&page=1&sort=[{"property":"inc","direction":"ASC"}]',
-                        data: {
-                            _token: csrf_token
-                        }
-                    }).done(function(v) {
-                        $.ajax({
-                            url: '/getIncColloquialName?&start=0&limit=25&page=1&filter=[{"operator":"eq","value":"' +
-                                inc[1] + '","property":"inc","type":"string"}]'
-                        }).done(function(v) {
-                            $("#inc-id-detail").val(inc[1]);
-                            $("#name_inc").val(v.data[0].item_name);
-                            $("#short_inc").val(v.data[0].item_name);
-                            $("#desc_inc").val(v.data[0].description);
-                            $.ajax({
-                                method: "GET",
-                                url: '/getMgcByInc?start=0&limit=25&_token="' +
-                                    csrf_token +
-                                    '"&filter=[{"operator":"eq","value":"' +
-                                    inc[1] +
-                                    '","property":"inc","type":"string"}]&page=1&sort=[{"property":"inc","direction":"ASC"}]'
-                            }).done(function(val) {
-                                transactionType = val[0]
-                                    .transaction_type;
-                                console.log(transactionType);
-                                val.forEach(function(v) {
-                                    var option = new Option(v
-                                        .name, v.id,
-                                        true, true);
-                                    MGCMultipleselect2.append(
-                                            option)
-                                        .trigger('change');
-                                })
-
-                            });
-                        })
-                        loadCharact(0, 25, "inc");
-                    })
-
-                });
-
-            });
 
             function loadCharact(start, limit, property) {
                 $.ajax({
@@ -590,6 +544,34 @@ use Illuminate\Support\Facades\Auth;
 
             }
 
+            $('.delete-inc-data').click(function() {
+                // deleteInc();
+                console.log("OJK");
+            })
+
+            function deleteInc() {
+                $('.delete-inc').each(function() {
+                    console.log("test" + $(this).data('id'));
+                })
+                $.ajax({
+                    url: '/DeleteInc',
+                    method: 'POST',
+                    data: {
+                        _token: csrf_token,
+                    }
+                })
+            }
+
+            function loadImage(inc, page, start) {
+                $.ajax({
+                    method: "GET",
+                    url: '/getIncImages?filter=[{"operator":"eq","value":"' + inc +
+                        '","property":"inc","type":"string"}]&page=' + page '+&start=' + start + '&limit=' + limit
+                }).done(function(v) {
+                    console.log(v);
+                })
+            }
+
             function loadResultInc(page, start, limit, filter) {
                 $.ajax({
                     method: "GET",
@@ -600,7 +582,7 @@ use Illuminate\Support\Facades\Auth;
                 }).done(function(val) {
                     $("#tb-inc tbody").empty();
                     val.data.forEach(function(v) {
-                        var row = $('<tr class="tr-tab-1">');
+                        var row = $('<tr class="tr-tab-1" >');
                         row.append(
                             '<td class=""> ' + v.inc + '</td></tr>'
                         );
@@ -612,12 +594,62 @@ use Illuminate\Support\Facades\Auth;
                         );
 
                         row.append(
-                            '<td class=" text-danger"> <i class="fas fa-trash"></i></td></tr>'
+                            '<td class="delete-inc-data text-danger" data-id="' + v.inc +
+                            '" > <i class="fas fa-trash"></i></td></tr>'
                         );
                         $("#tb-inc").append(row);
                     })
                     $('#current_page_inc').text(pageInc);
                     $('#total_page_inc').text(Math.ceil(val.total / 25))
+                    $(".tr-tab-1").click(function(e) {
+                        $(this).each(function() {
+                            var value = $(this).text();
+                            inc = value.split(" ");
+                            namePick = value.split("-");
+                            $.ajax({
+                                url: '/getMgcByInc?start=0&limit=25&filter=[{"operator":"eq","value":"' +
+                                    inc[1] +
+                                    '","property":"inc","type":"string"}]&page=1&sort=[{"property":"inc","direction":"ASC"}]',
+                                data: {
+                                    _token: csrf_token
+                                }
+                            }).done(function(v) {
+                                $.ajax({
+                                    url: '/getIncColloquialName?&start=0&limit=25&page=1&filter=[{"operator":"eq","value":"' +
+                                        inc[1] + '","property":"inc","type":"string"}]'
+                                }).done(function(v) {
+                                    $("#inc-id-detail").val(inc[1]);
+                                    $("#name_inc").val(v.data[0].item_name);
+                                    $("#short_inc").val(v.data[0].item_name);
+                                    $("#desc_inc").val(v.data[0].description);
+                                    $.ajax({
+                                        method: "GET",
+                                        url: '/getMgcByInc?start=0&limit=25&_token="' +
+                                            csrf_token +
+                                            '"&filter=[{"operator":"eq","value":"' +
+                                            inc[1] +
+                                            '","property":"inc","type":"string"}]&page=1&sort=[{"property":"inc","direction":"ASC"}]'
+                                    }).done(function(val) {
+                                        transactionType = val[0]
+                                            .transaction_type;
+                                        console.log(transactionType);
+                                        val.forEach(function(v) {
+                                            var option = new Option(v
+                                                .name, v.id,
+                                                true, true);
+                                            MGCMultipleselect2.append(
+                                                    option)
+                                                .trigger('change');
+                                        })
+
+                                    });
+                                })
+                                loadCharact(0, 25, "inc");
+                            })
+                            loadImage(inc[1]);
+                        });
+
+                    });
                 });
             }
 
@@ -639,5 +671,10 @@ use Illuminate\Support\Facades\Auth;
                     })
                 })
             }
+
+            $('#add-inc').click(function() {
+
+
+            });
         </script>
     @endsection

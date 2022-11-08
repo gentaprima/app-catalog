@@ -330,7 +330,7 @@ use Illuminate\Support\Facades\Auth;
             }
             $.ajax({
                 method: "GET",
-                url: '/getMaterialType?query=&filter=[{"operator":"eq","value":"material_type","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=25',
+                url: '/getMaterialType?query=&filter=[{"operator":"eq","value":"material_type","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=10',
                 dataType: "json",
             }).done(function(v) {
                 v.forEach(function(v) {
@@ -341,7 +341,7 @@ use Illuminate\Support\Facades\Auth;
             })
             $.ajax({
                 method: "GET",
-                url: '/getCategory?query=&filter=[{"operator":"eq","value":"itemcategory","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=25',
+                url: '/getCategory?query=&filter=[{"operator":"eq","value":"itemcategory","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=10',
                 dataType: "json",
             }).done(function(v) {
                 v.forEach(function(v) {
@@ -397,7 +397,7 @@ use Illuminate\Support\Facades\Auth;
                 loadData(page, 25);
                 // $.ajax({
                 //     method: "GET",
-                //     url: '/getMultiViewCatalogM?start=0&limit=25&action=getMultiView&page=1&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=["'+moreFilter+']'
+                //     url: '/getMultiViewCatalogM?start=0&limit=10&action=getMultiView&page=1&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=["'+moreFilter+']'
                 // })
                 // [{"operator":"like","value":"old","property":"old_material_code","type":"string"},{"operator":"like","value":"ZMAT","property":"material_type","type":"string"},{"operator":"like","value":"H","property":"category","type":"string"},{"operator":"like","value":"dsa","property":"refno","type":"string"},{"operator":"like","value":"dadsa","property":"manufactur","type":"string"},{"operator":"like","value":"dsadsa","property":"funcloc","type":"string"},{"operator":"eq","value":"2022-10-11","property":"std_approval_datef","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]
             })
@@ -497,7 +497,7 @@ use Illuminate\Support\Facades\Auth;
                     method: "GET",
                     url: '/getMultiViewCatalogM?action=getMultiView&page=' + parseInt(page) +
                         '&start=' + start +
-                        '&limit=25&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}' +
+                        '&limit=10&sort=[{"property":"addition_date","direction":"DESC"}]&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}' +
                         likeFilter.toString() + ']',
                     dataType: "json"
                 }).done(function(result) {
@@ -608,28 +608,28 @@ use Illuminate\Support\Facades\Auth;
                         var rowMaterial = $('<tr class="d-flex tr-tab-1">');
                         rowMaterial.append(
                             element.status_user == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_cat == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_stdapp == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_proc == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_sap == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append('<td class="col-3">' + element.catalog_no + ' </td>')
                         rowMaterial.append('<td class="col-5">' + element.short_description +
@@ -739,7 +739,7 @@ use Illuminate\Support\Facades\Auth;
                                     $("#tb-functional tbody").empty();
                                     $.ajax({
                                         method: "GET",
-                                        url: '/getItemsFuncloc?_dc=1666812249332&start=0&limit=300&filter=[{"operator":"eq","value":2,"property":"adr_d_items_id","type":"numeric"}]&page=1',
+                                        url: '/getItemsFuncloc?_dc=1666812249332&start=0&limit=25&filter=[{"operator":"eq","value":2,"property":"adr_d_items_id","type":"numeric"}]&page=1',
                                         dataType: "json"
                                     }).done(function(v) {
                                         if (v.data != null && v.data.length > 0) {

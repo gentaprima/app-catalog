@@ -133,16 +133,16 @@ use Illuminate\Support\Facades\Auth;
                     <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
                         <ul class="pagination">
                             <li>Halaman</li>
-                            <li class="paginate_button active mr-2"><a href="#" aria-controls="example1"
-                                    id="current_page" data-dt-idx="1" tabindex="0">1</a></li>
+                            <li class="paginate_button active mr-2"><a aria-controls="example1" id="current_page"
+                                    data-dt-idx="1" tabindex="0">1</a></li>
                             <li>Dari</li>
                             <li class="ml-2" id="total_page">0</li>
                             <li class="paginate_button next prev" id="previous" data-page="prev"><a
-                                    href="#"" aria-controls="example1" id="link_next" data-dt-idx="0"
-                                    tabindex="0"><i class="fa fa-chevron-left"></i></a></li>
-                            <li class="paginate_button next prev" id="next-step" data-page="next"><a
-                                    id="link_next" href="#" aria-controls="example1" data-dt-idx="2"
-                                    tabindex="0"><i class="fa fa-chevron-right"></i></a></li>
+                                    aria-controls="example1" id="link_next" data-dt-idx="0" tabindex="0"><i
+                                        class="fa fa-chevron-left"></i></a></li>
+                            <li class="paginate_button next prev" id="next-step" data-page="next"><a id="link_next"
+                                    aria-controls="example1" data-dt-idx="2" tabindex="0"><i
+                                        class="fa fa-chevron-right"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -150,7 +150,7 @@ use Illuminate\Support\Facades\Auth;
             <div class="card p-4 mb-5 m-2">
                 <div class="row">
                     <div class="col-lg-6">
-                        <h4>Material Item</h4>
+                        <h4>Service Owner</h4>
                         <hr>
                         <form action="">
                             <div class="form-group row">
@@ -193,7 +193,7 @@ use Illuminate\Support\Facades\Auth;
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-sm-3">Material Owner : </label>
+                                <label for="" class="col-sm-3">Service Owner : </label>
                                 <div class="col-sm-9">
                                     <label for="" id="material-owner"></label>
                                 </div>
@@ -453,7 +453,7 @@ use Illuminate\Support\Facades\Auth;
                     loadData(0, 25)
                 }
             });
-            $('#btn-raw-search').click(function(){
+            $('#btn-raw-search').click(function() {
                 likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                     '","property": "raw","type": "string"}';
                 loadData(0, 25)
@@ -497,7 +497,7 @@ use Illuminate\Support\Facades\Auth;
                     method: "GET",
                     url: '/getMultiViewCatalogM?action=getMultiView&page=' + parseInt(page) +
                         '&start=' + start +
-                        '&limit=25&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}' +
+                        '&limit=25&sort=[{"property":"addition_date","direction":"DESC"}]&filter=[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}' +
                         likeFilter.toString() + ']',
                     dataType: "json"
                 }).done(function(result) {
@@ -563,7 +563,8 @@ use Illuminate\Support\Facades\Auth;
                             .long_description + '">' + element.long_description + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1" role="button" data-tooltip="tooltip" title="'+element.raw+'">' + element.raw + '</td></tr>'
+                            '<td class="col-1" role="button" data-tooltip="tooltip" title="' + element.raw +
+                            '">' + element.raw + '</td></tr>'
                         )
                         rowMaterial2.append(
                             '<td class="col-1">' + element.material_type + '</td></tr>'
@@ -608,28 +609,28 @@ use Illuminate\Support\Facades\Auth;
                         var rowMaterial = $('<tr class="d-flex tr-tab-1">');
                         rowMaterial.append(
                             element.status_user == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_cat == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_stdapp == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_proc == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_sap == 1 ?
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append('<td class="col-3">' + element.catalog_no + ' </td>')
                         rowMaterial.append('<td class="col-5">' + element.short_description +
