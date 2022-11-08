@@ -68,6 +68,85 @@
         <p hidden="true" id="start">25</p>
         <p hidden="true" id="limit">25</p>
         <p hidden="true" id="totalData"></p>
+        <div class="modal fade" id="modalDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="titleModalReference">Delete Data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Material Item Revision</h4>
+                        <hr>
+                        <table id="tableMaterial" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>INC</th>
+                                    <th>MGC</th>
+                                    <th>Material Type</th>
+                                    <th>UOM</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <hr>
+                        <h4>Reason</h4>
+                        <hr>
+                        <table id="tableReason" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Users</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>Characteristic New</h4>
+                                <hr>
+                                <div class="scrollwrapperCharacteristic">
+                                    <table id="tableDataCharacteristic" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Characteristic</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h4>Characteristic Old</h4>
+                                <hr>
+                                <div class="scrollwrapperCharacteristic">
+                                    <table id="tableDataCharacteristicOld" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Characteristic</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="closeModalDelete" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- /.content -->
 
@@ -79,10 +158,10 @@
             $("#children-MNU28").addClass("nav-link active")
         });
 
-        if(groupName == 'User'){
+        if (groupName == 'User') {
             document.getElementById("btnReqRevision").hidden = false
             document.getElementById("btnApproveRevision").hidden = true
-        }else{
+        } else {
             document.getElementById("btnReqRevision").hidden = true
             document.getElementById("btnApproveRevision").hidden = false
         }
@@ -90,7 +169,7 @@
         function loadData(page = 1, start = 1, limit = 25) {
             $("#tableData tbody").empty();
             $.ajax({
-                url: `/getRevisionRequestM?page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]`,
+                url: `/getRevisionRequestM?page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]&sort=[{"property":"id","direction":"DESC"}]`,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
@@ -107,8 +186,113 @@
                         tr.append("<td>" + (response.data[i].updated_at) + "</td>");
                         tr.append("<td>" + (response.data[i].process_by) + "</td>");
                         tr.append("<td>" + (response.data[i].process_status) + "</td>");
-                        tr.append("<td><center><i class='fa fa-table'></i></center></td>");
+                        tr.append(`<td>
+                                        <center>
+                                            <button style='border:none;' onclick="viewDetail('${response.data[i].request_no}','${response.data[i].id}','${response.data[i].adr_d_items_id}','${response.data[i].inc_m_id}')" data-toggle="modal" data-target="#modalDetail" class='btn btn-sm btn-default'>
+                                                <i class='fa fa-table'></i> 
+                                            </button>
+                                        </center>
+                                    </td>`);
                         $("#tableData").append(tr);
+                    }
+                }
+            })
+        }
+
+        function viewDetail(requestNo, id,adrDItem,incMId) {
+            document.getElementById("titleModalReference").innerHTML = 'View Detail No.' + requestNo;
+            loadMaterialItem(id);
+            loadReason(id);
+            loadCharacteristicNew(id);
+            loadCharacteristicOld(id,adrDItem,incMId);
+        }
+
+        function loadCharacteristicOld(id,adrDItem,incMId) {
+            $("#tableDataCharacteristicOld tbody").empty();
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: `/getAuditAdrDItemsChar?_token=${csrf_token}&page=1&start=0&limit=300&inc_m_id=${incMId}&adr_d_items_id=${adrDItem}&revision_adr_d_items_id=${id}`,
+                success: function(response) {
+                    let data = response.data;
+                    let x = 1;
+                    for (let i = 0; i < data.length; i++) {
+                        var tr = $("<tr>");
+                        tr.append("<td>" + x++ + "</td>");
+                        tr.append("<td>" + data[i].characteristics + "</td>");
+                        if (data[i].nvalue != null) {
+                            tr.append("<td>" + (data[i].nvalue) + "</td>");
+                        } else {
+                            tr.append("<td></td>");
+
+                        }
+                        $("#tableDataCharacteristicOld").append(tr);
+                    }
+                }
+            })
+        }
+
+        function loadCharacteristicNew(id) {
+            $("#tableDataCharacteristic tbody").empty();
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: `/getRevisionAdrDItemsChar?_token=${csrf_token}&page=1&start=0&limit=300&filter=[{"operator":"eq","value":${id},"property":"revision_adr_d_items_id","type":"numeric"}]`,
+                success: function(response) {
+                    let data = response.data;
+                    let x = 1;
+                    for (let i = 0; i < data.length; i++) {
+                        var tr = $("<tr>");
+                        tr.append("<td>" + x++ + "</td>");
+                        tr.append("<td>" + data[i].characteristics + "</td>");
+                        if (data[i].nvalue != null) {
+                            tr.append("<td>" + (data[i].nvalue) + "</td>");
+                        } else {
+                            tr.append("<td></td>");
+
+                        }
+                        $("#tableDataCharacteristic").append(tr);
+                    }
+                }
+            })
+        }
+
+        function loadReason(id) {
+            $("#tableReason tbody").empty();
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: `/getReason?_token=${csrf_token}&page=1&start=0&limit=300&filter=[{"operator":"eq","value":"revision_adr_d_items","property":"table_name","type":"string"},{"operator":"eq","value":${id},"property":"table_id","type":"numeric"}]`,
+                success: function(response) {
+                    let data = response.data;
+                    for (let i = 0; i < data.length; i++) {
+                        var tr = $("<tr>");
+                        tr.append("<td>" + data[i].real_name + "</td>");
+                        tr.append("<td>" + (data[i].description) + "</td>");
+                        $("#tableReason").append(tr);
+                    }
+                }
+            })
+        }
+
+        function loadMaterialItem(id) {
+            $("#tableMaterial tbody").empty();
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: `/getRevisionRequestD?_token=${csrf_token}&page=1&start=0&limit=25&filter=[{"operator":"eq","value":${id},"property":"revision_adr_d_items_id","type":"numeric"}]`,
+                success: function(response) {
+                    let data = response.data;
+
+                    for (let i = 0; i < data.length; i++) {
+                        var tr = $("<tr>");
+                        tr.append("<td>" + data[i].type + "</td>");
+                        tr.append("<td>" + (data[i].inc) + "</td>");
+                        tr.append("<td>" + (data[i].groupclass) + "</td>");
+                        tr.append("<td>" + (data[i].material_type) + "</td>");
+                        tr.append("<td>" + (data[i].uom) + "</td>");
+                        tr.append("<td>" + (data[i].category) + "</td>");
+                        $("#tableMaterial").append(tr);
                     }
                 }
             })

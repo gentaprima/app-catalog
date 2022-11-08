@@ -97,6 +97,9 @@
                     var totalPage = Math.ceil(response.total / 25)
                     document.getElementById("totalData").innerHTML = totalPage
                     document.getElementById("total_page").innerHTML = totalPage
+                    if(totalPage == 1){
+                        $("#example1_next").addClass("paginate_button next prev disabledd")
+                    }
                     for (let i = 0; i < response.data.length; i++) {
                         var tr = $("<tr>");
                         console.log(response.data[i].class == null);

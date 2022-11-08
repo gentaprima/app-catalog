@@ -244,7 +244,7 @@
                     dataType: 'json',
                     url: '/CreateAddition',
                     data: {
-                        data_grid: `[{"flag":"","norder":1,"id":"model_adr_entry-1","raw":"${raw}","transaction_type":"${matSer}","class_code":"${mgc}","inc_code":"${inc}","manuf":"${manufacturing}","refnbr":"${refNo}","old_mat_no":"${manufacturing}"}]`,
+                        data_grid: `[{"flag":"","norder":1,"id":"model_adr_entry-1","raw":"${raw}","transaction_type":"${matSer}","class_code":"${mgc}","inc_code":"${inc}","manuf":"${manufacturing}","refnbr":"${refNo}","old_mat_no":"${oldMatNo}"}]`,
                         company_code : companyCode,
                         _token : csrf_token
                     },

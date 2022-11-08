@@ -156,4 +156,28 @@ class NavController extends Controller
     public function viewMaterialToolsUnspsc(){
         return view('/dashboard/material-tools/unspsc');
     }
+
+    public function viewStockType(){
+        return view('/dashboard/dictionary/stock-type');
+    }
+
+    public function viewStockClass(){
+        return view('/dashboard/dictionary/stock-class');
+    }
+
+    public function viewHazardType(){
+        return view('/dashboard/dictionary/hazard-type');
+    }
+    
+    public function viewCurrency(){
+        return view('/dashboard/dictionary/currency');
+    }
+
+    public function viewShelfLive(){
+        return view('/dashboard/dictionary/shelf-life');
+    }
+    
+    public function viewAbbreviation(){
+        return view('/dashboard/dictionary/abbreviation');
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Auth;
 ?>
 @extends('master')
@@ -449,6 +450,7 @@ use Illuminate\Support\Facades\Auth;
             $("#main-menu-MNU6").addClass("nav-item menu-is-opening menu-open")
             $("#subchild-MNU7").addClass("nav-link active")
         });
+
         function searchCatolog() {
             let catologueNo = document.getElementById("catologueNo").value;
             document.getElementById("button").hidden = false
@@ -463,32 +465,12 @@ use Illuminate\Support\Facades\Auth;
                         let data = response;
                         checkUser(data[0].user_name);
                         checkApproval(data[0].company_code);
-                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc,data[0].category);
+                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc, data[0].category);
                         document.getElementById("adrStatus").innerHTML = data[0].adr_status;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").value = data[0].sap_material_code;
                         document.getElementById("inc").value = data[0].inc;
-                        var incSelect = $('#inc');
-                        var option = new Option(data[0].class_inc_name, data[0].inc + '-' + data[0].inc_m_id + '-' + data[0].item_name + '-' + data[0].short_name_code, true, true);
-                        incSelect.append(option).trigger('change');
-                        var mgcSelect = $("#mgc")
-                        var optiobMgc = new Option(data[0].group_class_name, data[0].groupclass, true, true)
-                        mgcSelect.append(optiobMgc).trigger('change');
-                        if (data[0].material_type != null) {
-                            var materialType = $("#materialType")
-                            var optiobMaterial = new Option(data[0].material_type, data[0].material_type, true, true)
-                            materialType.append(optiobMaterial).trigger('change');
-                        }
-                        if (data[0].uom != null) {
-                            var uom = $("#uom")
-                            var optionUom = new Option(data[0].uom, data[0].uom, true, true)
-                            uom.append(optionUom).trigger('change');
-                        }
-                        if (data[0].category != null) {
-                            var category = $("#category")
-                            var optionCategory = new Option(data[0].category, data[0].category, true, true)
-                            category.append(optionCategory).trigger('change');
-                        }
+                        
                         document.getElementById("nameCode").value = data[0].item_name;
                         document.getElementById("shortNameCode").value = data[0].short_name_code;
                         document.getElementById("adrDItems").innerHTML = data[0].adr_d_items_id;
@@ -512,23 +494,45 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("procAproverBy").value = data[0].proc_approver_by;
                         if (data[0].cataloguer != null) {
                             document.getElementById("cataloguer").value = data[0].cataloguer;
-                        }else{
+                        } else {
                             document.getElementById("cataloguer").value = "";
                         }
                         if (data[0].std_approval != null) {
                             document.getElementById("stdApp").value = data[0].std_approval;
-                        }else{
+                        } else {
                             document.getElementById("stdApp").value = "";
-                            
+
                         }
                         if (data[0].proc_approver != null) {
                             document.getElementById("procApp").value = data[0].proc_approver;
-                        }else{
+                        } else {
                             document.getElementById("procApp").value = "";
                         }
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
-                        getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id);
+                        // getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, 'new');
+                        
+                        var incSelect = $('#inc');
+                        var option = new Option(data[0].class_inc_name, data[0].inc + '-' + data[0].inc_m_id + '-' + data[0].item_name + '-' + data[0].short_name_code, true, true);
+                        incSelect.append(option).trigger('change');
+                        var mgcSelect = $("#mgc")
+                        var optiobMgc = new Option(data[0].group_class_name, data[0].groupclass, true, true)
+                        mgcSelect.append(optiobMgc).trigger('change');
+                        if (data[0].material_type != null) {
+                            var materialType = $("#materialType")
+                            var optiobMaterial = new Option(data[0].material_type, data[0].material_type, true, true)
+                            materialType.append(optiobMaterial).trigger('change');
+                        }
+                        if (data[0].uom != null) {
+                            var uom = $("#uom")
+                            var optionUom = new Option(data[0].uom, data[0].uom, true, true)
+                            uom.append(optionUom).trigger('change');
+                        }
+                        if (data[0].category != null) {
+                            var category = $("#category")
+                            var optionCategory = new Option(data[0].category, data[0].category, true, true)
+                            category.append(optionCategory).trigger('change');
+                        }
                         // check status
                         if (data[0].status_user == 1) {
                             $("#arrowUser").attr("class", "left right active")
@@ -564,6 +568,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function checkUser(username) {
             console.log(username + " " + userName);
             if (username != userName) {
@@ -583,6 +588,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("uom").removeAttribute("disabled");
             }
         }
+
         function checkApproval(company_code) {
             if (groupName == 'User') {
                 document.getElementById("cataloguer").setAttribute("disabled", true)
@@ -619,7 +625,8 @@ use Illuminate\Support\Facades\Auth;
                 }
             }
         }
-        function checkStatus(status, statusCat, statusStd, statusProc,category) {
+
+        function checkStatus(status, statusCat, statusStd, statusProc, category) {
             if (status == "1" && groupName == 'User') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
@@ -687,10 +694,10 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("category").setAttribute("disabled", true);
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("procApp").setAttribute("disabled", true)
-                if(splitGroup[2] == category){
+                if (splitGroup[2] == category) {
                     document.getElementById("stdApp").removeAttribute("disabled")
-                }else{
-                    document.getElementById("stdApp").setAttribute("disabled",true);
+                } else {
+                    document.getElementById("stdApp").setAttribute("disabled", true);
                 }
             } else if (statusProc == 0 && groupName == 'Proc') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
@@ -720,6 +727,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("btnApply").hidden = true
             }
         }
+
         function applyChanges() {
             let catologueNo = document.getElementById("catologueNo").value;
             let materialType = document.getElementById("materialType").value;
@@ -829,6 +837,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             }
         }
+
         function materialApplyChange() {
             let catologueNo = document.getElementById("catologueNo").value;
             let materialType = document.getElementById("materialType").value;
@@ -1064,6 +1073,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function loadDataCharacteristic(adrdItems) {
             shortDesc = document.getElementById("shortNameCode").value + ":";
             longDesc = document.getElementById("shortNameCode").value + ":";
@@ -1084,6 +1094,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function loadAllDataCharacteristic(adrDItems) {
             dataCharateristic = "";
             $("#tableDataCharacteristic tbody").empty();
@@ -1123,6 +1134,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function addValueCharacteristic(data) {
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             $.ajax({
@@ -1157,6 +1169,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function updateAllValueCharacteristic(data) {
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             $.ajax({
@@ -1191,7 +1204,9 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
-        function getCharacteristic(adrDItems, incMId, type = "new") {
+
+        function getCharacteristic(adrDItemss, incMId, type) {
+            let adrDItems = document.getElementById("adrDItems").innerHTML;
             $("#tableDataCharacteristic tbody").empty();
             dataCharateristic = "";
             $.ajax({
@@ -1210,11 +1225,11 @@ use Illuminate\Support\Facades\Auth;
                         data.forEach(object => {
                             delete object['id'];
                         })
-                        if (type == 'new') {
-                            addValueCharacteristic(response.data);
-                        } else {
-                            updateAllValueCharacteristic(response.data);
-                        }
+                        updateAllValueCharacteristic(response.data);
+                        // addValueCharacteristic(response.data);
+                        // if (type == 'new') {
+                        // } else {
+                        // }
                     }
                 }
             })
@@ -1222,6 +1237,7 @@ use Illuminate\Support\Facades\Auth;
         $('#searchDescription').keyup((e) => {
             loadDataAbbr(1, 1, 10, e.currentTarget.value);
         });
+
         function showAbbr(id, descCharacteristic) {
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             document.getElementById("idValueCharacteristic").value = id;
@@ -1230,6 +1246,7 @@ use Illuminate\Support\Facades\Auth;
             document.getElementById("valueCharacteristic").value = "";
             loadDataAbbr();
         }
+
         function loadDataAbbr(page = 1, start = 1, limit = 10, search = "") {
             $("#tableDataAbbr tbody").empty();
             $.ajax({
@@ -1252,12 +1269,14 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function setValueCharacteristic(code) {
             let adrdItems = document.getElementById("adrDItems").innerHTML;
             let idValueCharacteristic = document.getElementById("idValueCharacteristic").value;
             let descValueCharacteristic = document.getElementById("descCharacteristic").value;
             document.getElementById("valueCharacteristic").value = code;
         }
+
         function nextPage() {
             $("#tableData tbody").empty();
             let search = document.getElementById("searchDescription").value
@@ -1272,6 +1291,7 @@ use Illuminate\Support\Facades\Auth;
                 $("#example1_next").addClass("paginate_button next prev disabledd")
             }
         }
+
         function prevPage() {
             $("#tableData tbody").empty();
             var page = document.getElementById("page").innerHTML;
@@ -1291,6 +1311,7 @@ use Illuminate\Support\Facades\Auth;
         function selectMgc(val) {
             let inc = val.value.split('-');
             let adrDItems = document.getElementById("adrDItems").innerHTML;
+            $("#tableDataCharacteristic tbody").empty();
             getCharacteristic(adrDItems, inc[1], 'update');
             document.getElementById("nameCode").value = inc[2];
             document.getElementById("shortNameCode").value = inc[3];
@@ -1355,6 +1376,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function addFunction() {
             document.getElementById("titleModalFunc").innerHTML = "Add Function Location";
             document.getElementById("locName").value = "";
@@ -1362,6 +1384,7 @@ use Illuminate\Support\Facades\Auth;
             let buttonSave = document.getElementById("saveFunction");
             buttonSave.setAttribute("onclick", 'proccessAddFunction()');
         }
+
         function proccessAddFunction() {
             let locName = document.getElementById("locName").value;
             let adrDItems = document.getElementById("adrDItems").innerHTML;
@@ -1394,6 +1417,7 @@ use Illuminate\Support\Facades\Auth;
                 })
             }
         }
+
         function updateFunction(locName, description, id) {
             document.getElementById("titleModalFunc").innerHTML = "Update Function Location";
             document.getElementById("locName").value = locName;
@@ -1401,6 +1425,7 @@ use Illuminate\Support\Facades\Auth;
             let buttonSave = document.getElementById("saveFunction");
             buttonSave.setAttribute("onclick", `proccessUpdateFunction('${id}')`);
         }
+
         function deleteFunction(id, adrDItems) {
             Swal.fire({
                 title: 'Are you sure?',
@@ -1431,6 +1456,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function proccessUpdateFunction(id) {
             let locName = document.getElementById("locName").value;
             let adrDItems = document.getElementById("adrDItems").innerHTML;
@@ -1503,6 +1529,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function addReference() {
             document.getElementById("titleModalReference").innerHTML = "Add Reference";
             document.getElementById("refNoReference").value = "";
@@ -1512,6 +1539,7 @@ use Illuminate\Support\Facades\Auth;
             let buttonSave = document.getElementById("saveReference");
             buttonSave.setAttribute("onclick", 'proccessAddReference()');
         }
+
         function updateReference(id, refNo, oldMaterial, manufactur, type) {
             document.getElementById("titleModalReference").innerHTML = "Update Reference";
             document.getElementById("refNoReference").value = refNo;
@@ -1521,6 +1549,7 @@ use Illuminate\Support\Facades\Auth;
             let buttonSave = document.getElementById("saveReference");
             buttonSave.setAttribute("onclick", `proccessUpdateReference('${id}')`);
         }
+
         function proccessUpdateReference(id) {
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             let refNo = document.getElementById("refNoReference").value;
@@ -1570,6 +1599,7 @@ use Illuminate\Support\Facades\Auth;
                 })
             }
         }
+
         function deleteReference(id, adrDItems) {
             Swal.fire({
                 title: 'Are you sure?',
@@ -1601,6 +1631,7 @@ use Illuminate\Support\Facades\Auth;
                 }
             })
         }
+
         function proccessAddReference() {
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             let refNo = document.getElementById("refNoReference").value;

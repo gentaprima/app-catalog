@@ -94,6 +94,13 @@ Route::get('/dictionary/uom','NavController@viewUom');
 Route::get('/dictionary/category','NavController@viewCategory');
 Route::get('/dictionary/plant','NavController@viewPlant');
 Route::get('/dictionary/moving-type','NavController@viewMovingType');
+Route::get('/dictionary/stock-type','NavController@viewStockType');
+Route::get('/dictionary/stock-class','NavController@viewStockClass');
+Route::get('/dictionary/stock-class','NavController@viewStockClass');
+Route::get('/dictionary/hazard-type','NavController@viewHazardType');
+Route::get('/dictionary/currency','NavController@viewCurrency');
+Route::get('/dictionary/shelf-life','NavController@viewShelfLive');
+Route::get('/dictionary/abbreviation','NavController@viewAbbreviation');
 
 // DICTIONARY
 

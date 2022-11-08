@@ -570,7 +570,7 @@ var store_adr_seacrh = Ext.create('Ext.data.Store', {
                     iconCls: 'report-xls',
                     id:'btnUploadExcel'+page,
                     tooltip: 'Upload File Excel',
-                    disabled:!ROLE.ImportAddition?!ROLE.ImportAddition:true?!ROLE.ImportAddition:true,
+                    // disabled:!ROLE.ImportAddition?!ROLE.ImportAddition:true?!ROLE.ImportAddition:true,
                     scope: this,
                     handler: function(){
                         winADR.animateTarget = 'btnUploadExcel'+page;

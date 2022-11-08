@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title','Dictionary | Moving Type')
+@section('title','Dictionary | Currency')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -9,13 +9,13 @@
         <div class="container-fluid mt-3">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">List Moving Type</h1>
+                    <h1 class="m-0">List Currency</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item">Dictionary</li>
-                        <li class="breadcrumb-item active">Moving Type</li>
+                        <li class="breadcrumb-item active">Currency</li>
                     </ol>
                 </div><!-- /.col -->
                 <p id="menu"></p>
@@ -110,7 +110,7 @@
         loadData();
         $(document).ready(function() {
             $("#main-menu-MNU10").addClass("nav-item menu-is-opening menu-open")
-            $("#subchild-MNU16").addClass("nav-link active")
+            $("#subchild-MNU22").addClass("nav-link active")
         });
 
         var delayTimer;
@@ -235,8 +235,8 @@
                             url: '/SaveEntityM',
                             data: {
                                 _token: csrf_token,
-                                entity_name: 'movingtype',
-                                data_items: `[{"flag":"Insert","id":"model_moving_type-1","code":"${code}","description":"${description}"}]`
+                                entity_name: 'currency',
+                                data_items: `[{"flag":"Insert","id":"model_currency-1","code":"${code}","description":"${description}"}]`
                             },
                             success: function(response) {
                                 if (response.success == true) {
@@ -292,10 +292,10 @@
                             url: '/SaveEntityM',
                             data: {
                                 _token: csrf_token,
-                                entity_name: 'movingtype',
+                                entity_name: 'currency',
                                 data_items: `[{
                                         "id": ${parseInt(id)},
-                                        "entity_name": "movingtype",
+                                        "entity_name": "currency",
                                         "entity_code_name": "${code} - ${description}",
                                         "description": "${description}",
                                         "code": "${code}",
@@ -367,7 +367,7 @@
         function loadData(page = 1, start = 1, limit = 25, search = "") {
             $("#tableData tbody").empty();
             $.ajax({
-                url: `/get-abbreviation?action=getEntity&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"${search}","property":"entity_code_name","type":"string"},{"operator":"like","value":"movingtype","property":"entity_name","type":"string"}]`,
+                url: `/get-abbreviation?action=getEntity&page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"${search}","property":"entity_code_name","type":"string"},{"operator":"like","value":"currency","property":"entity_name","type":"string"}]`,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {

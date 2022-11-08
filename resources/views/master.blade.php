@@ -92,6 +92,14 @@
             border: 1px solid blue;
         }
 
+        #tableDataCharacteristicOld {
+            /* display: block;
+            white-space: nowrap;
+            table-layout: fixed; */
+            width: 100%;
+            border: 1px solid blue;
+        }
+
         /* .multiple-table td{
             word-wrap: break-word;
             white-space: initial;
@@ -104,6 +112,10 @@
             border: none;
         }
         #tableDataCharacteristic td {
+            word-wrap: break-word;
+            white-space: initial;
+        }
+        #tableDataCharacteristicOld td {
             word-wrap: break-word;
             white-space: initial;
         }
@@ -283,7 +295,7 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <!-- <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a> -->
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="/" class="nav-link">Home</a>
