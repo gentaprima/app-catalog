@@ -34,17 +34,20 @@
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <div class="row">
-                            <label for="" class="col-sm-4">Select Adr</label>
-                            <div class="col-sm-8">
+                            <label for="" class="col-sm-4">Select Adr <span style="color: red;">*</span></label>
+                            <div class="col-sm-7">
                                 <select class="js-example-data-ajax" onchange="selectAdr(this)" id="adr">
                                     <option value="">Select Adr</option>
                                 </select>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" id="btnClearAdr" style="height: 37px;" class="btn btn-sm btn-default"><i class="fa fa-eraser"></i></button>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="row">
-                            <label for="" class="col-sm-2">Raw Data</label>
+                            <label for="" class="col-sm-2">Raw Data <span style="color: red;">*</span></label>
                             <div class="col-sm-10">
                                 <input type="text" id="raw" class="form-control">
                             </div>
@@ -52,7 +55,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="" class="col-sm-2">Material/Service</label>
+                    <label for="" class="col-sm-2">Material/Service <span style="color: red;">*</span></label>
                     <div class="col-sm-10">
                         <select onchange="selectInc(this)" id="matSer" class="form-control ">
                             <option value="">Select Material/Service</option>
@@ -63,7 +66,7 @@
                     <!-- <div class="col-sm-6"></div> -->
                 </div>
                 <div class="form-group row">
-                    <label for="" class="col-sm-2">INC</label>
+                    <label for="" class="col-sm-2">INC <span style="color: red;">*</span></label>
                     <div class="col-sm-10">
 
                         <select class="js-example-basic-single2 " onchange="selectMgc(this)" id="inc">
@@ -72,7 +75,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="" class="col-sm-2">MGC/SGC</label>
+                    <label for="" class="col-sm-2">MGC/SGC <span style="color: red;">*</span></label>
                     <div class="col-sm-10">
 
                         <select class="js-example-basic-single3 " id="mgc">
@@ -120,38 +123,51 @@
             $('.js-example-basic-single3').select2();
         });
 
-
-        $("#adr").select2({
-
-            ajax: {
-                url: `/getAdditionHistoryD`,
-                dataType: 'json',
-                data: function(params) {
-                    if (params.term == undefined) {
-                        params.term = ""
-                    }
-                    var query = {
-                        query: params.term,
-                        action: "getAdditionHistoryD",
-                        page: 1,
-                        start: 0,
-                        limit: 25,
-                        filter: `[{"operator":"like","value":"${params.term}","property":"raw","type":"string"}]`
-                    }
-                    return query;
-                },
-                processResults: function(data) {
-                    return {
-                        results: $.map(data, function(item) {
-                            return {
-                                text: item.raw,
-                                id: item.raw
-                            }
-                        })
-                    };
-                }
-            }
+        $("#btnClearAdr").click(function() {
+            $('#adr').val([]);
+            $("#adr").select2({
+                placeholder: "Select MGC",
+            });
+            $("#raw").val("");
+            getSelectAdr();
         })
+
+        getSelectAdr();
+
+        function getSelectAdr() {
+            $("#adr").select2({
+
+                ajax: {
+                    url: `/getAdditionHistoryD`,
+                    dataType: 'json',
+                    data: function(params) {
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            query: params.term,
+                            action: "getAdditionHistoryD",
+                            page: 1,
+                            start: 0,
+                            limit: 25,
+                            filter: `[{"operator":"like","value":"${params.term}","property":"raw","type":"string"}]`
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: item.raw,
+                                    id: item.raw
+                                }
+                            })
+                        };
+                    }
+                }
+            })
+        }
+
 
         function selectInc(val) {
             let matearialService = val.value;
@@ -191,6 +207,10 @@
         function selectMgc(val) {
             let inc = val.value;
             let materialService = document.getElementById("matSer").value
+            $('#mgc').val([]);
+            $("#mgc").select2({
+                placeholder: "Select MGC",
+            });
             $("#mgc").select2({
 
                 ajax: {
@@ -229,7 +249,7 @@
         }
 
         function saveData() {
-           
+
             let raw = document.getElementById("raw").value;
             let matSer = document.getElementById("matSer").value;
             let inc = document.getElementById("inc").value;
@@ -238,15 +258,15 @@
             let oldMatNo = document.getElementById("oldMatNo").value;
             let manufacturing = document.getElementById("manufacturing").value;
 
-            if (raw != '' && matSer != '' && inc != '' && refNo != '' && oldMatNo != '' && manufacturing != '') {
+            if (raw != '' && matSer != '' && inc != '' && mgc != '' ) {
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
                     url: '/CreateAddition',
                     data: {
                         data_grid: `[{"flag":"","norder":1,"id":"model_adr_entry-1","raw":"${raw}","transaction_type":"${matSer}","class_code":"${mgc}","inc_code":"${inc}","manuf":"${manufacturing}","refnbr":"${refNo}","old_mat_no":"${oldMatNo}"}]`,
-                        company_code : companyCode,
-                        _token : csrf_token
+                        company_code: companyCode,
+                        _token: csrf_token
                     },
                     success: function(response) {
                         if (response.success == true) {

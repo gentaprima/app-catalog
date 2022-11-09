@@ -938,7 +938,7 @@ use Illuminate\Support\Facades\Auth;
                         page: 1,
                         start: 0,
                         limit: 25,
-                        filter: `[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"}]`
+                        filter: `[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"},{"operator":"like","value":"${params.term}","property":"class_inc_name","type":"string"}]`
                     }
                     return query;
                 },
