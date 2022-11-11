@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Auth;
     <section class="content">
 
         <div class="card p-4 mb-5 m-2">
-            <h4>Adition History</h4>
+            <h4>Addition History</h4>
             <hr>
             <form action="">
                 <div class="form-group row">
@@ -100,7 +100,7 @@ use Illuminate\Support\Facades\Auth;
                         <div class="row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
-                                <button class="btn btn-primary" onclick="loadData()" type="button">Submit</button>
+                                <button class="btn btn-primary" onclick="loadData()" type="button">Search</button>
                                 <button class="btn btn-default ml-1" onclick="reset()" id="btnReset" type="reset" style="border:none;">Reset</button>
                             </div>
                         </div>

@@ -143,12 +143,12 @@ use Illuminate\Support\Facades\Auth;
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2">Catologuer</label>
+                            <label for="" class="col-sm-2">Catologer</label>
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <select type="text" required class="form-control" id="cataloguer">
-                                            <option value="">Select Cataologuer</option>
+                                            <option value="">Select Catologer</option>
                                             <option value="Validate">Validate</option>
                                             <option value="Not Validate">Not Validate</option>
                                         </select>
@@ -492,6 +492,13 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("cataloguerBy").value = data[0].cataloguer_by;
                         document.getElementById("stdAprovalBy").value = data[0].std_approval_by;
                         document.getElementById("procAproverBy").value = data[0].proc_approver_by;
+
+                        // check validated or not
+                        if(data[0].cataloguer == 'Not Validate'){
+                            document.getElementById("cataloguer").setAttribute("disabled", true);
+                        }
+                        // check validated or not
+
                         if (data[0].cataloguer != null) {
                             document.getElementById("cataloguer").value = data[0].cataloguer;
                         } else {
@@ -510,6 +517,7 @@ use Illuminate\Support\Facades\Auth;
                         }
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
+                        loadDataCharacteristic(data[0].adr_d_items_id)
                         // getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, 'new');
                         
                         var incSelect = $('#inc');
