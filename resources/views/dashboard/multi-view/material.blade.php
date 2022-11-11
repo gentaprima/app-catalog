@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Auth;
 ?>
+<style>
+
+    .table-hover tbody tr:hover td {
+        background-color: rgba(205, 206, 206, 0.50);
+    }
+</style>
 @extends('master')
 
 @section('title', 'Multiple View | Material')
@@ -33,21 +39,40 @@ use Illuminate\Support\Facades\Auth;
             <div class="card p-4 mb-1 m-2">
                 <div class="card-header px-0">
                     <h3 class="card-title">
-                        <button type="button" class="btn btn-primary mr-1">
-                            Export All &nbsp; <i class="fas fa-file-export"></i>
-                        </button>
-                        <button id="btn-export" type="button" class="btn btn-primary mr-1">
-                            Export &nbsp; <i class="fas fa-file-export"></i>
-                        </button>
-                        <button id="btn-reset" type="button" class="btn btn-primary">
-                            Reset &nbsp; <i class="fas fa-filter"></i>
-                        </button>
-                        <button type="button" id="btn-search" class="btn btn-primary mx-1">
-                            Search &nbsp; <i class="fas fa-search"></i>
-                        </button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal">
-                            More Search &nbsp; <i class="fas fa-search"></i>
-                        </button>
+                        <div class="row">
+                            <div class="col-12">
+                                {{-- <button type="button" class="btn btn-primary mr-1">
+                                    Export All &nbsp; <i class="fas fa-file-export"></i>
+                                </button> --}}
+                                <button class="btn p-0">
+                                    <select name="" id="filter-count"
+                                        style="width: 95px;display:inline;mr-1;  white-space: normal;"
+                                        class="form-control mr-1">
+                                        <option value="">Default</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                </button>
+                                <button id="btn-export" type="button" class="btn btn-primary mr-1">
+                                    Export &nbsp; <i class="fas fa-file-export"></i>
+                                </button>
+                                <button id="btn-reset" type="button" class="btn btn-primary">
+                                    Reset &nbsp; <i class="fas fa-filter"></i>
+                                </button>
+                                <button type="button" id="btn-search" class="btn btn-primary mx-1">
+                                    Search &nbsp; <i class="fas fa-search"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#filterModal">
+                                    More Search &nbsp; <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div class="col-lg-12">
+
+                            </div>
+                        </div>
                     </h3>
                     <div class="card-tools mt-2">
                         <div class="input-group input-group-sm" style="width: 300px;">
@@ -75,8 +100,8 @@ use Illuminate\Support\Facades\Auth;
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 table-responsive">
-                        <table class="table table-striped w-100 multiple-table" id="material-table">
+                    <div class="col-lg-6">
+                        <table class="table table-responsive table-hover w-100 multiple-table" id="material-table">
                             <thead>
                                 <tr class="d-flex">
                                     <th class="col-2">User</th>
@@ -95,7 +120,7 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                     </div>
                     <div class="col-lg-6 table-responsive">
-                        <table class="table table-striped multiple-table" id="material-table2">
+                        <table class="table multiple-table" id="material-table2">
                             <thead>
                                 <tr class="d-flex">
                                     <th class="col-1">Addition Date</th>
@@ -138,11 +163,11 @@ use Illuminate\Support\Facades\Auth;
                             <li>Dari</li>
                             <li class="ml-2" id="total_page">0</li>
                             <li class="paginate_button next prev" id="previous" data-page="prev"><a
-                                     aria-controls="example1" id="link_next" data-dt-idx="0"
-                                    tabindex="0"><i class="fa fa-chevron-left"></i></a></li>
-                            <li class="paginate_button next prev" id="next-step" data-page="next"><a
-                                    id="link_next" aria-controls="example1" data-dt-idx="2"
-                                    tabindex="0"><i class="fa fa-chevron-right"></i></a></li>
+                                    aria-controls="example1" id="link_next" data-dt-idx="0" tabindex="0"><i
+                                        class="fa fa-chevron-left"></i></a></li>
+                            <li class="paginate_button next prev" id="next-step" data-page="next"><a id="link_next"
+                                    aria-controls="example1" data-dt-idx="2" tabindex="0"><i
+                                        class="fa fa-chevron-right"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -204,7 +229,7 @@ use Illuminate\Support\Facades\Auth;
                     <div class="col-lg-6 table-responsive" style="overflow: scroll;height:650px">
                         <h4>Characteristic</h4>
                         <hr>
-                        <table class="table table-striped multiple-table" id="tb-characteristic">
+                        <table class="table multiple-table" id="tb-characteristic">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -220,7 +245,7 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                         <h4>Cross References</h4>
                         <hr>
-                        <table class="table table-striped multiple-table" id="tb-crossref">
+                        <table class="table multiple-table" id="tb-crossref">
                             <thead>
                                 <tr>
                                     <th>No. Ref.</th>
@@ -235,7 +260,7 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                         <h4>Functional Locations</h4>
                         <hr>
-                        <table class="table table-striped multiple-table" id="tb-functional">
+                        <table class="table multiple-table" id="tb-functional">
                             <thead>
                                 <tr>
                                     <th>Loc Name</th>
@@ -352,7 +377,7 @@ use Illuminate\Support\Facades\Auth;
             })
             // {"operator":"like","value":"old","property":"old_material_code","type":"string"}
 
-            // loadData(0, 25);
+            // loadData(01 20;
             $('#btn-filter').click(function() {
                 likeFilter = "";
                 page = 1;
@@ -392,15 +417,19 @@ use Illuminate\Support\Facades\Auth;
                     likeFilter += ',{"operator":"eq","value":"' + $('#on-date').val() +
                         '","property":"' + $('#select-filter-date').val() + '","type":"string"},';
                 }
-                console.log(likeFilter);
                 likeFilter = likeFilter.replaceAt(0, "").replaceAt(likeFilter.length - 1, " ").replaceAll(",,", ",")
-                loadData(page, 25);
+                loadData(page, 0);
                 // $.ajax({
                 //     method: "GET",
                 //     url: '/getMultiViewCatalogM?start=0&limit=10&action=getMultiView&page=1&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=["'+moreFilter+']'
                 // })
                 // [{"operator":"like","value":"old","property":"old_material_code","type":"string"},{"operator":"like","value":"ZMAT","property":"material_type","type":"string"},{"operator":"like","value":"H","property":"category","type":"string"},{"operator":"like","value":"dsa","property":"refno","type":"string"},{"operator":"like","value":"dadsa","property":"manufactur","type":"string"},{"operator":"like","value":"dsadsa","property":"funcloc","type":"string"},{"operator":"eq","value":"2022-10-11","property":"std_approval_datef","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]
             })
+
+            $('#filter-count').change(function() {
+                loadData(page, 0, $(this).val());
+
+            });
             // var page = $('#page');
             $('.next').click(function() {
                 var start = $('#current_page');
@@ -436,13 +465,13 @@ use Illuminate\Support\Facades\Auth;
                 {
                     likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                         '","property": "short_description","type": "string"}';
-                    loadData(page, 25)
+                    loadData(page, 0)
                 }
             });
             $('#short-desc-btn').click(function() {
                 likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                     '","property": "short_description","type": "string"}';
-                loadData(page, 25);
+                loadData(page, 0);
             })
             $('#raw-search').keypress(function(e) {
                 var key = e.which;
@@ -450,13 +479,13 @@ use Illuminate\Support\Facades\Auth;
                 {
                     likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                         '","property": "raw","type": "string"}';
-                    loadData(0, 25)
+                    loadData(1, 0)
                 }
             });
-            $('#btn-raw-search').click(function(){
+            $('#btn-raw-search').click(function() {
                 likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                     '","property": "raw","type": "string"}';
-                loadData(0, 25)
+                loadData(1, 0)
             })
             $('#btn-search').click(function(e) {
                 page = 1;
@@ -468,11 +497,12 @@ use Illuminate\Support\Facades\Auth;
                     likeFilter = ',{"operator": "like","value": "' + $('#short-desc-search').val() +
                         '","property": "short_description","type": "string"}';
                 }
-                loadData(page, 25)
+                loadData(page, 0)
                 likeFilter = "";
             })
             // {"operator":"like","value":"PLATE:ASTM A36;45MM","property":"short_description","type":"string"}
             $('#btn-export').click(function() {
+                console.log($('#filter-count').val() != undefined ? $('#filter-count').val() : 10);
                 $.ajax({
                     method: "POST",
                     url: "/ExportMV/xlsx",
@@ -483,7 +513,7 @@ use Illuminate\Support\Facades\Auth;
                         'filter': '',
                         'page': '1',
                         'start': '0',
-                        'limit': '25',
+                        'limit': $('#filter-count').val() != undefined ? $('#filter-count').val() : 10,
                         _token: csrf_token,
                     },
                 }).done(function(result) {
@@ -491,19 +521,20 @@ use Illuminate\Support\Facades\Auth;
                 });
             });
 
-            function loadData(page, start) {
+            function loadData(page, start = 0, limit = 10) {
                 page = page == 0 ? 1 : page;
                 $.ajax({
                     method: "GET",
                     url: '/getMultiViewCatalogM?action=getMultiView&page=' + parseInt(page) +
                         '&start=' + start +
-                        '&limit=10&sort=[{"property":"addition_date","direction":"DESC"}]&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}' +
+                        '&limit=' + limit +
+                        '&sort=[{"property":"addition_date","direction":"DESC"}]&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}' +
                         likeFilter.toString() + ']',
                     dataType: "json"
                 }).done(function(result) {
                     console.log(result);
                     totalData = result.total;
-                    $('#total_page').html(Math.ceil(totalData / 25));
+                    $('#total_page').html(Math.ceil(totalData / limit));
                     $("#material-table tbody").empty();
                     $("#material-table2 tbody").empty();
                     exportData = result.data;
@@ -563,7 +594,8 @@ use Illuminate\Support\Facades\Auth;
                             .long_description + '">' + element.long_description + '</td></tr>'
                         )
                         rowMaterial2.append(
-                            '<td class="col-1" role="button" data-tooltip="tooltip" title="'+element.raw+'">' + element.raw + '</td></tr>'
+                            '<td class="col-1" role="button" data-tooltip="tooltip" title="' + element.raw +
+                            '">' + element.raw + '</td></tr>'
                         )
                         rowMaterial2.append(
                             '<td class="col-1">' + element.material_type + '</td></tr>'
