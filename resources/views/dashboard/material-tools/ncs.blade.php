@@ -205,21 +205,21 @@ use Illuminate\Support\Facades\Auth;
                         max-height: 383px;
                         object-fit: cover;
                         ;"
-                            id="image-inc" alt="">
+                            id="image-inc" alt="" src="">
                         <div class="card-footer bg-white ml-auto mr-0 pr-0">
                             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
                                 <ul class="pagination">
                                     <li>Halaman</li>
-                                    <li class="paginate_button active mr-2"><a href="#" aria-controls="example1"
-                                            id="current_page" data-dt-idx="1" tabindex="0">1</a></li>
+                                    <li class="paginate_button active mr-2"><a aria-controls="example1"
+                                            id="current_page_image" data-dt-idx="1" tabindex="0">1</a></li>
                                     <li>Dari</li>
-                                    <li class="ml-2" id="total_page">25</li>
-                                    <li class="paginate_button next prev " id="example1_previous" data-page="prev"><a
-                                            href="#"" aria-controls="example1" id="link_next" data-dt-idx="0"
+                                    <li class="ml-2" id="total_page_image">25</li>
+                                    <li class="paginate_button next next-image prev " id="example1_previous"
+                                        data-page="prev"><a aria-controls="example1" id="link_next" data-dt-idx="0"
                                             tabindex="0"><i class="fa fa-chevron-left"></i></a></li>
-                                    <li class="paginate_button next prev" id="next-step" data-page="next"><a
-                                            id="link_next" href="#" aria-controls="example1" data-dt-idx="2"
-                                            tabindex="0"><i class="fa fa-chevron-right"></i></a></li>
+                                    <li class="paginate_button next next-image prev" id="next-step" data-page="next"><a
+                                            id="link_next" aria-controls="example1" data-dt-idx="2" tabindex="0"><i
+                                                class="fa fa-chevron-right"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -331,6 +331,7 @@ use Illuminate\Support\Facades\Auth;
             $('.js-example-basic-single').select2({
                 tags: false
             });
+
             var MGCMultipleselect2 =
                 $(document).ready(function() {
                     MGCMultipleselect2 = $('.js-example-basic-multiple').select2({
@@ -562,13 +563,20 @@ use Illuminate\Support\Facades\Auth;
                 })
             }
 
-            function loadImage(inc, page, start) {
+            function loadImage(inc, page, start, limit) {
                 $.ajax({
                     method: "GET",
-                    url: '/getIncImages?filter=[{"operator":"eq","value":"' + inc +
-                        '","property":"inc","type":"string"}]&page=' + page '+&start=' + start + '&limit=' + limit
+                    url: '/getIncImages?start=' + start + '&limit=1&filter=[{"operator":"eq","value":"' + inc +
+                        '","property":"inc","type":"string"}]&page=' + page
                 }).done(function(v) {
-                    console.log(v);
+                    oldImage = v.data[0].images;
+                    if ($('#image-inc').attr("src") == "" || $('#image-inc').attr("src") == null) {
+                        console.log("Awal" + v.data[0].images)
+                        $('#image-inc').attr("src", "/inc_images/" + v.data[0].images);
+                    } else {
+                        console.log("pindah page" + v.data[0].images)
+                        $('img[src="' + oldImage + '"]').attr("src", "/inc_images/" + v.data[0].images);
+                    }
                 })
             }
 
@@ -646,7 +654,18 @@ use Illuminate\Support\Facades\Auth;
                                 })
                                 loadCharact(0, 25, "inc");
                             })
-                            loadImage(inc[1]);
+                            loadImage(inc[1], 1, 0, 1);
+                            var pageImage = 1;
+                            $('.next-image').click(function() {
+                                if ($(this).data("page") === "next") {
+                                    pageImage += 1;
+                                }
+                                if ($(this).data("page") === "prev") {
+                                    pageImage -= 1;
+                                }
+
+                                loadImage(inc[1], pageImage, pageImage - 1, 1);
+                            });
                         });
 
                     });
