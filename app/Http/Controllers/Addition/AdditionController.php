@@ -945,7 +945,7 @@ class AdditionController extends Controller
 
                 }
                 // NEW UPDATE
-                DB::table('value_characteristic')->where('adr_d_items_id',$request->adr_d_items_id)->where('type_adr','Addition')->delete();
+                // DB::table('value_characteristic')->where('adr_d_items_id',$request->adr_d_items_id)->where('type_adr','Addition')->delete();
                 // NEW UPDATE
                 $adrDitems->save();
                 $checkOnProcess = AdrDItemsStatus::select(DB::raw("count(adr_d_items_status.item_status) AS OnProcess"))

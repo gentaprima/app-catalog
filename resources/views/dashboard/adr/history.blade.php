@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Auth;
     <section class="content">
 
         <div class="card p-4 mb-5 m-2">
-            <h4>Adition History</h4>
+            <h4>Addition History</h4>
             <hr>
             <form action="">
                 <div class="form-group row">
@@ -100,7 +100,7 @@ use Illuminate\Support\Facades\Auth;
                         <div class="row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
-                                <button class="btn btn-primary" onclick="loadData()" type="button">Submit</button>
+                                <button class="btn btn-primary" onclick="loadData()" type="button">Search</button>
                                 <button class="btn btn-default ml-1" onclick="reset()" id="btnReset" type="reset" style="border:none;">Reset</button>
                             </div>
                         </div>
@@ -110,7 +110,7 @@ use Illuminate\Support\Facades\Auth;
             </form>
             <hr>
             <div class="scrollwrapper">
-                <table id="tableDataHistory" class="table table-striped mt-3" >
+                <table id="tableDataHistory" class="table table-striped mt-3">
                     <thead>
                         <tr>
                             <th>ADR No</th>
@@ -257,6 +257,8 @@ use Illuminate\Support\Facades\Auth;
             let company = document.getElementById("company").value;
             let adrStatus = document.getElementById("adrStatus").value;
 
+
+
             let filter = [];
             // Params
             // let filter = `[,,,]`;
@@ -270,7 +272,9 @@ use Illuminate\Support\Facades\Auth;
             }
 
             if (endDate != '') {
-                filter.push(`{"operator":"lt","value":"${endDate}","property":"created_at","type":"date"}`)
+                var resultDate = new Date(new Date(endDate).setDate(new Date(endDate).getDate() + 1));
+                let newEndDate = resultDate.toISOString().substr(0, 10)
+                filter.push(`{"operator":"lt","value":"${newEndDate}","property":"created_at","type":"date"}`)
             }
 
             if (company != '') {
@@ -330,19 +334,19 @@ use Illuminate\Support\Facades\Auth;
                 success: function(response) {
                     for (let i = 0; i < response.length; i++) {
                         var tr = $("<tr>");
-                        if(response[i].transaction_type == 'Material'){
+                        if (response[i].transaction_type == 'Material') {
                             tr.append(`<td>
                                 <center><a href="/single-view/material/${response[i].catalog_no}">${response[i].catalog_no}</a></center>
                             </td>`);
-                        }else{
+                        } else {
                             tr.append(`<td>
                                 <center><a href="/single-view/service/${response[i].catalog_no}">${response[i].catalog_no}</a></center>
                             </td>`);
 
                         }
-                        if(response[i].sap_material_code == null){
+                        if (response[i].sap_material_code == null) {
                             tr.append("<td></td>");
-                        }else{
+                        } else {
                             tr.append("<td>" + (response[i].sap_material_code) + "</td>");
 
                         }
