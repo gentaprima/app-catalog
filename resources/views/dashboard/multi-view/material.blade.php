@@ -104,11 +104,11 @@ use Illuminate\Support\Facades\Auth;
                         <table class="table table-responsive table-hover w-100 multiple-table" id="material-table">
                             <thead>
                                 <tr class="d-flex">
-                                    <th class="col-2">User</th>
-                                    <th class="col-2">Cat</th>
-                                    <th class="col-2">Std App</th>
-                                    <th class="col-2">Proc App</th>
-                                    <th class="col-2">SAP</th>
+                                    <th class="col-1">User</th>
+                                    <th class="col-1">Cat</th>
+                                    <th class="col-1">Std App</th>
+                                    <th class="col-1">Proc App</th>
+                                    <th class="col-1">SAP</th>
                                     <th class="col-3">Catalogue No</th>
                                     <th class="col-5">Short Description</th>
                                     <th class="col-3">ADR Number</th>
@@ -418,7 +418,7 @@ use Illuminate\Support\Facades\Auth;
                         '","property":"' + $('#select-filter-date').val() + '","type":"string"},';
                 }
                 likeFilter = likeFilter.replaceAt(0, "").replaceAt(likeFilter.length - 1, " ").replaceAll(",,", ",")
-                loadData(page, 0);
+                loadData(page, 0,$('#filter-count').val());
                 // $.ajax({
                 //     method: "GET",
                 //     url: '/getMultiViewCatalogM?start=0&limit=10&action=getMultiView&page=1&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=["'+moreFilter+']'
@@ -434,15 +434,6 @@ use Illuminate\Support\Facades\Auth;
             $('.next').click(function() {
                 var start = $('#current_page');
                 var pageCurr = $(this).data("page");
-                // if(parseInt($('#total_page').html()) >= page){
-                //     $('#next-step').addClass("Disabledd");
-                //     $('#previous').removeClass("Disabledd");
-                // }
-
-                // if(parseInt($('#total_page').html() <= page)){
-                //     $('#previous').addClass("Disabledd");
-                //     $('#next-step').removeClass("Disabledd");
-                // }
 
                 if (pageCurr == "next") {
                     // page.val((parseInt(page.val()) + 1));
@@ -452,11 +443,11 @@ use Illuminate\Support\Facades\Auth;
                 }
                 if (pageCurr == "prev") {
                     console.log("Prev");
-                    page = page + 1;
+                    page = page - 1;
 
                 }
                 start.text(page);;
-                loadData(page, 0);
+                loadData(page, 0,$('#filter-count').val());
             })
 
             $('#short-desc-search').keypress(function(e) {
@@ -465,13 +456,13 @@ use Illuminate\Support\Facades\Auth;
                 {
                     likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                         '","property": "short_description","type": "string"}';
-                    loadData(page, 0)
+                    loadData(page, 0,$('#filter-count').val())
                 }
             });
             $('#short-desc-btn').click(function() {
                 likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                     '","property": "short_description","type": "string"}';
-                loadData(page, 0);
+                loadData(page, 0,$('#filter-count').val());
             })
             $('#raw-search').keypress(function(e) {
                 var key = e.which;
@@ -497,7 +488,7 @@ use Illuminate\Support\Facades\Auth;
                     likeFilter = ',{"operator": "like","value": "' + $('#short-desc-search').val() +
                         '","property": "short_description","type": "string"}';
                 }
-                loadData(page, 0)
+                loadData(page, 0,$('#filter-count').val())
                 likeFilter = "";
             })
             // {"operator":"like","value":"PLATE:ASTM A36;45MM","property":"short_description","type":"string"}
@@ -640,28 +631,28 @@ use Illuminate\Support\Facades\Auth;
                         var rowMaterial = $('<tr class="d-flex tr-tab-1">');
                         rowMaterial.append(
                             element.status_user == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_cat == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_stdapp == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_proc == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_sap == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append('<td class="col-3">' + element.catalog_no + ' </td>')
                         rowMaterial.append('<td class="col-5">' + element.short_description +
