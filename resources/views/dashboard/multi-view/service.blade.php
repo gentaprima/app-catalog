@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Auth;
 ?>
+<style>
+
+    .table-hover tbody tr:hover td {
+        background-color: rgba(205, 206, 206, 0.50);
+    }
+</style>
 @extends('master')
 
 @section('title', 'Multiple View | Service')
@@ -33,21 +39,40 @@ use Illuminate\Support\Facades\Auth;
             <div class="card p-4 mb-1 m-2">
                 <div class="card-header px-0">
                     <h3 class="card-title">
-                        <button type="button" class="btn btn-primary mr-1">
-                            Export All &nbsp; <i class="fas fa-file-export"></i>
-                        </button>
-                        <button id="btn-export" type="button" class="btn btn-primary mr-1">
-                            Export &nbsp; <i class="fas fa-file-export"></i>
-                        </button>
-                        <button id="btn-reset" type="button" class="btn btn-primary">
-                            Reset &nbsp; <i class="fas fa-filter"></i>
-                        </button>
-                        <button type="button" id="btn-search" class="btn btn-primary mx-1">
-                            Search &nbsp; <i class="fas fa-search"></i>
-                        </button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal">
-                            More Search &nbsp; <i class="fas fa-search"></i>
-                        </button>
+                        <div class="row">
+                            <div class="col-12">
+                                {{-- <button type="button" class="btn btn-primary mr-1">
+                                    Export All &nbsp; <i class="fas fa-file-export"></i>
+                                </button> --}}
+                                <button class="btn p-0">
+                                    <select name="" id="filter-count"
+                                        style="width: 95px;display:inline;mr-1;  white-space: normal;"
+                                        class="form-control mr-1">
+                                        <option value="">Default</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                </button>
+                                <button id="btn-export" type="button" class="btn btn-primary mr-1">
+                                    Export &nbsp; <i class="fas fa-file-export"></i>
+                                </button>
+                                <button id="btn-reset" type="button" class="btn btn-primary">
+                                    Reset &nbsp; <i class="fas fa-filter"></i>
+                                </button>
+                                <button type="button" id="btn-search" class="btn btn-primary mx-1">
+                                    Search &nbsp; <i class="fas fa-search"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#filterModal">
+                                    More Search &nbsp; <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div class="col-lg-12">
+
+                            </div>
+                        </div>
                     </h3>
                     <div class="card-tools mt-2">
                         <div class="input-group input-group-sm" style="width: 300px;">
@@ -75,15 +100,15 @@ use Illuminate\Support\Facades\Auth;
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 table-responsive">
-                        <table class="table table-striped w-100 multiple-table" id="material-table">
+                    <div class="col-lg-6">
+                        <table class="table table-responsive table-hover w-100 multiple-table" id="material-table">
                             <thead>
                                 <tr class="d-flex">
-                                    <th class="col-2">User</th>
-                                    <th class="col-2">Cat</th>
-                                    <th class="col-2">Std App</th>
-                                    <th class="col-2">Proc App</th>
-                                    <th class="col-2">SAP</th>
+                                    <th class="col-1">User</th>
+                                    <th class="col-1">Cat</th>
+                                    <th class="col-1">Std App</th>
+                                    <th class="col-1">Proc App</th>
+                                    <th class="col-1">SAP</th>
                                     <th class="col-3">Catalogue No</th>
                                     <th class="col-5">Short Description</th>
                                     <th class="col-3">ADR Number</th>
@@ -95,7 +120,7 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                     </div>
                     <div class="col-lg-6 table-responsive">
-                        <table class="table table-striped multiple-table" id="material-table2">
+                        <table class="table multiple-table" id="material-table2">
                             <thead>
                                 <tr class="d-flex">
                                     <th class="col-1">Addition Date</th>
@@ -133,8 +158,8 @@ use Illuminate\Support\Facades\Auth;
                     <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
                         <ul class="pagination">
                             <li>Halaman</li>
-                            <li class="paginate_button active mr-2"><a aria-controls="example1" id="current_page"
-                                    data-dt-idx="1" tabindex="0">1</a></li>
+                            <li class="paginate_button active mr-2"><a href="#" aria-controls="example1"
+                                    id="current_page" data-dt-idx="1" tabindex="0">1</a></li>
                             <li>Dari</li>
                             <li class="ml-2" id="total_page">0</li>
                             <li class="paginate_button next prev" id="previous" data-page="prev"><a
@@ -150,7 +175,7 @@ use Illuminate\Support\Facades\Auth;
             <div class="card p-4 mb-5 m-2">
                 <div class="row">
                     <div class="col-lg-6">
-                        <h4>Service Owner</h4>
+                        <h4>Service Item</h4>
                         <hr>
                         <form action="">
                             <div class="form-group row">
@@ -204,7 +229,7 @@ use Illuminate\Support\Facades\Auth;
                     <div class="col-lg-6 table-responsive" style="overflow: scroll;height:650px">
                         <h4>Characteristic</h4>
                         <hr>
-                        <table class="table table-striped multiple-table" id="tb-characteristic">
+                        <table class="table multiple-table" id="tb-characteristic">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -220,7 +245,7 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                         <h4>Cross References</h4>
                         <hr>
-                        <table class="table table-striped multiple-table" id="tb-crossref">
+                        <table class="table multiple-table" id="tb-crossref">
                             <thead>
                                 <tr>
                                     <th>No. Ref.</th>
@@ -235,7 +260,7 @@ use Illuminate\Support\Facades\Auth;
                         </table>
                         <h4>Functional Locations</h4>
                         <hr>
-                        <table class="table table-striped multiple-table" id="tb-functional">
+                        <table class="table multiple-table" id="tb-functional">
                             <thead>
                                 <tr>
                                     <th>Loc Name</th>
@@ -330,7 +355,7 @@ use Illuminate\Support\Facades\Auth;
             }
             $.ajax({
                 method: "GET",
-                url: '/getMaterialType?query=&filter=[{"operator":"eq","value":"material_type","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=25',
+                url: '/getMaterialType?query=&filter=[{"operator":"eq","value":"material_type","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=10',
                 dataType: "json",
             }).done(function(v) {
                 v.forEach(function(v) {
@@ -341,7 +366,7 @@ use Illuminate\Support\Facades\Auth;
             })
             $.ajax({
                 method: "GET",
-                url: '/getCategory?query=&filter=[{"operator":"eq","value":"itemcategory","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=25',
+                url: '/getCategory?query=&filter=[{"operator":"eq","value":"itemcategory","property":"entity_name","type":"string"}]&action=getEntity&page=1&start=0&limit=10',
                 dataType: "json",
             }).done(function(v) {
                 v.forEach(function(v) {
@@ -352,7 +377,7 @@ use Illuminate\Support\Facades\Auth;
             })
             // {"operator":"like","value":"old","property":"old_material_code","type":"string"}
 
-            // loadData(0, 25);
+            // loadData(01 20;
             $('#btn-filter').click(function() {
                 likeFilter = "";
                 page = 1;
@@ -392,28 +417,23 @@ use Illuminate\Support\Facades\Auth;
                     likeFilter += ',{"operator":"eq","value":"' + $('#on-date').val() +
                         '","property":"' + $('#select-filter-date').val() + '","type":"string"},';
                 }
-                console.log(likeFilter);
                 likeFilter = likeFilter.replaceAt(0, "").replaceAt(likeFilter.length - 1, " ").replaceAll(",,", ",")
-                loadData(page, 25);
+                loadData(page, 0,$('#filter-count').val());
                 // $.ajax({
                 //     method: "GET",
-                //     url: '/getMultiViewCatalogM?start=0&limit=25&action=getMultiView&page=1&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=["'+moreFilter+']'
+                //     url: '/getMultiViewCatalogM?start=0&limit=10&action=getMultiView&page=1&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=["'+moreFilter+']'
                 // })
                 // [{"operator":"like","value":"old","property":"old_material_code","type":"string"},{"operator":"like","value":"ZMAT","property":"material_type","type":"string"},{"operator":"like","value":"H","property":"category","type":"string"},{"operator":"like","value":"dsa","property":"refno","type":"string"},{"operator":"like","value":"dadsa","property":"manufactur","type":"string"},{"operator":"like","value":"dsadsa","property":"funcloc","type":"string"},{"operator":"eq","value":"2022-10-11","property":"std_approval_datef","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]
             })
+
+            $('#filter-count').change(function() {
+                loadData(page, 0, $(this).val());
+
+            });
             // var page = $('#page');
             $('.next').click(function() {
                 var start = $('#current_page');
                 var pageCurr = $(this).data("page");
-                // if(parseInt($('#total_page').html()) >= page){
-                //     $('#next-step').addClass("Disabledd");
-                //     $('#previous').removeClass("Disabledd");
-                // }
-
-                // if(parseInt($('#total_page').html() <= page)){
-                //     $('#previous').addClass("Disabledd");
-                //     $('#next-step').removeClass("Disabledd");
-                // }
 
                 if (pageCurr == "next") {
                     // page.val((parseInt(page.val()) + 1));
@@ -423,11 +443,11 @@ use Illuminate\Support\Facades\Auth;
                 }
                 if (pageCurr == "prev") {
                     console.log("Prev");
-                    page = page + 1;
+                    page = page - 1;
 
                 }
                 start.text(page);;
-                loadData(page, 0);
+                loadData(page, 0,$('#filter-count').val());
             })
 
             $('#short-desc-search').keypress(function(e) {
@@ -436,13 +456,13 @@ use Illuminate\Support\Facades\Auth;
                 {
                     likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                         '","property": "short_description","type": "string"}';
-                    loadData(page, 25)
+                    loadData(page, 0,$('#filter-count').val())
                 }
             });
             $('#short-desc-btn').click(function() {
                 likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                     '","property": "short_description","type": "string"}';
-                loadData(page, 25);
+                loadData(page, 0,$('#filter-count').val());
             })
             $('#raw-search').keypress(function(e) {
                 var key = e.which;
@@ -450,13 +470,13 @@ use Illuminate\Support\Facades\Auth;
                 {
                     likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                         '","property": "raw","type": "string"}';
-                    loadData(0, 25)
+                    loadData(1, 0)
                 }
             });
             $('#btn-raw-search').click(function() {
                 likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                     '","property": "raw","type": "string"}';
-                loadData(0, 25)
+                loadData(1, 0)
             })
             $('#btn-search').click(function(e) {
                 page = 1;
@@ -468,22 +488,23 @@ use Illuminate\Support\Facades\Auth;
                     likeFilter = ',{"operator": "like","value": "' + $('#short-desc-search').val() +
                         '","property": "short_description","type": "string"}';
                 }
-                loadData(page, 25)
+                loadData(page, 0,$('#filter-count').val())
                 likeFilter = "";
             })
             // {"operator":"like","value":"PLATE:ASTM A36;45MM","property":"short_description","type":"string"}
             $('#btn-export').click(function() {
+                console.log($('#filter-count').val() != undefined ? $('#filter-count').val() : 10);
                 $.ajax({
                     method: "POST",
                     url: "/ExportMV/xlsx",
                     data: {
-                        'transaction_type': 'Service',
+                        'transaction_type': 'Material',
                         'data': JSON.stringify(exportData),
                         '_token': 'vgCCbWBT8X7Miwg2mBqKhc1iscrXpGHxd31FkihY',
                         'filter': '',
                         'page': '1',
                         'start': '0',
-                        'limit': '25',
+                        'limit': $('#filter-count').val() != undefined ? $('#filter-count').val() : 10,
                         _token: csrf_token,
                     },
                 }).done(function(result) {
@@ -491,19 +512,20 @@ use Illuminate\Support\Facades\Auth;
                 });
             });
 
-            function loadData(page, start) {
+            function loadData(page, start = 0, limit = 10) {
                 page = page == 0 ? 1 : page;
                 $.ajax({
                     method: "GET",
                     url: '/getMultiViewCatalogM?action=getMultiView&page=' + parseInt(page) +
                         '&start=' + start +
-                        '&limit=25&sort=[{"property":"addition_date","direction":"DESC"}]&filter=[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}' +
+                        '&limit=' + limit +
+                        '&sort=[{"property":"addition_date","direction":"DESC"}]&filter=[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}' +
                         likeFilter.toString() + ']',
                     dataType: "json"
                 }).done(function(result) {
                     console.log(result);
                     totalData = result.total;
-                    $('#total_page').html(Math.ceil(totalData / 25));
+                    $('#total_page').html(Math.ceil(totalData / limit));
                     $("#material-table tbody").empty();
                     $("#material-table2 tbody").empty();
                     exportData = result.data;
@@ -609,28 +631,28 @@ use Illuminate\Support\Facades\Auth;
                         var rowMaterial = $('<tr class="d-flex tr-tab-1">');
                         rowMaterial.append(
                             element.status_user == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_cat == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_stdapp == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_proc == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append(
                             element.status_sap == 1 ?
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
-                            '<td style="font-size:12px" class="col-2 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
+                            '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-danger"></i></td>'
                         )
                         rowMaterial.append('<td class="col-3">' + element.catalog_no + ' </td>')
                         rowMaterial.append('<td class="col-5">' + element.short_description +
@@ -656,7 +678,7 @@ use Illuminate\Support\Facades\Auth;
                                     method: "GET",
                                     url: '/getCatalogM?filter=[{"operator":"eq","value":"' +
                                         value.split(" ")[0] +
-                                        '","property":"catalog_no","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"},{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}]&action=getCatalogM&page=1&start=0&limit=25',
+                                        '","property":"catalog_no","type":"string"},{"operator":"eq","value":"Active","property":"is_active","type":"string"},{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]&action=getCatalogM&page=1&start=0&limit=25',
                                     dataType: "json"
                                 }).done(function(v) {
                                     var data = v.data[0];
@@ -740,7 +762,7 @@ use Illuminate\Support\Facades\Auth;
                                     $("#tb-functional tbody").empty();
                                     $.ajax({
                                         method: "GET",
-                                        url: '/getItemsFuncloc?_dc=1666812249332&start=0&limit=300&filter=[{"operator":"eq","value":2,"property":"adr_d_items_id","type":"numeric"}]&page=1',
+                                        url: '/getItemsFuncloc?_dc=1666812249332&start=0&limit=25&filter=[{"operator":"eq","value":2,"property":"adr_d_items_id","type":"numeric"}]&page=1',
                                         dataType: "json"
                                     }).done(function(v) {
                                         if (v.data != null && v.data.length > 0) {
