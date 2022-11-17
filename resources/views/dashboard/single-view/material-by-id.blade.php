@@ -396,6 +396,7 @@ use Illuminate\Support\Facades\Auth;
                                 <input type="text" class="form-control" id="valueCharacteristic">
                                 <input type="hidden" name="" id="idValueCharacteristic">
                                 <input type="hidden" name="" id="descCharacteristic">
+                                <span>Catatan : Anda juga bisa mengisi value pada abbreviation diatas, dengan mengcopy paste code abbreviation, maka nanti di long desc akan terisi otomatis description.</span>
                             </div>
                         </div>
 

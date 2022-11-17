@@ -69,7 +69,7 @@ use Illuminate\Support\Facades\Auth;
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2">SAP Material Code</label>
+                            <label for="" class="col-sm-2">SAP Service Code</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" readonly id="SAP">
                             </div>
@@ -121,12 +121,12 @@ use Illuminate\Support\Facades\Auth;
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2">Material</label>
+                            <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <select readonly class="js-example-data-ajax" id="materialType">
-                                            <option value="">Select Material Type</option>
+                                            <option value="">Select Service Type</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-4">
@@ -143,7 +143,7 @@ use Illuminate\Support\Facades\Auth;
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2">Catologuer</label>
+                            <label for="" class="col-sm-2">Catologer</label>
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -388,6 +388,7 @@ use Illuminate\Support\Facades\Auth;
                                 <input type="text" class="form-control" id="valueCharacteristic">
                                 <input type="hidden" name="" id="idValueCharacteristic">
                                 <input type="hidden" name="" id="descCharacteristic">
+                                <span>Catatan : Anda juga bisa mengisi value pada abbreviation diatas, dengan mengcopy paste code abbreviation, maka nanti di long desc akan terisi otomatis description.</span>
                             </div>
                         </div>
 
