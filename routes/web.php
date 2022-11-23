@@ -201,7 +201,7 @@ Route::post('/SaveServiceDocument', 'Addition\AdditionController@SaveItemsDocume
 Route::post('/DeleteServiceDocument', 'Addition\AdditionController@DeleteItemsDocument');
 Route::get('/SaveMaterialRaw', 'Addition\AdditionController@SaveMaterialRaw');
 
-
+Route::post('/test','Addition\AdditionController@test');
 Route::get('/getServiceItemsImages', 'Addition\AdditionController@getItemsImages');
 Route::post('/SaveServiceImages', 'Addition\AdditionController@SaveItemsImages');
 Route::post('/DeleteServiceImages', 'Addition\AdditionController@DeleteItemsImages');

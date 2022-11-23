@@ -1113,7 +1113,12 @@ class AdditionController extends Controller
         );
         return \Response::json($data,200);
     }
+
+    public function test(Request $request){
+        
+    }
     public function SaveItemsImages(Request $request){
+        // echo "kontol";
         DB::beginTransaction();
         try {
             $input = Input::all();
