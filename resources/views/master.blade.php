@@ -45,9 +45,9 @@
             z-index: 1052 !important;
         }
 
-        .modal-backdrop.show:nth-of-type(even) {
-            /* z-index: 1051 !important; */
-        }
+        /* .modal-backdrop.show:nth-of-type(even) {
+            z-index: 1051 !important;
+        } */
 
         #realName {
             position: relative;
