@@ -387,6 +387,9 @@ class AdditionController extends Controller
             foreach ($input as $key => $value) {
                 $data[$key] = $value;
             }
+            $reason =  $data['reason'];
+            
+            unset($data['reason']);
             $sql_d_items = array();
             $adr_d_items = array($data);
             $i=1;
@@ -582,6 +585,19 @@ class AdditionController extends Controller
                                     //         ->subject('Request '.$row['transaction_type']);
                                     // });
                                 }
+
+                                // update reason
+                                DB::table('adr_d_notes_notvalidate')->insert([
+                                    'adr_no' => $row['adr_d_items_id'],
+                                    'catalog_no' => $row['catalog_no'],
+                                    'item_status' => $row['item_status'],
+                                    'transaction_type' => $row['transaction_type'],
+                                    'sap_material_code' => $row['sap_material_code'],
+                                    'reason' => $reason,
+                                    'updated_at' => date("Y-m-d H:i:s"),
+                                    'updated_by'=> $row['updated_by']
+                                ]);
+
                             }
                         }
                         if(substr(strtolower($levelUser),0,3) == 'std'){
@@ -659,6 +675,18 @@ class AdditionController extends Controller
                                 //         //->bcc('bqsoft77@gmail.com', 'Development')
                                 //         ->subject('Request '.$row['transaction_type']);
                                 // });
+
+                                 // update reason
+                                 DB::table('adr_d_notes_notvalidate')->insert([
+                                    'adr_no' => $row['adr_d_items_id'],
+                                    'catalog_no' => $row['catalog_no'],
+                                    'item_status' => $row['item_status'],
+                                    'transaction_type' => $row['transaction_type'],
+                                    'sap_material_code' => $row['sap_material_code'],
+                                    'reason' => $reason,
+                                    'updated_at' => date("Y-m-d H:i:s"),
+                                    'updated_by'=> $row['updated_by']
+                                ]);
                             }
                         }
                         if($levelUser == 'Proc'){
@@ -830,6 +858,17 @@ class AdditionController extends Controller
                                 //         //->bcc('bqsoft77@gmail.com', 'Development')
                                 //         ->subject('Request '.$row['transaction_type']);
                                 // });
+                                 // update reason
+                                 DB::table('adr_d_notes_notvalidate')->insert([
+                                    'adr_no' => $row['adr_d_items_id'],
+                                    'catalog_no' => $row['catalog_no'],
+                                    'item_status' => $row['item_status'],
+                                    'transaction_type' => $row['transaction_type'],
+                                    'sap_material_code' => $row['sap_material_code'],
+                                    'reason' => $reason,
+                                    'updated_at' => date("Y-m-d H:i:s"),
+                                    'updated_by'=> $row['updated_by']
+                                ]);
                             }
                         }
 

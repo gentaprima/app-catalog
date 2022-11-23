@@ -70,6 +70,8 @@ Route::post('/update-all-value-characteristic-revision','Catalogue\CatalogueCont
 Route::get('/single-view/service', 'NavController@singleViewService');
 Route::get('/single-view/service/{id}', 'NavController@singleViewServiceById');
 
+Route::get('/single-view/get-reason-not-validate','Catalogue\CatalogueController@getReasonNotValidate');
+
 // SINGLE VIEW
 
 // CLEANSING & DUPLICATION
