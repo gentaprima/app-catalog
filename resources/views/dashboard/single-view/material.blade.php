@@ -194,7 +194,7 @@ use Illuminate\Support\Facades\Auth;
                                 <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
                             </div>
                         </div>
-                      
+
                         <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
@@ -644,6 +644,7 @@ use Illuminate\Support\Facades\Auth;
     <p hidden="true" id="totalDataDocument"></p>
 
     <p hidden="true" id="rawData"></p>
+    <p hidden="true" id="categoryData"></p>
 
 
 
@@ -928,13 +929,13 @@ use Illuminate\Support\Facades\Auth;
 
         // IMAGE
 
-        function getReasonNotValidate(adrNo){
+        function getReasonNotValidate(adrNo) {
             $("#tableDataReason tbody").empty();
             $.ajax({
-                url : `/single-view/get-reason-not-validate?adr_no=${adrNo}`,
-                type:'get',
-                dataType:'json',
-                success : function(response){
+                url: `/single-view/get-reason-not-validate?adr_no=${adrNo}`,
+                type: 'get',
+                dataType: 'json',
+                success: function(response) {
                     let data = response.data;
                     for (let i = 0; i < data.length; i++) {
                         var tr = $("<tr>");
@@ -989,18 +990,36 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("cataloguerBy").value = data[0].cataloguer_by;
                         document.getElementById("stdAprovalBy").value = data[0].std_approval_by;
                         document.getElementById("procAproverBy").value = data[0].proc_approver_by;
+                        document.getElementById("categoryData").innerHTML = data[0].category;
 
                         // check validated or not
                         if (data[0].cataloguer == 'Not Validate') {
                             document.getElementById("cataloguer").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+
                         }
 
                         if (data[0].std_approval == 'Not Validate') {
                             document.getElementById("stdApp").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
                         }
 
                         if (data[0].proc_approver == 'Not Validate') {
                             document.getElementById("procApp").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+
                         }
                         // check validated or not
 
@@ -1293,15 +1312,18 @@ use Illuminate\Support\Facades\Auth;
                             title: 'Please select cataloguer'
                         });
                         return;
-                    } 
+                    }
 
-                    if(cataloguer == 'Not Validate' && reason == ''){
+                    if (cataloguer == 'Not Validate' && reason == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please add reason'
                         });
                         return;
                     }
+
+                    let categoryData = document.getElementById("categoryData").innerHTML;
+                    console.log(categoryData);
 
                     Swal.fire({
                         title: 'Are you sure?',
@@ -1323,9 +1345,9 @@ use Illuminate\Support\Facades\Auth;
                             title: 'Please select std approver'
                         });
                         return;
-                    } 
+                    }
 
-                    if(stdApp == 'Not Validate' && reason == ''){
+                    if (stdApp == 'Not Validate' && reason == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please add reason'
@@ -1334,18 +1356,18 @@ use Illuminate\Support\Facades\Auth;
                     }
 
                     Swal.fire({
-                            title: 'Are you sure?',
-                            text: "you want to process data!",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, process it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                materialApplyChange();
-                            }
-                        })
+                        title: 'Are you sure?',
+                        text: "you want to process data!",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, process it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            materialApplyChange();
+                        }
+                    })
                 } else if (groupName == 'Proc') {
                     if (procApp == '') {
                         Toast.fire({
@@ -1411,6 +1433,12 @@ use Illuminate\Support\Facades\Auth;
             let stdBy = document.getElementById("stdAprovalBy").value
             let procBy = document.getElementById("procAproverBy").value
             let reason = document.getElementById("reason").value;
+            let categoryData = document.getElementById("categoryData").innerHTML;
+            // if(categoryData != 'M'){
+            //     cataloguer = "Validate";
+            //     stdApp = "Validate";
+            //     procApp = "Validate";
+            // }
             $.ajax({
                 type: "post",
                 url: '/MaterialApplyChanges',
@@ -1449,7 +1477,7 @@ use Illuminate\Support\Facades\Auth;
                     cataloguer_by: cataloguerBy,
                     std_approval_by: stdBy,
                     proc_approver_by: procBy,
-                    reason : reason
+                    reason: reason
                 },
                 success: function(response) {
                     if (response.success == true) {

@@ -507,6 +507,7 @@ class AdditionController extends Controller
                             });
                         }
                         if($levelUser == 'Cat'){
+                            // check disini
                             if($row['cataloguer'] == 'Validate') {
                                 $adrDitems->cataloguer = $row['cataloguer'];
                                 $adrDitems->cataloguer_by_id = $user_id;

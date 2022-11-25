@@ -955,14 +955,31 @@ use Illuminate\Support\Facades\Auth;
                         // check validated or not
                         if (data[0].cataloguer == 'Not Validate') {
                             document.getElementById("cataloguer").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+
                         }
 
                         if (data[0].std_approval == 'Not Validate') {
                             document.getElementById("stdApp").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
                         }
 
                         if (data[0].proc_approver == 'Not Validate') {
                             document.getElementById("procApp").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+
                         }
                         // check validated or not
 
