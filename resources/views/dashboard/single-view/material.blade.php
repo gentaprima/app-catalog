@@ -182,19 +182,19 @@ use Illuminate\Support\Facades\Auth;
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
-                            </div>
-                        </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Reason</label>
                             <div class="col-sm-10">
                                 <textarea name="" id="reason" rows="5" class="form-control"></textarea>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
+                            </div>
+                        </div>
+                      
                         <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
