@@ -547,6 +547,10 @@ use Illuminate\Support\Facades\Auth;
                             document.getElementById("category").setAttribute("disabled", true)
                             document.getElementById("inc").setAttribute("disabled", true);
                             document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
 
                         }
 
@@ -557,6 +561,10 @@ use Illuminate\Support\Facades\Auth;
                             document.getElementById("category").setAttribute("disabled", true)
                             document.getElementById("inc").setAttribute("disabled", true);
                             document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
                         }
 
                         if (data[0].proc_approver == 'Not Validate') {
@@ -566,6 +574,10 @@ use Illuminate\Support\Facades\Auth;
                             document.getElementById("category").setAttribute("disabled", true)
                             document.getElementById("inc").setAttribute("disabled", true);
                             document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
 
                         }
                         // check validated or not

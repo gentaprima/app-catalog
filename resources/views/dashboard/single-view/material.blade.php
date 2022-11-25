@@ -1000,6 +1000,10 @@ use Illuminate\Support\Facades\Auth;
                             document.getElementById("category").setAttribute("disabled", true)
                             document.getElementById("inc").setAttribute("disabled", true);
                             document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
 
                         }
 
@@ -1010,6 +1014,10 @@ use Illuminate\Support\Facades\Auth;
                             document.getElementById("category").setAttribute("disabled", true)
                             document.getElementById("inc").setAttribute("disabled", true);
                             document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
                         }
 
                         if (data[0].proc_approver == 'Not Validate') {
@@ -1019,6 +1027,10 @@ use Illuminate\Support\Facades\Auth;
                             document.getElementById("category").setAttribute("disabled", true)
                             document.getElementById("inc").setAttribute("disabled", true);
                             document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
 
                         }
                         // check validated or not
@@ -1164,12 +1176,12 @@ use Illuminate\Support\Facades\Auth;
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
+                document.getElementById("btnApply").hidden = true
                 document.getElementById("materialType").setAttribute("disabled", true);
                 document.getElementById("uom").setAttribute("disabled", true)
                 document.getElementById("category").setAttribute("disabled", true)
                 document.getElementById("inc").setAttribute("disabled", true)
                 document.getElementById("mgc").setAttribute("disabled", true)
-                document.getElementById("btnApply").hidden = true
             } else if (statusCat == "1" && groupName == 'Cat') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
