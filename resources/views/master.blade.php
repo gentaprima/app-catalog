@@ -121,6 +121,11 @@
             border: none;
         }
 
+
+        #tableDataReason td{
+            word-wrap: break-word;
+            white-space: initial;
+        }
         #tableDataCharacteristic td {
             word-wrap: break-word;
             white-space: initial;
