@@ -182,6 +182,13 @@ use Illuminate\Support\Facades\Auth;
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2">Reason</label>
                             <div class="col-sm-10">
@@ -200,12 +207,6 @@ use Illuminate\Support\Facades\Auth;
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
                             </div>
                         </div>
                         <input type="hidden" name="" id="useremail">

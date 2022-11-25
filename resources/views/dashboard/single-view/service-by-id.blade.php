@@ -208,6 +208,26 @@ use Illuminate\Support\Facades\Auth;
                                 <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2">Reason</label>
+                            <div class="col-sm-10">
+                                <textarea name="" id="reason" rows="5" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <table id="tableDataReason" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Users</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
                         <input type="hidden" name="" id="useremail">
                         <input type="hidden" name="" id="catemail">
                         <input type="hidden" name="" id="stdemail">
