@@ -48,7 +48,7 @@ use Illuminate\Support\Facades\Auth;
                                     <select name="" id="filter-count"
                                         style="width: 95px;display:inline;mr-1;  white-space: normal;"
                                         class="form-control mr-1">
-                                        <option value="">Default</option>
+                                        <option value="10">Default</option>
                                         <option value="10">10</option>
                                         <option value="50">50</option>
                                         <option value="100">100</option>
@@ -158,7 +158,7 @@ use Illuminate\Support\Facades\Auth;
                     <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
                         <ul class="pagination">
                             <li>Halaman</li>
-                            <li class="paginate_button active mr-2"><a href="#" aria-controls="example1"
+                            <li class="paginate_button active mr-2"><a aria-controls="example1"
                                     id="current_page" data-dt-idx="1" tabindex="0">1</a></li>
                             <li>Dari</li>
                             <li class="ml-2" id="total_page">0</li>
