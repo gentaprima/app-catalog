@@ -70,6 +70,8 @@ Route::post('/update-all-value-characteristic-revision','Catalogue\CatalogueCont
 Route::get('/single-view/service', 'NavController@singleViewService');
 Route::get('/single-view/service/{id}', 'NavController@singleViewServiceById');
 
+Route::get('/single-view/get-reason-not-validate','Catalogue\CatalogueController@getReasonNotValidate');
+
 // SINGLE VIEW
 
 // CLEANSING & DUPLICATION
@@ -201,7 +203,7 @@ Route::post('/SaveServiceDocument', 'Addition\AdditionController@SaveItemsDocume
 Route::post('/DeleteServiceDocument', 'Addition\AdditionController@DeleteItemsDocument');
 Route::get('/SaveMaterialRaw', 'Addition\AdditionController@SaveMaterialRaw');
 
-
+Route::post('/test','Addition\AdditionController@test');
 Route::get('/getServiceItemsImages', 'Addition\AdditionController@getItemsImages');
 Route::post('/SaveServiceImages', 'Addition\AdditionController@SaveItemsImages');
 Route::post('/DeleteServiceImages', 'Addition\AdditionController@DeleteItemsImages');

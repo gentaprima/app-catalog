@@ -41,6 +41,14 @@
         const userId = localStorage.getItem('userId');
     </script>
     <style>
+        .modal:nth-of-type(even) {
+            z-index: 1052 !important;
+        }
+
+        /* .modal-backdrop.show:nth-of-type(even) {
+            z-index: 1051 !important;
+        } */
+
         #realName {
             position: relative;
             top: -10px;
@@ -105,16 +113,24 @@
             white-space: initial;
         } */
 
-        .select2-selection__choice__display{
+        .select2-selection__choice__display {
             color: black;
         }
-        .select2-selection__choice{
+
+        .select2-selection__choice {
             border: none;
+        }
+
+
+        #tableDataReason td{
+            word-wrap: break-word;
+            white-space: initial;
         }
         #tableDataCharacteristic td {
             word-wrap: break-word;
             white-space: initial;
         }
+
         #tableDataCharacteristicOld td {
             word-wrap: break-word;
             white-space: initial;
@@ -145,12 +161,13 @@
         .scrollwrapper {
             overflow: auto;
         }
+
         .scrollwrapperCharacteristic {
             overflow: auto;
             max-height: 400px;
         }
 
-       
+
         /* .container-table {
             overflow: scroll;
             max-height: 400px;

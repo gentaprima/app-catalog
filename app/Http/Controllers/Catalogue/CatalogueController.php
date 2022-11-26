@@ -444,6 +444,18 @@ class CatalogueController extends Controller
         $result = BaseModel::buildSql($sql);;
         return \Response::json($result, 200);
     }
+    
+    public function getReasonNotValidate(Request $request){
+        $dataReason =  DB::table('adr_d_notes_notvalidate')
+                ->join('users','adr_d_notes_notvalidate.updated_by','=','users.user_id')
+                ->where('adr_no',$request->adr_no)
+                ->get();
+        return response()->json([
+            'success' => true,
+            'data' => $dataReason
+        ]);
+    }
+
 
     public function addValueCharacteristic(Request $request)
     {

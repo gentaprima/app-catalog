@@ -183,9 +183,30 @@ use Illuminate\Support\Facades\Auth;
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="" class="col-sm-2">Reason</label>
+                            <div class="col-sm-10">
+                                <textarea name="" id="reason" rows="5" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
                                 <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <table id="tableDataReason" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Users</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
                         <input type="hidden" name="" id="useremail">
@@ -195,6 +216,14 @@ use Illuminate\Support\Facades\Auth;
                         <input type="hidden" name="" id="adr_status">
                         <input type="hidden" name="" id="adr_m_id">
                         <input type="hidden" name="" id="item_status">
+                        <input type="hidden" id="itemIsActive">
+                        <input type="hidden" id="sapMaterialCode">
+                        <input type="hidden" id="sapMaterialCodeBy">
+                        <input type="hidden" id="sapMaterialCodeDate">
+                        <input type="hidden" id="updatedBy">
+                        <input type="hidden" id="cataloguerBy">
+                        <input type="hidden" id="stdAprovalBy">
+                        <input type="hidden" id="procAproverBy">
                     </form>
 
                 </div>
@@ -447,6 +476,25 @@ use Illuminate\Support\Facades\Auth;
         });
 
 
+        function getReasonNotValidate(adrNo) {
+            $("#tableDataReason tbody").empty();
+            $.ajax({
+                url: `/single-view/get-reason-not-validate?adr_no=${adrNo}`,
+                type: 'get',
+                dataType: 'json',
+                success: function(response) {
+                    let data = response.data;
+                    for (let i = 0; i < data.length; i++) {
+                        var tr = $("<tr>");
+                        tr.append("<td>" + data[i].real_name + "</td>");
+                        tr.append("<td>" + (data[i].reason) + "</td>");
+
+                        $("#tableDataReason").append(tr);
+                    }
+                }
+            })
+        }
+
         function searchCatolog() {
             let catologueNo = document.getElementById("catologueNo").value;
             document.getElementById("button").hidden = false
@@ -461,12 +509,12 @@ use Illuminate\Support\Facades\Auth;
                         let data = response;
                         checkUser(data[0].user_name);
                         checkApproval(data[0].company_code);
-                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp,data[0].status_proc);
+                        checkStatus(data[0].status_user, data[0].status_cat, data[0].status_stdapp, data[0].status_proc);
                         document.getElementById("adrStatus").innerHTML = data[0].adr_status;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").innerHTML = data[0].sap_material_code;
                         document.getElementById("inc").value = data[0].inc;
-                        
+
 
                         document.getElementById("nameCode").value = data[0].item_name;
                         document.getElementById("shortNameCode").value = data[0].short_name_code;
@@ -482,6 +530,58 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("shortDesc").value = data[0].short_description;
                         document.getElementById("longDesc").value = data[0].long_description;
                         document.getElementById("SAP").value = data[0].sap_material_code;
+                        document.getElementById("itemIsActive").value = data[0].items_is_active;
+                        document.getElementById("sapMaterialCode").value = data[0].sap_material_code;
+                        document.getElementById("sapMaterialCodeBy").value = data[0].sap_material_code_by;
+                        document.getElementById("sapMaterialCodeDate").value = data[0].sap_material_code_date;
+                        document.getElementById("updatedBy").value = userId;
+                        document.getElementById("cataloguerBy").value = data[0].cataloguer_by;
+                        document.getElementById("stdAprovalBy").value = data[0].std_approval_by;
+                        document.getElementById("procAproverBy").value = data[0].proc_approver_by;
+
+                        // check validated or not
+                        if (data[0].cataloguer == 'Not Validate') {
+                            document.getElementById("cataloguer").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
+
+                        }
+
+                        if (data[0].std_approval == 'Not Validate') {
+                            document.getElementById("stdApp").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
+                        }
+
+                        if (data[0].proc_approver == 'Not Validate') {
+                            document.getElementById("procApp").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
+
+                        }
+                        // check validated or not
+
                         if (data[0].cataloguer != null) {
                             document.getElementById("cataloguer").value = data[0].cataloguer;
                         }
@@ -490,13 +590,14 @@ use Illuminate\Support\Facades\Auth;
                             document.getElementById("stdApp").value = data[0].std_approval;
                         }
 
-                        if(data[0].proc_approver != null){
+                        if (data[0].proc_approver != null) {
                             document.getElementById("procApp").value = data[0].proc_approver;
                         }
 
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
                         loadDataCharacteristic(data[0].adr_d_items_id)
+                        getReasonNotValidate(data[0].adr_d_items_id);
                         // getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id);
 
                         var incSelect = $('#inc');
@@ -637,7 +738,7 @@ use Illuminate\Support\Facades\Auth;
             }
         }
 
-        function checkStatus(status, statusCat, statusStd,statusProc) {
+        function checkStatus(status, statusCat, statusStd, statusProc) {
             if (status == "1" && groupName == 'User') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
@@ -700,22 +801,22 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("cataloguer").removeAttribute("disabled", true);
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
-            }else if(statusStd == 0 && groupName.substr(0, 3) == 'Std'){
+            } else if (statusStd == 0 && groupName.substr(0, 3) == 'Std') {
                 document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = false;
                 })
 
 
-                document.getElementById("materialType").setAttribute("disabled",true);
-                document.getElementById("inc").setAttribute("disabled",true);
-                document.getElementById("mgc").setAttribute("disabled",true);
-                document.getElementById("uom").setAttribute("disabled",true);
-                document.getElementById("category").setAttribute("disabled",true);
+                document.getElementById("materialType").setAttribute("disabled", true);
+                document.getElementById("inc").setAttribute("disabled", true);
+                document.getElementById("mgc").setAttribute("disabled", true);
+                document.getElementById("uom").setAttribute("disabled", true);
+                document.getElementById("category").setAttribute("disabled", true);
                 document.getElementById("cataloguer").setAttribute("disabled", true);
                 document.getElementById("stdApp").removeAttribute("disabled")
                 document.getElementById("procApp").setAttribute("disabled", true)
-            }else if (statusProc == 0 && groupName == 'Proc') {
+            } else if (statusProc == 0 && groupName == 'Proc') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -727,11 +828,11 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("mgc").setAttribute("disabled", true)
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").setAttribute("disabled",true)
+                document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").removeAttribute("disabled")
 
                 document.getElementById("btnApply").hidden = false
-            }else if(statusProc == 1 && groupName == 'Proc'){
+            } else if (statusProc == 1 && groupName == 'Proc') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
@@ -743,7 +844,7 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("mgc").setAttribute("disabled", true)
 
                 document.getElementById("cataloguer").setAttribute("disabled", true);
-                document.getElementById("stdApp").setAttribute("disabled",true)
+                document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("procApp").setAttribute("disabled", true)
 
                 document.getElementById("btnApply").hidden = true
@@ -774,6 +875,8 @@ use Illuminate\Support\Facades\Auth;
             let cataloguer = document.getElementById("cataloguer").value;
             let stdApp = document.getElementById("stdApp").value;
             let procApp = document.getElementById("procApp").value;
+            let reason = document.getElementById("reason").value;
+
 
 
             if (catologueNo == '' || materialType == '' || uom == '' || category == '') {
@@ -784,6 +887,36 @@ use Illuminate\Support\Facades\Auth;
                 });
             } else {
                 if (groupName == 'User') {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "you want to process data!",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, process it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            materialApplyChange();
+                        }
+                    })
+                } else if (groupName == 'Cat') {
+                    if (cataloguer == '') {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please select cataloguer'
+                        });
+                        return;
+                    } 
+
+                    if(cataloguer == 'Not Validate' && reason == ''){
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please add reason'
+                        });
+                        return;
+                    }
+
                     Swal.fire({
                             title: 'Are you sure?',
                             text: "you want to process data!",
@@ -797,36 +930,24 @@ use Illuminate\Support\Facades\Auth;
                                 materialApplyChange();
                             }
                         })
-                } else if (groupName == 'Cat') {
-                    if (cataloguer == '') {
-
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Please select cataloguer'
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "you want to process data!",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, process it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                materialApplyChange();
-                            }
-                        })
-                    }
                 } else if (groupName == 'Std App T' || groupName == 'Std App O' || groupName == 'Std App M' || groupName == 'Std App I' || groupName == 'Std App H' || groupName == 'Std App G' || groupName == 'Std App S') {
                     if (stdApp == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please select std approver'
                         });
-                    } else {
-                        Swal.fire({
+                        return;
+                    } 
+
+                    if(stdApp == 'Not Validate' && reason == ''){
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please add reason'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
                             title: 'Are you sure?',
                             text: "you want to process data!",
                             icon: 'info',
@@ -839,35 +960,42 @@ use Illuminate\Support\Facades\Auth;
                                 materialApplyChange();
                             }
                         })
-                    }
-                }else if(groupName == 'Proc'){
-                    if(procApp == ''){
+                } else if (groupName == 'Proc') {
+                    if (procApp == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please select proc approver'
                         });
-                    }else{
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "you want to process data!",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, process it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                materialApplyChange();
-                            }
-                        })
                     }
+
+                    if (procApp == 'Not Validate' && reason == '') {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please add reason'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "you want to process data!",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, process it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            materialApplyChange();
+                        }
+                    })
                 }
 
             }
         }
 
         function materialApplyChange() {
-            if(dataCharateristic == ""){
+            if (dataCharateristic == "") {
                 dataCharateristic = "[]";
             }
 
@@ -893,6 +1021,15 @@ use Illuminate\Support\Facades\Auth;
             let cataloguer = document.getElementById("cataloguer").value;
             let stdApp = document.getElementById("stdApp").value;
             let procApp = document.getElementById("procApp").value;
+            let reason = document.getElementById("reason").value;
+            let itemIsActive = document.getElementById("itemIsActive").value
+            let sapMaterialCode = document.getElementById("sapMaterialCode").value
+            let sapMaterialCodeBy = document.getElementById("sapMaterialCodeBy").value
+            let sapMaterialCodeDate = document.getElementById("sapMaterialCodeDate").value
+            let updatedBy = document.getElementById("updatedBy").value = userId;
+            let cataloguerBy = document.getElementById("cataloguerBy").value
+            let stdBy = document.getElementById("stdAprovalBy").value
+            let procBy = document.getElementById("procAproverBy").value
 
             $.ajax({
                 type: "post",
@@ -924,7 +1061,15 @@ use Illuminate\Support\Facades\Auth;
                     category: category,
                     cataloguer: cataloguer,
                     std_approval: stdApp,
-                    proc_approver: procApp
+                    proc_approver: procApp,
+                    sap_material_code_by: sapMaterialCodeBy,
+                    sap_material_code_date: sapMaterialCodeDate,
+                    items_is_active: itemIsActive,
+                    updated_by: updatedBy,
+                    cataloguer_by: cataloguerBy,
+                    std_approval_by: stdBy,
+                    proc_approver_by: procBy,
+                    reason : reason
 
                 },
                 success: function(response) {
@@ -1164,7 +1309,7 @@ use Illuminate\Support\Facades\Auth;
                     data.forEach(object => {
                         delete object['id_characteristic_value'];
                     })
-                   
+
                     dataCharateristic += JSON.stringify(response.data);
                 }
             })
@@ -1172,7 +1317,7 @@ use Illuminate\Support\Facades\Auth;
 
 
         function addValueCharacteristic(data) {
-            
+
             let adrDItems = document.getElementById("adrDItems").innerHTML;
             $.ajax({
                 type: 'post',
@@ -1242,7 +1387,7 @@ use Illuminate\Support\Facades\Auth;
             })
         }
 
-        function getCharacteristic(adrDItems, incMId,type = 'new') {
+        function getCharacteristic(adrDItems, incMId, type = 'new') {
             $("#tableDataCharacteristic tbody").empty();
             dataCharateristic = "";
             $.ajax({

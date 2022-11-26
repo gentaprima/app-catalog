@@ -38,9 +38,9 @@ use Illuminate\Support\Facades\Auth;
                     <hr>
                     <div class="row" id="button" hidden="true">
                         <div class="col-sm-8">
-                            <button class="btn btn-default"><i class="fa fa-table"></i> Raw</button>
-                            <button class="btn btn-default"><i class="fa fa-table"></i> Document</button>
-                            <button class="btn btn-default"><i class="fa fa-table"></i> Image</button>
+                            <button onclick="getRaw()" data-target="#modalRaw" data-toggle="modal" class="btn btn-default"><i class="fa fa-table"></i> Raw</button>
+                            <button onclick="getDocument()" data-target="#modalShowImage" data-toggle="modal" class="btn btn-default"><i class="fa fa-table"></i> Document</button>
+                            <button onclick="getImage()" data-target="#modalShowImage" data-toggle="modal" class="btn btn-default"><i class="fa fa-table"></i> Image</button>
                         </div>
                         <div class="col-sm-4">
                             <div class="row">
@@ -183,9 +183,30 @@ use Illuminate\Support\Facades\Auth;
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="" class="col-sm-2">Reason</label>
+                            <div class="col-sm-10">
+                                <textarea name="" id="reason" rows="5" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
                                 <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <table id="tableDataReason" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Users</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
                         <input type="hidden" name="" id="useremail">
@@ -428,12 +449,205 @@ use Illuminate\Support\Facades\Auth;
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalRaw" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleModalReference">Raw Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span>Raw Data : </span>
+                    <textarea name="" id="rawDataForm" cols="10" rows="5" class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeModalRaw" data-dismiss="modal">Close</button>
+                    <button onclick="saveRaw()" type="button" id="saveRawButton" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalShowImage">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="titleModal">Show Image</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="container"></div>
+                <div class="modal-body">
+                    <div id="bodyImage">
+                        <center>
+                            <img src="" id="imagesData" alt="" style="width: 300px;height:auto;">
+                        </center>
+                        <div class="dataTables_paginate paging_simple_numbers mt-3" id="example2_paginate">
+                            <ul class="pagination">
+                                <li>Halaman</li>
+                                <li class="paginate_button active mr-2"><a href="#" aria-controls="example1" id="current_page_image" data-dt-idx="1" tabindex="0">1</a></li>
+                                <li>Dari</li>
+                                <li class="ml-2" id="total_page_image">1</li>
+                                <li class="paginate_button next prev disabledd" id="example1_previous_image"><a href="#" onclick="prevPageImage()" aria-controls="example1" id="link_prev" data-dt-idx="0" tabindex="0"><i class="fa fa-chevron-left"></i></a></li>
+                                <li class="paginate_button next prev" id="example1_next_image"><a id="link_next" onclick="nextPageImage()" href="#" aria-controls="example1" data-dt-idx="2" tabindex="0"><i class="fa fa-chevron-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="bodyDocument">
+                        <table id="tableDataDocument" class="table table-striped mt-3">
+                            <thead>
+                                <tr>
+                                    <th>Document</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="dataTables_paginate paging_simple_numbers mt-3" id="example2_paginate">
+                            <ul class="pagination">
+                                <li>Halaman</li>
+                                <li class="paginate_button active mr-2"><a href="#" aria-controls="example1" id="current_page_document" data-dt-idx="1" tabindex="0">1</a></li>
+                                <li>Dari</li>
+                                <li class="ml-2" id="total_page_document">1</li>
+                                <li class="paginate_button next prev disabledd" id="example1_previous_document"><a href="#" onclick="prevPageDocument()" aria-controls="example1" id="link_prev" data-dt-idx="0" tabindex="0"><i class="fa fa-chevron-left"></i></a></li>
+                                <li class="paginate_button next prev" id="example1_next_document"><a id="link_next" onclick="nextPageDocument()" href="#" aria-controls="example1" data-dt-idx="2" tabindex="0"><i class="fa fa-chevron-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modalFooterDocument">
+                    <a class="btn btn-outline-primary" href="#modalFormDocument" data-toggle="modal"><i class="fa fa-plus"></i> add Document</a>
+                    <button type="button" class="btn btn-secondary ml-auto" id="closeModalDelete" data-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-footer" id="modalFooterImage">
+                    <a class="btn btn-outline-primary" href="#modalFormImage" data-toggle="modal"><i class="fa fa-plus"></i> add Image</a>
+                    <button type="button" class="btn btn-secondary ml-auto" id="closeModalDelete" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="modal" id="modalShowDocument">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="titleModalDocument">Show Image</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="container"></div>
+                <div class="modal-body">
+                    <table id="tableDataDocument" class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th>Document</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="dataTables_paginate paging_simple_numbers mt-3" id="example2_paginate">
+                        <ul class="pagination">
+                            <li>Halaman</li>
+                            <li class="paginate_button active mr-2"><a href="#" aria-controls="example1" id="current_page_document" data-dt-idx="1" tabindex="0">1</a></li>
+                            <li>Dari</li>
+                            <li class="ml-2" id="total_page_document">1</li>
+                            <li class="paginate_button next prev disabledd" id="example1_previous_document"><a href="#" onclick="prevPageDocument()" aria-controls="example1" id="link_prev" data-dt-idx="0" tabindex="0"><i class="fa fa-chevron-left"></i></a></li>
+                            <li class="paginate_button next prev" id="example1_next_document"><a id="link_next" onclick="nextPageDocument()" href="#" aria-controls="example1" data-dt-idx="2" tabindex="0"><i class="fa fa-chevron-right"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-primary" href="#modalFormDocument" data-toggle="modal"><i class="fa fa-plus"></i> add Document</a>
+                    <button type="button" class="btn btn-secondary ml-auto" id="closeModalDelete" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="modal fade" id="modalFormImage" style="z-index: 1052 !important;" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Form Add Image</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="container"></div>
+                <div class="modal-body">
+                    <form action="">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-3">Description</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="description" id="descriptionImage" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-3">Image</label>
+                            <div class="col-sm-9">
+                                <input type="file" name="image" id="uploadImage" class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" data-dismiss="modal" class="btn" id="btnCloseModalFormImage">Close</a>
+                    <button type="button" onclick="uploadImage()" class="btn btn-primary">submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalFormDocument" style="z-index: 1052 !important;" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Form Add Document</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="container"></div>
+                <div class="modal-body">
+                    <form action="">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-3">Description</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="description" id="descriptionDocument" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-3">Document</label>
+                            <div class="col-sm-9">
+                                <input type="file" name="document" id="uploadDocument" class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" data-dismiss="modal" class="btn" id="btnCloseModalFormDocument">Close</a>
+                    <button type="button" onclick="uploadDocument()" class="btn btn-primary">submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- /.content -->
 
     <p hidden="true" id="page">1</p>
     <p hidden="true" id="start">10</p>
     <p hidden="true" id="limit">10</p>
     <p hidden="true" id="totalData"></p>
+
+    <p hidden="true" id="pageImage">1</p>
+    <p hidden="true" id="startImage">10</p>
+    <p hidden="true" id="limitImage">10</p>
+    <p hidden="true" id="totalDataImage"></p>
+
+    <p hidden="true" id="pageDocument">1</p>
+    <p hidden="true" id="startDocument">10</p>
+    <p hidden="true" id="limitDocument">25</p>
+    <p hidden="true" id="totalDataDocument"></p>
+
+    <p hidden="true" id="rawData"></p>
+    <p hidden="true" id="categoryData"></p>
+
+
+
 
     <script>
         let inc = "";
@@ -451,6 +665,288 @@ use Illuminate\Support\Facades\Auth;
             $("#main-menu-MNU6").addClass("nav-item menu-is-opening menu-open")
             $("#subchild-MNU7").addClass("nav-link active")
         });
+
+        // RAW
+        function getRaw() {
+            let rawData = document.getElementById("rawData").innerHTML;
+            document.getElementById("rawDataForm").value = rawData;
+        }
+
+        function saveRaw() {
+            let raw = document.getElementById("rawDataForm").value;
+            let catologueNo = document.getElementById("catologueNo").value;
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: `/SaveMaterialRaw?_token=${csrf_token}&catalog_no=${catologueNo}&newRaw=${raw}`,
+                success: function(response) {
+                    if (response.success == true) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        });
+                        getDocument();
+                        $("#closeModalRaw").click();
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.message
+                        });
+                    }
+                }
+            })
+        }
+        // RAW
+
+        // DOCUMENT
+
+        function getDocument(page = 1, start = 0, limit = 25) {
+            $("#tableDataDocument tbody").empty();
+            document.getElementById("bodyDocument").hidden = false;
+            document.getElementById("bodyImage").hidden = true;
+            document.getElementById("modalFooterDocument").hidden = false;
+            document.getElementById("modalFooterImage").hidden = true;
+            let adrDItems = document.getElementById("adrDItems").innerHTML
+            let catologueNo = document.getElementById("catologueNo").value;
+            document.getElementById("titleModal").innerHTML = "Document Catalog No. " + catologueNo
+            document.getElementById("pageDocument").innerHTML = parseInt(page)
+            document.getElementById("startDocument").innerHTML = parseInt(start)
+            document.getElementById("current_page_document").innerHTML = parseInt(page)
+            // document.getElementById("example2_paginate").hidden = false
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: `/getMaterialItemsDocument?start=${start}&limit=${limit}&action=getMaterialDocument&page=${page}&filter=[{"operator":"eq","value":"${adrDItems}","property":"adr_d_items_id","type":"numeric"}]`,
+                success: function(response) {
+                    if (response.total > 0) {
+                        var totalPage = Math.ceil(response.total / 25)
+                        document.getElementById("totalDataDocument").innerHTML = totalPage
+                        document.getElementById("total_page_document").innerHTML = totalPage
+                        for (let i = 0; i < response.data.length; i++) {
+                            var tr = $("<tr>");
+                            tr.append("<td>" + response.data[i].document_name + "</td>");
+                            tr.append(`<td>
+                                            <center><a target="_blank" href="/material_document/${response.data[i].url}" class="btn btn-primary"><i class="fa fa-arrow-down"></i></a></center>
+                                        </td>`);
+
+                            $("#tableDataDocument").append(tr);
+                        }
+                        if (document.getElementById("pageDocument").innerHTML == document.getElementById("totalDataDocument").innerHTML) {
+                            $("#example1_next_document").addClass("paginate_button next prev disabledd")
+                        }
+                        if (document.getElementById("pageDocument").innerHTML == "1") {
+                            $("#example1_previous_document").addClass("paginate_button next prev disabledd")
+                        }
+                    }
+                }
+            })
+        }
+
+        function uploadDocument() {
+
+            const fileupload = $('#uploadDocument').prop('files')[0];
+            var desc = $('#descriptionDocument').val();
+            let catologueNo = document.getElementById("catologueNo").value;
+            let adrDItems = document.getElementById("adrDItems").innerHTML
+
+            let formData = new FormData();
+            formData.append('document_path', fileupload);
+            formData.append('document_name', desc);
+            formData.append('adr_d_items_id', adrDItems);
+            formData.append('catalog_no', catologueNo);
+            formData.append('transaction_type', 'Material');
+            formData.append('_token', csrf_token);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "you want to process data!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, process it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/SaveMaterialDocument",
+                        data: formData,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            if (response.success == true) {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: response.message
+                                });
+                                getDocument();
+                                $("#btnCloseModalFormDocument").click();
+                            } else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: response.message
+                                });
+                            }
+                        },
+                        error: function() {
+                            alert("Data Gagal Diupload");
+                        }
+                    });
+                }
+            })
+        }
+
+        // DOCUMENT
+
+        // IMAGE
+
+        function uploadImage() {
+            const fileupload = $('#uploadImage').prop('files')[0];
+            var desc = $('#descriptionImage').val();
+            let catologueNo = document.getElementById("catologueNo").value;
+            let adrDItems = document.getElementById("adrDItems").innerHTML
+
+            let formData = new FormData();
+            formData.append('images_path', fileupload);
+            formData.append('description', desc);
+            formData.append('adr_d_items_id', adrDItems);
+            formData.append('catalog_no', catologueNo);
+            formData.append('transaction_type', 'Material');
+            formData.append('_token', csrf_token);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "you want to process data!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, process it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/SaveMaterialImages",
+                        data: formData,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            if (response.success == true) {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: response.message
+                                });
+                                getImage();
+                                $("#btnCloseModalFormImage").click();
+                            } else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: response.message
+                                });
+                            }
+                        },
+                        error: function() {
+                            alert("Data Gagal Diupload");
+                        }
+                    });
+                }
+            })
+
+
+
+        }
+
+        function getImage(page = 1, start = 0, limit = 1) {
+            // /getMaterialItemsImages
+            document.getElementById("bodyDocument").hidden = true;
+            document.getElementById("bodyImage").hidden = false;
+            document.getElementById("modalFooterDocument").hidden = true;
+            document.getElementById("modalFooterImage").hidden = false;
+
+            let adrDItems = document.getElementById("adrDItems").innerHTML
+            let catologueNo = document.getElementById("catologueNo").value;
+            document.getElementById("titleModal").innerHTML = "Images Catalog No. " + catologueNo
+            document.getElementById("page").innerHTML = parseInt(page)
+            document.getElementById("start").innerHTML = parseInt(start)
+            document.getElementById("current_page").innerHTML = parseInt(page)
+            document.getElementById("example2_paginate").hidden = false
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: `/getMaterialItemsImages?start=${start}&limit=${limit}&action=getMaterialImages&page=${page}&filter=[{"operator":"eq","value":"${adrDItems}","property":"adr_d_items_id","type":"numeric"}]`,
+                success: function(response) {
+                    if (response.total > 0) {
+                        var totalPage = Math.ceil(response.total / 1)
+                        document.getElementById("totalDataImage").innerHTML = totalPage
+                        document.getElementById("total_page_image").innerHTML = totalPage
+                        document.getElementById("imagesData").src = '/material_images/' + response.data[0].images
+
+                        if (document.getElementById("pageImage").innerHTML == document.getElementById("totalDataImage").innerHTML) {
+                            $("#example1_next_image").addClass("paginate_button next prev disabledd")
+                        }
+                        if (document.getElementById("pageImage").innerHTML == "1") {
+                            $("#example1_previous_image").addClass("paginate_button next prev disabledd")
+                        }
+                    }
+                }
+            })
+        }
+
+        function nextPageImage() {
+            var page = document.getElementById("page").innerHTML;
+            var start = document.getElementById("start").innerHTML;
+
+            getImage(parseInt(page) + 1, parseInt(start) + 1);
+
+            document.getElementById("pageImage").innerHTML = parseInt(page) + 1
+            document.getElementById("startImage").innerHTML = parseInt(start) + 1
+            document.getElementById("current_page_image").innerHTML = parseInt(page) + 1
+            $("#example1_previous_image").removeClass("disabledd")
+            if (document.getElementById("pageImage").innerHTML == document.getElementById("totalData").innerHTML) {
+                $("#example1_next_image").addClass("paginate_button next prev disabledd")
+            }
+
+        }
+
+        function prevPageImage() {
+            var page = document.getElementById("page").innerHTML;
+            var start = document.getElementById("start").innerHTML;
+
+            getImage(parseInt(page) - 1, parseInt(start) - 1);
+
+            document.getElementById("pageImage").innerHTML = parseInt(page) - 1
+            document.getElementById("startImage").innerHTML = parseInt(start) - 1
+            document.getElementById("startImage").innerHTML = parseInt(start) + 1
+            document.getElementById("current_page_image").innerHTML = parseInt(page) - 1
+            // console.log(document.getElementById("page"));
+            $("#example1_next_image").removeClass("disabledd")
+            if (document.getElementById("pageImage").innerHTML == "1") {
+                $("#example1_previous_image").addClass("paginate_button next prev disabledd")
+            }
+        }
+
+        // IMAGE
+
+        function getReasonNotValidate(adrNo) {
+            $("#tableDataReason tbody").empty();
+            $.ajax({
+                url: `/single-view/get-reason-not-validate?adr_no=${adrNo}`,
+                type: 'get',
+                dataType: 'json',
+                success: function(response) {
+                    let data = response.data;
+                    for (let i = 0; i < data.length; i++) {
+                        var tr = $("<tr>");
+                        tr.append("<td>" + data[i].real_name + "</td>");
+                        tr.append("<td>" + (data[i].reason) + "</td>");
+
+                        $("#tableDataReason").append(tr);
+                    }
+                }
+            })
+        }
 
         function searchCatolog() {
             let catologueNo = document.getElementById("catologueNo").value;
@@ -471,7 +967,8 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("itemStatus").innerHTML = data[0].item_status;
                         document.getElementById("SAP").value = data[0].sap_material_code;
                         document.getElementById("inc").value = data[0].inc;
-                        
+
+                        document.getElementById("rawData").innerHTML = data[0].raw;
                         document.getElementById("nameCode").value = data[0].item_name;
                         document.getElementById("shortNameCode").value = data[0].short_name_code;
                         document.getElementById("adrDItems").innerHTML = data[0].adr_d_items_id;
@@ -493,10 +990,48 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("cataloguerBy").value = data[0].cataloguer_by;
                         document.getElementById("stdAprovalBy").value = data[0].std_approval_by;
                         document.getElementById("procAproverBy").value = data[0].proc_approver_by;
+                        document.getElementById("categoryData").innerHTML = data[0].category;
 
                         // check validated or not
-                        if(data[0].cataloguer == 'Not Validate'){
+                        if (data[0].cataloguer == 'Not Validate') {
                             document.getElementById("cataloguer").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
+
+                        }
+
+                        if (data[0].std_approval == 'Not Validate') {
+                            document.getElementById("stdApp").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
+                        }
+
+                        if (data[0].proc_approver == 'Not Validate') {
+                            document.getElementById("procApp").setAttribute("disabled", true);
+                            document.getElementById("materialType").setAttribute("disabled", true);
+                            document.getElementById("uom").setAttribute("disabled", true)
+                            document.getElementById("category").setAttribute("disabled", true)
+                            document.getElementById("inc").setAttribute("disabled", true);
+                            document.getElementById("mgc").setAttribute("disabled", true);
+                            document.querySelectorAll("input[type='text']").forEach(input => {
+                                input.disabled = true;
+                            })
+                            document.getElementById("btnApply").hidden = true
+
                         }
                         // check validated or not
 
@@ -518,9 +1053,10 @@ use Illuminate\Support\Facades\Auth;
                         }
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
-                        loadDataCharacteristic(data[0].adr_d_items_id)
+                        loadDataCharacteristic(data[0].adr_d_items_id);
+                        getReasonNotValidate(data[0].adr_d_items_id);
                         // getCharacteristic(data[0].adr_d_items_id, data[0].inc_m_id, 'new');
-                        
+
                         var incSelect = $('#inc');
                         var option = new Option(data[0].class_inc_name, data[0].inc + '-' + data[0].inc_m_id + '-' + data[0].item_name + '-' + data[0].short_name_code, true, true);
                         incSelect.append(option).trigger('change');
@@ -640,12 +1176,12 @@ use Illuminate\Support\Facades\Auth;
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
+                document.getElementById("btnApply").hidden = true
                 document.getElementById("materialType").setAttribute("disabled", true);
                 document.getElementById("uom").setAttribute("disabled", true)
                 document.getElementById("category").setAttribute("disabled", true)
                 document.getElementById("inc").setAttribute("disabled", true)
                 document.getElementById("mgc").setAttribute("disabled", true)
-                document.getElementById("btnApply").hidden = true
             } else if (statusCat == "1" && groupName == 'Cat') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
@@ -760,6 +1296,7 @@ use Illuminate\Support\Facades\Auth;
             let cataloguer = document.getElementById("cataloguer").value;
             let stdApp = document.getElementById("stdApp").value;
             let procApp = document.getElementById("procApp").value;
+            let reason = document.getElementById("reason").value;
             if (catologueNo == '' || materialType == '' || uom == '' || category == '') {
                 Toast.fire({
                     icon: 'error',
@@ -786,63 +1323,92 @@ use Illuminate\Support\Facades\Auth;
                             icon: 'error',
                             title: 'Please select cataloguer'
                         });
-                    } else {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "you want to process data!",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, process it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                materialApplyChange();
-                            }
-                        })
+                        return;
                     }
+
+                    if (cataloguer == 'Not Validate' && reason == '') {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please add reason'
+                        });
+                        return;
+                    }
+
+                    let categoryData = document.getElementById("categoryData").innerHTML;
+                    console.log(categoryData);
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "you want to process data!",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, process it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            materialApplyChange();
+                        }
+                    })
                 } else if (groupName == 'Std App T' || groupName == 'Std App O' || groupName == 'Std App M' || groupName == 'Std App I' || groupName == 'Std App H' || groupName == 'Std App G' || groupName == 'Std App S') {
                     if (stdApp == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please select std approver'
                         });
-                    } else {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "you want to process data!",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, process it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                materialApplyChange();
-                            }
-                        })
+                        return;
                     }
+
+                    if (stdApp == 'Not Validate' && reason == '') {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please add reason'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "you want to process data!",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, process it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            materialApplyChange();
+                        }
+                    })
                 } else if (groupName == 'Proc') {
                     if (procApp == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please select proc approver'
                         });
-                    } else {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "you want to process data!",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, process it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                materialApplyChange();
-                            }
-                        })
                     }
+
+                    if (procApp == 'Not Validate' && reason == '') {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please add reason'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "you want to process data!",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, process it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            materialApplyChange();
+                        }
+                    })
                 }
             }
         }
@@ -878,6 +1444,13 @@ use Illuminate\Support\Facades\Auth;
             let cataloguerBy = document.getElementById("cataloguerBy").value
             let stdBy = document.getElementById("stdAprovalBy").value
             let procBy = document.getElementById("procAproverBy").value
+            let reason = document.getElementById("reason").value;
+            let categoryData = document.getElementById("categoryData").innerHTML;
+            // if(categoryData != 'M'){
+            //     cataloguer = "Validate";
+            //     stdApp = "Validate";
+            //     procApp = "Validate";
+            // }
             $.ajax({
                 type: "post",
                 url: '/MaterialApplyChanges',
@@ -915,7 +1488,8 @@ use Illuminate\Support\Facades\Auth;
                     updated_by: updatedBy,
                     cataloguer_by: cataloguerBy,
                     std_approval_by: stdBy,
-                    proc_approver_by: procBy
+                    proc_approver_by: procBy,
+                    reason: reason
                 },
                 success: function(response) {
                     if (response.success == true) {
