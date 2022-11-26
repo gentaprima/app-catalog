@@ -48,7 +48,7 @@ use Illuminate\Support\Facades\Auth;
                                     <select name="" id="filter-count"
                                         style="width: 95px;display:inline;mr-1;  white-space: normal;"
                                         class="form-control mr-1">
-                                        <option value="">Default</option>
+                                        <option value="10">Default</option>
                                         <option value="10">10</option>
                                         <option value="50">50</option>
                                         <option value="100">100</option>
