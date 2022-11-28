@@ -1446,11 +1446,13 @@ use Illuminate\Support\Facades\Auth;
             let procBy = document.getElementById("procAproverBy").value
             let reason = document.getElementById("reason").value;
             let categoryData = document.getElementById("categoryData").innerHTML;
-            // if(categoryData != 'M'){
-            //     cataloguer = "Validate";
-            //     stdApp = "Validate";
-            //     procApp = "Validate";
-            // }
+            if(categoryData != 'M'){
+                cataloguer = "Validate";
+                stdApp = "Validate";
+                procApp = "Validate";
+                stdBy = cataloguerBy
+                procBy = cataloguerBy
+            }
             $.ajax({
                 type: "post",
                 url: '/MaterialApplyChanges',

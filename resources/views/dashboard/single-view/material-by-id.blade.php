@@ -609,6 +609,7 @@ use Illuminate\Support\Facades\Auth;
     <p hidden="true" id="totalDataDocument"></p>
 
     <p hidden="true" id="rawData"></p>
+    <p hidden="true" id="categoryData"></p>
 
     <script>
         let inc = "";
@@ -951,6 +952,7 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("cataloguerBy").value = data[0].cataloguer_by;
                         document.getElementById("stdAprovalBy").value = data[0].std_approval_by;
                         document.getElementById("procAproverBy").value = data[0].proc_approver_by;
+                        document.getElementById("categoryData").innerHTML = data[0].category;
 
                         // check validated or not
                         if (data[0].cataloguer == 'Not Validate') {
@@ -1136,12 +1138,12 @@ use Illuminate\Support\Facades\Auth;
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
                 })
+                document.getElementById("btnApply").hidden = true
                 document.getElementById("materialType").setAttribute("disabled", true);
                 document.getElementById("uom").setAttribute("disabled", true)
                 document.getElementById("category").setAttribute("disabled", true)
                 document.getElementById("inc").setAttribute("disabled", true)
                 document.getElementById("mgc").setAttribute("disabled", true)
-                document.getElementById("btnApply").hidden = true
             } else if (statusCat == "1" && groupName == 'Cat') {
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = true;
@@ -1294,6 +1296,9 @@ use Illuminate\Support\Facades\Auth;
                         return;
                     }
 
+                    let categoryData = document.getElementById("categoryData").innerHTML;
+                    console.log(categoryData);
+
                     Swal.fire({
                         title: 'Are you sure?',
                         text: "you want to process data!",
@@ -1402,6 +1407,14 @@ use Illuminate\Support\Facades\Auth;
             let stdBy = document.getElementById("stdAprovalBy").value
             let procBy = document.getElementById("procAproverBy").value
             let reason = document.getElementById("reason").value;
+            let categoryData = document.getElementById("categoryData").innerHTML;
+            if(categoryData != 'M'){
+                cataloguer = "Validate";
+                stdApp = "Validate";
+                procApp = "Validate";
+                stdBy = cataloguerBy
+                procBy = cataloguerBy
+            }
             $.ajax({
                 type: "post",
                 url: '/MaterialApplyChanges',
