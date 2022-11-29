@@ -262,6 +262,75 @@ class BaseModel extends Model
 		$data['SQL'] = $sql;
         return $data;
     }
+    public static function buildSqlValuationClass($sql) {
+        $filters = \Request::get('filter');
+        if(isset($filters)){
+            $clause = \App\Models\BaseModel::buildFilter($filters);
+            if(isset($clause)){
+                foreach ($clause as $key=>$str){
+                    $whereParts = array();
+                    // dd($str);
+                    for($i=0;$i<sizeof($str['field']);$i++)
+                    {
+                        $whereParts[] = $str['field'][$i]." ".$str['operator'][$i]." '".$str['value'][$i]."'";
+                        // dd($str['field'][$i]);
+                    }
+                    $sql .= " WHERE " . implode(' OR ',$whereParts );
+                }
+            }
+        }
+
+        $groupers = \Request::get('grouper');
+        if(isset($groupers)) {
+            $groupBy = \App\Models\BaseModel::buildGroupBy($groupers);
+            $sql .= " GROUP BY ".$groupBy." " ;
+        }
+
+        $sort = \Request::get('sort');
+        if(isset($sort)) {
+            $string = $sort;//file_get_contents("/home/michael/test.json");
+            $string = str_replace('"', "", str_replace("]", "", str_replace("[", "", stripslashes($string))));
+            $arrFields = array($string);
+
+            foreach ($arrFields as $key => $value) {
+                if ($key == "property") {
+                    $sort = $key . ':' . $value;
+                    $sort = explode(':', $sort);
+                    $sort = $sort[2];
+                    $sort = explode(',', $sort);
+                    $sort = $sort[0];
+                }
+                if ($key == "direction") {
+                    $dir = $key . ':' . $value;
+                    $dir = explode(':', $dir);
+                    $dir = $dir[3];
+                    $dir = explode(',', $dir);
+                    $dir = str_replace("}", "", $dir[0]);
+                }
+            }
+            $sql .= " ORDER BY ".$sort . " " . $dir;
+        }
+
+        //$allResult = DB::select($sql);
+        //$totalRecord = sizeof($allResult);
+        $allResult = DB::select('SELECT count(*) AS cnt FROM ('.$sql.') AS c');
+		$totalRecord = $allResult[0]->cnt;
+
+        $limit = \Request::get('limit');
+        if(isset($limit)){
+            $page = \Request::get('page');
+            $start= \Request::get('start');
+            $perPage = $limit;
+            $offset = ($page * $perPage) - $perPage;
+            $sql .= " LIMIT ".$perPage." OFFSET ".$offset;
+        }
+//        dd($sql);
+        $result = DB::select($sql);
+//        dd($result);
+		$data = \App\Models\BaseModel::buildMetaData($result,$totalRecord);
+		$data['SQL'] = $sql;
+        return $data;
+    }
 
     public static function buildMetaData($result,$totalRecord)
     {

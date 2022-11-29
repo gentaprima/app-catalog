@@ -263,7 +263,8 @@ class DictionaryController extends Controller
 
     public  function getValuationClass(Request $request){
         $sql = "SELECT * FROM vw_valuation_class_m" ;
-        $result = BaseModel::buildSql($sql);;
+        // $result = BaseModel::buildSql($sql);
+        $result = BaseModel::buildSqlValuationClass($sql);
         return \Response::json($result,200);
     }
 
@@ -275,9 +276,11 @@ class DictionaryController extends Controller
             $i = 1;
             foreach ($data_items as $row) {
                 $UpdateValuationClassM = ValuationClassM::find($row->id);
-                if(count($UpdateValuationClassM) > 0 ){
+                // if(count($UpdateValuationClassM) != null ){
+                if($UpdateValuationClassM != null ){
                     $UpdateValuationClassM->valuation = $row->valuation ;
                     $UpdateValuationClassM->valuationdesc = $row->valuationdesc ;
+                    $UpdateValuationClassM->companies_m_id = $row->companies_m_id ;
                     $UpdateValuationClassM->save();
                 }else{
                     $InsertValuationClassM = new ValuationClassM();

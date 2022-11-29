@@ -103,6 +103,7 @@ Route::get('/dictionary/hazard-type','NavController@viewHazardType');
 Route::get('/dictionary/currency','NavController@viewCurrency');
 Route::get('/dictionary/shelf-life','NavController@viewShelfLive');
 Route::get('/dictionary/abbreviation','NavController@viewAbbreviation');
+Route::get('/dictionary/valuation-class','NavController@viewValuationClass');
 
 // DICTIONARY
 

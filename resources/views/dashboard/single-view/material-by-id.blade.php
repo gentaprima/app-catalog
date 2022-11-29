@@ -194,13 +194,14 @@ use Illuminate\Support\Facades\Auth;
                                 <button class="btn btn-primary" id="btnApply" type="button" onclick="applyChanges()">Apply Changes</button>
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
                                 <table id="tableDataReason" class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <th>Date</th>
                                             <th>Users</th>
                                             <th>Reason</th>
                                         </tr>
@@ -901,6 +902,7 @@ use Illuminate\Support\Facades\Auth;
                     let data = response.data;
                     for (let i = 0; i < data.length; i++) {
                         var tr = $("<tr>");
+                        tr.append("<td>" + data[i].updated_at + "</td>");
                         tr.append("<td>" + data[i].real_name + "</td>");
                         tr.append("<td>" + (data[i].reason) + "</td>");
 
@@ -955,46 +957,51 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("categoryData").innerHTML = data[0].category;
 
                         // check validated or not
-                        if (data[0].cataloguer == 'Not Validate') {
-                            document.getElementById("cataloguer").setAttribute("disabled", true);
-                            document.getElementById("materialType").setAttribute("disabled", true);
-                            document.getElementById("uom").setAttribute("disabled", true)
-                            document.getElementById("category").setAttribute("disabled", true)
-                            document.getElementById("inc").setAttribute("disabled", true);
-                            document.getElementById("mgc").setAttribute("disabled", true);
-                            document.querySelectorAll("input[type='text']").forEach(input => {
-                                input.disabled = true;
-                            })
-                            document.getElementById("btnApply").hidden = true
 
+                        if (groupName != 'User') {
+                            if (data[0].cataloguer == 'Not Validate') {
+                                document.getElementById("cataloguer").setAttribute("disabled", true);
+                                document.getElementById("materialType").setAttribute("disabled", true);
+                                document.getElementById("uom").setAttribute("disabled", true)
+                                document.getElementById("category").setAttribute("disabled", true)
+                                document.getElementById("inc").setAttribute("disabled", true);
+                                document.getElementById("mgc").setAttribute("disabled", true);
+                                document.querySelectorAll("input[type='text']").forEach(input => {
+                                    input.disabled = true;
+                                })
+                                document.getElementById("btnApply").hidden = true
+
+                            }
+
+                            if (data[0].std_approval == 'Not Validate') {
+                                document.getElementById("stdApp").setAttribute("disabled", true);
+                                document.getElementById("materialType").setAttribute("disabled", true);
+                                document.getElementById("uom").setAttribute("disabled", true)
+                                document.getElementById("category").setAttribute("disabled", true)
+                                document.getElementById("inc").setAttribute("disabled", true);
+                                document.getElementById("mgc").setAttribute("disabled", true);
+                                document.querySelectorAll("input[type='text']").forEach(input => {
+                                    input.disabled = true;
+                                })
+                                document.getElementById("btnApply").hidden = true
+                            }
+
+                            if (data[0].proc_approver == 'Not Validate') {
+                                document.getElementById("procApp").setAttribute("disabled", true);
+                                document.getElementById("materialType").setAttribute("disabled", true);
+                                document.getElementById("uom").setAttribute("disabled", true)
+                                document.getElementById("category").setAttribute("disabled", true)
+                                document.getElementById("inc").setAttribute("disabled", true);
+                                document.getElementById("mgc").setAttribute("disabled", true);
+                                document.querySelectorAll("input[type='text']").forEach(input => {
+                                    input.disabled = true;
+                                })
+                                document.getElementById("btnApply").hidden = true
+
+                            }
                         }
 
-                        if (data[0].std_approval == 'Not Validate') {
-                            document.getElementById("stdApp").setAttribute("disabled", true);
-                            document.getElementById("materialType").setAttribute("disabled", true);
-                            document.getElementById("uom").setAttribute("disabled", true)
-                            document.getElementById("category").setAttribute("disabled", true)
-                            document.getElementById("inc").setAttribute("disabled", true);
-                            document.getElementById("mgc").setAttribute("disabled", true);
-                            document.querySelectorAll("input[type='text']").forEach(input => {
-                                input.disabled = true;
-                            })
-                            document.getElementById("btnApply").hidden = true
-                        }
 
-                        if (data[0].proc_approver == 'Not Validate') {
-                            document.getElementById("procApp").setAttribute("disabled", true);
-                            document.getElementById("materialType").setAttribute("disabled", true);
-                            document.getElementById("uom").setAttribute("disabled", true)
-                            document.getElementById("category").setAttribute("disabled", true)
-                            document.getElementById("inc").setAttribute("disabled", true);
-                            document.getElementById("mgc").setAttribute("disabled", true);
-                            document.querySelectorAll("input[type='text']").forEach(input => {
-                                input.disabled = true;
-                            })
-                            document.getElementById("btnApply").hidden = true
-
-                        }
                         // check validated or not
 
                         if (data[0].cataloguer != null) {
@@ -1165,7 +1172,6 @@ use Illuminate\Support\Facades\Auth;
                 document.getElementById("stdApp").setAttribute("disabled", true)
                 document.getElementById("btnApply").hidden = true
             } else if (status == 0 && groupName == 'User') {
-                document.getElementById("btnApply").hidden = false
                 document.querySelectorAll("input[type='text']").forEach(input => {
                     input.disabled = false;
                 })
@@ -1408,7 +1414,7 @@ use Illuminate\Support\Facades\Auth;
             let procBy = document.getElementById("procAproverBy").value
             let reason = document.getElementById("reason").value;
             let categoryData = document.getElementById("categoryData").innerHTML;
-            if(categoryData != 'M'){
+            if (categoryData != 'M') {
                 cataloguer = "Validate";
                 stdApp = "Validate";
                 stdBy = cataloguerBy
@@ -1513,7 +1519,7 @@ use Illuminate\Support\Facades\Auth;
                         page: 1,
                         start: 0,
                         limit: 25,
-                        filter: `[{"operator":"like","value":"material_type","property":"entity_name","type":"string"}]`
+                        filter: `[{"operator":"like","value":"material_type","property":"entity_name","type":"string"},{"operator":"like","value":"${params.term}","property":"entity_code_name","type":"string"}]`
                     }
                     return query;
                 },
@@ -1543,7 +1549,7 @@ use Illuminate\Support\Facades\Auth;
                         page: 1,
                         start: 0,
                         limit: 25,
-                        filter: `[{"operator":"eq","value":"UOM","property":"entity_name","type":"string"}]`
+                        filter: `[{"operator":"eq","value":"UOM","property":"entity_name","type":"string"},{"operator":"like","value":"${params.term}","property":"entity_code_name","type":"string"}]`
                     }
                     return query;
                 },
@@ -1573,7 +1579,7 @@ use Illuminate\Support\Facades\Auth;
                         page: 1,
                         start: 0,
                         limit: 25,
-                        filter: `[{"operator":"eq","value":"itemcategory","property":"entity_name","type":"string"}]`
+                        filter: `[{"operator":"eq","value":"itemcategory","property":"entity_name","type":"string"},{"operator":"like","value":"${params.term}","property":"entity_code_name","type":"string"}]`
                     }
                     return query;
                 },

@@ -180,4 +180,8 @@ class NavController extends Controller
     public function viewAbbreviation(){
         return view('/dashboard/dictionary/abbreviation');
     }
+
+    public function viewValuationClass(){
+        return view('/dashboard/dictionary/valuation-class');
+    }
 }

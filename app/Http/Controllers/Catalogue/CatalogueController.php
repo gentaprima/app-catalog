@@ -447,6 +447,7 @@ class CatalogueController extends Controller
     
     public function getReasonNotValidate(Request $request){
         $dataReason =  DB::table('adr_d_notes_notvalidate')
+                ->select('adr_d_notes_notvalidate.*','users.real_name')
                 ->join('users','adr_d_notes_notvalidate.updated_by','=','users.user_id')
                 ->where('adr_no',$request->adr_no)
                 ->get();

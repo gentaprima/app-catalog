@@ -640,24 +640,23 @@ class AdditionController extends Controller
                                         'Note' => $Note,
                                         'regard' => $dataUserProfile[0]['real_name']
                                     );
-                                    // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    // $beautymail->send('emails.CatNotValidate', $data, function($message) use($row)
-                                    // {
-                                    //     $emailSender = Auth::user()->email;
-                                    //     $input = Input::all();
-                                    //     $query = DB::table('vw_catalog_m_owner');
-                                    //     $query->where('catalog_no',"=",$row['catalog_no']);
-                                    //     $search = $query->get();
-                                    //     $toOwner = array();
-                                    //     foreach ($search as $arrEmailRow){
-                                    //         $toOwner[] = $arrEmailRow->email ;
-                                    //     }
-                                    //     $message
-                                    //         ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                    //         ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                    //         //->bcc('bqsoft77@gmail.com', 'Development')
-                                    //         ->subject('Request '.$row['transaction_type']);
-                                    // });
+                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                    $beautymail->send('emails.CatNotValidate', $data, function ($message) use ($row) {
+                                        $emailSender = Auth::user()->email;
+                                        $input = Input::all();
+                                        $query = DB::table('vw_catalog_m_owner');
+                                        $query->where('catalog_no', "=", $row['catalog_no']);
+                                        $search = $query->get();
+                                        $toOwner = array();
+                                        foreach ($search as $arrEmailRow) {
+                                            $toOwner[] = $arrEmailRow->email;
+                                        }
+                                        $message
+                                            ->from($emailSender, 'ABM E-Cataloguing Systems')
+                                            ->to($toOwner, 'ABM E-Cataloguing Systems')
+                                            //->bcc('bqsoft77@gmail.com', 'Development')
+                                            ->subject('Request ' . $row['transaction_type']);
+                                    });
                                 }
 
                                 // update reason
@@ -711,7 +710,9 @@ class AdditionController extends Controller
                                         ->subject('Request ' . $row['transaction_type']);
                                 });
                             } else {
-
+                                // update cataloger not validate
+                                $adrDitems->cataloguer = null;
+                                // update cataloger not validate
                                 $adrDitems->std_approval = $row['std_approval'];
                                 $adrDitems->std_approval_by_id = $user_id;
                                 $adrDitems->std_approval_date = date("Y-m-d H:i:s");
@@ -802,34 +803,34 @@ class AdditionController extends Controller
                                         'Note' => $Note,
                                         'regard' => $dataUserProfile[0]['real_name']
                                     );
-                                    // $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    // $beautymail->send('emails.SAPMaterialCode', $data, function ($message) use($row) {
-                                    //     $emailSender = Auth::user()->email;
-                                    //     $input = Input::all();
-                                    //     $query = DB::table('vw_catalog_m_owner');
-                                    //     $query->where('catalog_no',"=",$row['catalog_no']);
-                                    //     $search = $query->get();
-                                    //     $toOwner = array();
-                                    //     foreach ($search as $arrEmailRow){
-                                    //         $toOwner[] = $arrEmailRow->email ;
-                                    //     }
+                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                    $beautymail->send('emails.SAPMaterialCode', $data, function ($message) use($row) {
+                                        $emailSender = Auth::user()->email;
+                                        $input = Input::all();
+                                        $query = DB::table('vw_catalog_m_owner');
+                                        $query->where('catalog_no',"=",$row['catalog_no']);
+                                        $search = $query->get();
+                                        $toOwner = array();
+                                        foreach ($search as $arrEmailRow){
+                                            $toOwner[] = $arrEmailRow->email ;
+                                        }
 
-                                    //     $queryCat = DB::table('adr_d_items');
-                                    //     $queryCat->leftJoin('users', 'adr_d_items.cataloguer_by_id', '=', 'users.user_id');
-                                    //     $queryCat->where('catalog_no',"=",$row['catalog_no']);
-                                    //     $searchCat = $queryCat->get();
-                                    //     $toCat = array();
-                                    //     foreach ($searchCat as $arrEmailCat){
-                                    //         $toCat[] = $arrEmailCat->email ;
-                                    //     }    
+                                        $queryCat = DB::table('adr_d_items');
+                                        $queryCat->leftJoin('users', 'adr_d_items.cataloguer_by_id', '=', 'users.user_id');
+                                        $queryCat->where('catalog_no',"=",$row['catalog_no']);
+                                        $searchCat = $queryCat->get();
+                                        $toCat = array();
+                                        foreach ($searchCat as $arrEmailCat){
+                                            $toCat[] = $arrEmailCat->email ;
+                                        }    
 
-                                    //     $message
-                                    //         ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                    //         ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                    //         ->cc($toCat)
-                                    //         //->bcc('bqsoft77@gmail.com', 'Development')
-                                    //         ->subject('Request '.$row['transaction_type']);
-                                    // });
+                                        $message
+                                            ->from($emailSender ,'ABM E-Cataloguing Systems')
+                                            ->to($toOwner, 'ABM E-Cataloguing Systems')
+                                            // ->cc($toCat)
+                                            //->bcc('bqsoft77@gmail.com', 'Development')
+                                            ->subject('Request '.$row['transaction_type']);
+                                    });
 
                                 } else {
                                     $adrDitems->sap_material_code = $row['sap_material_code'];
@@ -886,6 +887,10 @@ class AdditionController extends Controller
                                     }
                                 }
                             } else {
+                                // update cataloger not validate
+                                $adrDitems->cataloguer = null;
+                                $adrDitems->std_approval = null;
+                                // update cataloger not validate
                                 $adrDitems->proc_approver = $row['proc_approver'];
                                 $adrDitems->proc_approver_by_id = $user_id;
                                 $adrDitems->proc_approver_date = date("Y-m-d H:i:s");
