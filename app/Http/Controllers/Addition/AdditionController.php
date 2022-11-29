@@ -525,8 +525,8 @@ class AdditionController extends Controller
                         }
                         if ($levelUser == 'Cat') {
                             // check disini
-                            if ($row['cataloguer'] == 'Validate' && $row['std_approval'] == 'Validate' && $row['proc_approver'] == 'Validate') {
-                                
+                            if ($row['cataloguer'] == 'Validate' && $row['std_approval'] == 'Validate') {
+
                                 $adrDitems->cataloguer = $row['cataloguer'];
                                 $adrDitems->cataloguer_by_id = $user_id;
                                 $adrDitems->cataloguer_date = date("Y-m-d H:i:s");
@@ -549,144 +549,38 @@ class AdditionController extends Controller
                                 $adrDitems->std_approval = $row['std_approval'];
                                 $adrDitems->std_approval_by_id = $user_id;
                                 $adrDitems->std_approval_date = date("Y-m-d H:i:s");
-                                // $mat_owner = self::getMaterialOwner($row['catalog_no']);
-                                // $Note = self::getNote($row['catalog_no']);
-                                // $KataGot = self::getCatagory($row['category']);
-                                // $setFrom = 'ecat@abm-investama.co.id';
-                                // $titlesetFrom = 'ABM E-Cataloguing Systems';
-                                // $data = array(
-                                //     'from' => $dataUserProfile[0]['email'],
-                                //     'catalog_no' => $row['catalog_no'],
-                                //     'short_text' => $row['short_description'],
-                                //     'std' => $levelUser,
-                                //     'Catagory' => $KataGot,
-                                //     'mat_owner' => $mat_owner,
-                                //     'Note' => $Note,
-                                //     'regard' => $dataUserProfile[0]['real_name']
-                                // );
-
-                                $adrDitems->proc_approver = $row['proc_approver'];
-                                $adrDitems->proc_approver_by_id = $user_id;
-                                $adrDitems->proc_approver_date = date("Y-m-d H:i:s");
-
-                                if ($row['material_type'] !== 'ZOEM') {
-                                    $table = "adr_d_items";
-                                    $primary = "sap_material_code";
-                                    $years = '';
-                                    if ($row['transaction_type'] == 'Material') {
-                                        $prefix = 'G';
-                                    } else {
-                                        $prefix = 'S';
+                                $mat_owner = self::getMaterialOwner($row['catalog_no']);
+                                $Note = self::getNote($row['catalog_no']);
+                                $KataGot = self::getCatagory($row['category']);
+                                $setFrom = 'ecat@abm-investama.co.id';
+                                $titlesetFrom = 'ABM E-Cataloguing Systems';
+                                $data = array(
+                                    'from' => $dataUserProfile[0]['email'],
+                                    'catalog_no' => $row['catalog_no'],
+                                    'short_text' => $row['short_description'],
+                                    'std' => $levelUser,
+                                    'Catagory' => $KataGot,
+                                    'mat_owner' => $mat_owner,
+                                    'Note' => $Note,
+                                    'regard' => $dataUserProfile[0]['real_name']
+                                );
+                                $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+                                $beautymail->send('emails.StdAppValidate', $data, function ($message) use ($row) {
+                                    $emailSender = Auth::user()->email;
+                                    $to = User::select(DB::raw("users.*"))
+                                        ->leftJoin('users_group', 'users.group_id', '=', 'users_group.group_id')
+                                        ->where('group_name', '=', 'Proc')
+                                        ->get();
+                                    $toProc = array();
+                                    foreach ($to as $arrEmailRow) {
+                                        $toProc[] = $arrEmailRow->email;
                                     }
-
-                                    $sprintf = "%017s";
-                                    $generateSAPNO = AutoNumber::autonumber($table, $primary, $prefix, $years, $sprintf);
-
-                                    $adrDitems->sap_material_code = $generateSAPNO;
-                                    $adrDitems->sap_material_code_by_id = $user_id;
-                                    $adrDitems->sap_material_code_date = date("Y-m-d H:i:s");
-
-                                    $adrDItemsStatus = new AdrDItemsStatus();
-                                    $adrDItemsStatus->adr_d_items_id = $row['adr_d_items_id'];
-                                    $adrDItemsStatus->item_status = 'ORIGIN';
-                                    $adrDItemsStatus->save();
-                                    $mat_owner = self::getMaterialOwner($row['catalog_no']);
-                                    $Note = self::getNote($row['catalog_no']);
-                                    $setFrom = 'ecat@abm-investama.co.id';
-                                    $titlesetFrom = 'ABM E-Cataloguing Systems';
-                                    $data = array(
-                                        'from' => $dataUserProfile[0]['email'],
-                                        'catalog_no' => $row['catalog_no'],
-                                        'sap_material_code' => $generateSAPNO,
-                                        'short_text' => $row['short_description'],
-                                        'Catagory' => self::getCatagory($row['category']),
-                                        'mat_owner' => $mat_owner,
-                                        'Note' => $Note,
-                                        'regard' => $dataUserProfile[0]['real_name']
-                                    );
-                                    $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                    $beautymail->send('emails.SAPMaterialCode', $data, function ($message) use($row) {
-                                        $emailSender = Auth::user()->email;
-                                        $input = Input::all();
-                                        $query = DB::table('vw_catalog_m_owner');
-                                        $query->where('catalog_no',"=",$row['catalog_no']);
-                                        $search = $query->get();
-                                        $toOwner = array();
-                                        foreach ($search as $arrEmailRow){
-                                            $toOwner[] = $arrEmailRow->email ;
-                                        }
-
-                                        $queryCat = DB::table('adr_d_items');
-                                        $queryCat->leftJoin('users', 'adr_d_items.cataloguer_by_id', '=', 'users.user_id');
-                                        $queryCat->where('catalog_no',"=",$row['catalog_no']);
-                                        $searchCat = $queryCat->get();
-                                        $toCat = array();
-                                        foreach ($searchCat as $arrEmailCat){
-                                            $toCat[] = $arrEmailCat->email ;
-                                        }    
-
-                                        $message
-                                            ->from($emailSender ,'ABM E-Cataloguing Systems')
-                                            ->to($toOwner, 'ABM E-Cataloguing Systems')
-                                            // ->cc($toCat)
-                                            //->bcc('bqsoft77@gmail.com', 'Development')
-                                            ->subject('Request '.$row['transaction_type']);
-                                    });
-
-                                } else {
-                                    $adrDitems->sap_material_code = $row['sap_material_code'];
-                                    $adrDitems->sap_material_code_by_id = $user_id;
-                                    $adrDitems->sap_material_code_date = date("Y-m-d H:i:s");
-
-                                    $adrDItemsStatus = new AdrDItemsStatus();
-                                    $adrDItemsStatus->adr_d_items_id = $row['adr_d_items_id'];
-                                    $adrDItemsStatus->item_status = 'ORIGIN';
-                                    $adrDItemsStatus->save();
-                                    if (!empty($row['sap_material_code'])) {
-                                        $mat_owner = self::getMaterialOwner($row['catalog_no']);
-                                        $Note = self::getNote($row['catalog_no']);
-                                        $setFrom = 'ecat@abm-investama.co.id';
-                                        $titlesetFrom = 'ABM E-Cataloguing Systems';
-                                        $data = array(
-                                            'from' => $dataUserProfile[0]['email'],
-                                            'catalog_no' => $row['catalog_no'],
-                                            'sap_material_code' => $row['sap_material_code'],
-                                            'short_text' => $row['short_description'],
-                                            'Catagory' => self::getCatagory($row['category']),
-                                            'mat_owner' => $mat_owner,
-                                            'Note' => $Note,
-                                            'regard' => $dataUserProfile[0]['real_name']
-                                        );
-                                        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-                                        $beautymail->send('emails.SAPMaterialCode', $data, function($message) use($row)
-                                        {
-                                        	$emailSender = Auth::user()->email;
-                                        	$input = Input::all();
-                                        	$query = DB::table('vw_catalog_m_owner');
-                                        	$query->where('catalog_no',"=",$row['catalog_no']);
-                                        	$search = $query->get();
-                                        	$toOwner = array();
-                                        	foreach ($search as $arrEmailRow){
-                                        		$toOwner[] = $arrEmailRow->email ;
-                                        	}
-
-                                            $queryCat = DB::table('adr_d_items');
-                                            $queryCat->leftJoin('users', 'adr_d_items.cataloguer_by_id', '=', 'users.user_id');
-                                            $queryCat->where('catalog_no',"=",$row['catalog_no']);
-                                            $searchCat = $queryCat->get();
-                                            $toCat = array();
-                                            foreach ($searchCat as $arrEmailCat){
-                                                $toCat[] = $arrEmailCat->email ;
-                                            }                                            
-                                        	$message
-                                        		->from($emailSender ,'ABM E-Cataloguing Systems')
-                                        		->to($toOwner, 'ABM E-Cataloguing Systems')
-                                                // ->cc($toCat)
-                                        		//->bcc('bqsoft77@gmail.com', 'Development')
-                                                ->subject('Request '.$row['transaction_type']);
-                                        });
-                                    }
-                                }
+                                    $message
+                                        ->from($emailSender, 'ABM E-Cataloguing Systems')
+                                        ->to($toProc, 'ABM E-Cataloguing Systems')
+                                        //->bcc('bqsoft77@gmail.com', 'Development')
+                                        ->subject('Request ' . $row['transaction_type']);
+                                });
                             } else if ($row['cataloguer'] == 'Validate') {
                                 $adrDitems->cataloguer = $row['cataloguer'];
                                 $adrDitems->cataloguer_by_id = $user_id;

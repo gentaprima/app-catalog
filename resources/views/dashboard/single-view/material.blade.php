@@ -1449,9 +1449,7 @@ use Illuminate\Support\Facades\Auth;
             if(categoryData != 'M'){
                 cataloguer = "Validate";
                 stdApp = "Validate";
-                procApp = "Validate";
                 stdBy = cataloguerBy
-                procBy = cataloguerBy
             }
             $.ajax({
                 type: "post",
