@@ -194,7 +194,7 @@ use Illuminate\Support\Facades\Auth;
                                 <button class="btn btn-primary" type="button" id="btnApply" onclick="applyChanges()">Apply Changes</button>
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label for="" class="col-sm-2"></label>
                             <div class="col-sm-10">
@@ -540,45 +540,47 @@ use Illuminate\Support\Facades\Auth;
                         document.getElementById("procAproverBy").value = data[0].proc_approver_by;
 
                         // check validated or not
-                        if (data[0].cataloguer == 'Not Validate') {
-                            document.getElementById("cataloguer").setAttribute("disabled", true);
-                            document.getElementById("materialType").setAttribute("disabled", true);
-                            document.getElementById("uom").setAttribute("disabled", true)
-                            document.getElementById("category").setAttribute("disabled", true)
-                            document.getElementById("inc").setAttribute("disabled", true);
-                            document.getElementById("mgc").setAttribute("disabled", true);
-                            document.querySelectorAll("input[type='text']").forEach(input => {
-                                input.disabled = true;
-                            })
-                            document.getElementById("btnApply").hidden = true
+                        if (groupName != 'User') {
+                            if (data[0].cataloguer == 'Not Validate') {
+                                document.getElementById("cataloguer").setAttribute("disabled", true);
+                                document.getElementById("materialType").setAttribute("disabled", true);
+                                document.getElementById("uom").setAttribute("disabled", true)
+                                document.getElementById("category").setAttribute("disabled", true)
+                                document.getElementById("inc").setAttribute("disabled", true);
+                                document.getElementById("mgc").setAttribute("disabled", true);
+                                document.querySelectorAll("input[type='text']").forEach(input => {
+                                    input.disabled = true;
+                                })
+                                document.getElementById("btnApply").hidden = true
 
-                        }
+                            }
 
-                        if (data[0].std_approval == 'Not Validate') {
-                            document.getElementById("stdApp").setAttribute("disabled", true);
-                            document.getElementById("materialType").setAttribute("disabled", true);
-                            document.getElementById("uom").setAttribute("disabled", true)
-                            document.getElementById("category").setAttribute("disabled", true)
-                            document.getElementById("inc").setAttribute("disabled", true);
-                            document.getElementById("mgc").setAttribute("disabled", true);
-                            document.querySelectorAll("input[type='text']").forEach(input => {
-                                input.disabled = true;
-                            })
-                            document.getElementById("btnApply").hidden = true
-                        }
+                            if (data[0].std_approval == 'Not Validate') {
+                                document.getElementById("stdApp").setAttribute("disabled", true);
+                                document.getElementById("materialType").setAttribute("disabled", true);
+                                document.getElementById("uom").setAttribute("disabled", true)
+                                document.getElementById("category").setAttribute("disabled", true)
+                                document.getElementById("inc").setAttribute("disabled", true);
+                                document.getElementById("mgc").setAttribute("disabled", true);
+                                document.querySelectorAll("input[type='text']").forEach(input => {
+                                    input.disabled = true;
+                                })
+                                document.getElementById("btnApply").hidden = true
+                            }
 
-                        if (data[0].proc_approver == 'Not Validate') {
-                            document.getElementById("procApp").setAttribute("disabled", true);
-                            document.getElementById("materialType").setAttribute("disabled", true);
-                            document.getElementById("uom").setAttribute("disabled", true)
-                            document.getElementById("category").setAttribute("disabled", true)
-                            document.getElementById("inc").setAttribute("disabled", true);
-                            document.getElementById("mgc").setAttribute("disabled", true);
-                            document.querySelectorAll("input[type='text']").forEach(input => {
-                                input.disabled = true;
-                            })
-                            document.getElementById("btnApply").hidden = true
+                            if (data[0].proc_approver == 'Not Validate') {
+                                document.getElementById("procApp").setAttribute("disabled", true);
+                                document.getElementById("materialType").setAttribute("disabled", true);
+                                document.getElementById("uom").setAttribute("disabled", true)
+                                document.getElementById("category").setAttribute("disabled", true)
+                                document.getElementById("inc").setAttribute("disabled", true);
+                                document.getElementById("mgc").setAttribute("disabled", true);
+                                document.querySelectorAll("input[type='text']").forEach(input => {
+                                    input.disabled = true;
+                                })
+                                document.getElementById("btnApply").hidden = true
 
+                            }
                         }
                         // check validated or not
 
@@ -907,9 +909,9 @@ use Illuminate\Support\Facades\Auth;
                             title: 'Please select cataloguer'
                         });
                         return;
-                    } 
+                    }
 
-                    if(cataloguer == 'Not Validate' && reason == ''){
+                    if (cataloguer == 'Not Validate' && reason == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please add reason'
@@ -918,18 +920,18 @@ use Illuminate\Support\Facades\Auth;
                     }
 
                     Swal.fire({
-                            title: 'Are you sure?',
-                            text: "you want to process data!",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, process it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                materialApplyChange();
-                            }
-                        })
+                        title: 'Are you sure?',
+                        text: "you want to process data!",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, process it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            materialApplyChange();
+                        }
+                    })
                 } else if (groupName == 'Std App T' || groupName == 'Std App O' || groupName == 'Std App M' || groupName == 'Std App I' || groupName == 'Std App H' || groupName == 'Std App G' || groupName == 'Std App S') {
                     if (stdApp == '') {
                         Toast.fire({
@@ -937,9 +939,9 @@ use Illuminate\Support\Facades\Auth;
                             title: 'Please select std approver'
                         });
                         return;
-                    } 
+                    }
 
-                    if(stdApp == 'Not Validate' && reason == ''){
+                    if (stdApp == 'Not Validate' && reason == '') {
                         Toast.fire({
                             icon: 'error',
                             title: 'Please add reason'
@@ -948,18 +950,18 @@ use Illuminate\Support\Facades\Auth;
                     }
 
                     Swal.fire({
-                            title: 'Are you sure?',
-                            text: "you want to process data!",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, process it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                materialApplyChange();
-                            }
-                        })
+                        title: 'Are you sure?',
+                        text: "you want to process data!",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, process it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            materialApplyChange();
+                        }
+                    })
                 } else if (groupName == 'Proc') {
                     if (procApp == '') {
                         Toast.fire({
@@ -1069,7 +1071,7 @@ use Illuminate\Support\Facades\Auth;
                     cataloguer_by: cataloguerBy,
                     std_approval_by: stdBy,
                     proc_approver_by: procBy,
-                    reason : reason
+                    reason: reason
 
                 },
                 success: function(response) {
