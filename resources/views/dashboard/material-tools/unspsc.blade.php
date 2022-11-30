@@ -40,8 +40,8 @@ use Illuminate\Support\Facades\Auth;
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item">Material & Service Tools</li>
-                            <li class="breadcrumb-item active">NCS</li>
+                            <li class="breadcrumb-item">Material & Service Tools </li>
+                            <li class="breadcrumb-item active">UNSPSC</li>
                         </ol>
                     </div><!-- /.col -->
                     <p id="menu"></p>
@@ -119,7 +119,11 @@ use Illuminate\Support\Facades\Auth;
                     <div class="card p-4 mb-1 m-2">
                         <h4>Result Inc</h4>
                         <hr>
-                        
+                        <div class="row">
+                            {{-- <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal" data-target="#add-inc">
+                                Add Inc &nbsp; <i class="fas fa-plus"></i>
+                            </button> --}}
+                        </div>
                         <div class="row mt-1"style="height: 203px; overflow: auto">
                             <table class="table table-striped" id="tb-inc">
                                 <thead>
@@ -127,7 +131,7 @@ use Illuminate\Support\Facades\Auth;
                                         <th>Inc</th>
                                         <th>Item Name</th>
                                         <th>Status</th>
-                                        <th>Remove</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody style="height:137px">
@@ -163,20 +167,20 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-3">INC: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <input type="text" class="form-control" id="inc-id-detail"
+                                    <input type="text" readonly class="form-control" id="inc-id-detail"
                                         placeholder="">
                                 </div>
                             </div>
                             <label for="" class="col-sm-3">Name: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <input type="text"  class="form-control" id="name_inc" placeholder="">
+                                    <input type="text" readonly class="form-control" id="name_inc" placeholder="">
                                 </div>
                             </div>
                             <label for="" class="col-sm-3">Short: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <input type="text" readonly class="form-control" id="short_inc" placeholder="">
+                                    <input readonly type="text" class="form-control" id="short_inc" placeholder="">
                                     <div class="input-group-append">
                                         <button disabled type="submit" id="save-short-desc" class="btn btn-default">
                                             <i class="fas fa-save"></i>
@@ -187,24 +191,24 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-3">Desc: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <textarea type="text"  class="form-control" id="desc_inc" placeholder=""> </textarea>
+                                    <textarea type="text" readonly class="form-control" id="desc_inc" placeholder=""> </textarea>
                                 </div>
                             </div>
                             <label for="" class="col-sm-3">MGC: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <select multiple="multiple" class="js-example-basic-multiple js-example-basic-type"
+                                    <select multiple="multiple" disabled class="js-example-basic-multiple js-example-basic-type"
                                         id="select-mgc-2">
                                         <option value="">Select MGC</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-white ml-auto mr-0 pr-0">
+                        {{-- <div class="card-footer bg-white ml-auto mr-0 pr-0">
                             <button id="btn-save-inc" type="button" class="btn btn-primary">
                                 Save &nbsp; <i class="fas fa-save"></i>
                             </button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -294,7 +298,6 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Inc Characteristic</h4>
 
                         <hr>
-                       
                         <div class="row mt-1"style="max-height: 400px; overflow: auto">
                             <table class="table table-striped" id="tb-characteristic">
                                 <thead>
@@ -304,7 +307,7 @@ use Illuminate\Support\Facades\Auth;
                                         <th>Characteristic</th>
                                         <th>value</th>
                                         <th>Type</th>
-                                        <th>Remove</th>
+                                        <th>Action</th>
                                     </tr>
                                 <tbody style="height:137px">
 
@@ -381,14 +384,12 @@ use Illuminate\Support\Facades\Auth;
                     <div class="card p-4 mb-1 m-2">
                         <h4>Colloquial Name</h4>
                         <hr>
-                     
                         <div class="row mt-1"style="height: 203px; overflow: auto">
                             <table class="table table-striped" id="tb-collo">
                                 <thead>
                                     <tr>
                                         <th>CN</th>
                                         <th>Colloquial Name</th>
-                                        <th>Remove CN</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -420,35 +421,30 @@ use Illuminate\Support\Facades\Auth;
             </div>
         </section>
 
+
         <div class="modal fade" id="add-inc" role="dialog" aria-labelledby="add-inc" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="add-incLabel">Inc Detail</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Inc:</label>
                             <input type="text" class="form-control" id="inc-add">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Name Code:</label>
+                            <label for="exampleInputEmail1" id="name-code-add">Name Code:</label>
                             <input type="text" class="form-control" id="name-code-add">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Short Name:</label>
+                            <label for="exampleInputEmail1" id="title-short-name-add">Short Name:</label>
                             <input type="text" class="form-control" id="short-name-add">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Desc:</label>
+                            <label for="exampleInputEmail1" id="title-desc-add">Desc:</label>
                             <textarea name="desc-add" id="desc-add" cols="30" rows="5" class="form-control"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label for="exampleInputEmail1">MGC:</label>
+                            <label for="exampleInputEmail1" id="title-select-mgc-3">MGC:</label>
                             <select multiple="multiple" class="js-example-basic-multiple js-example-basic-type-add"
                                 id="select-mgc-3">
                                 <option value="">Select MGC</option>
@@ -494,6 +490,67 @@ use Illuminate\Support\Facades\Auth;
             </div>
         </div>
 
+        <div class="modal fade" id="value-char" role="dialog" aria-labelledby="value-char" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="value-charLabel">Value Characteristic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{-- <div class="card p-4 mb-1 m-2"> --}}
+                        {{-- <h4>Result Inc</h4>
+                            <hr> --}}
+                        {{-- <div class="row">
+                                <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal"
+                                    data-target="#add-inc">
+                                    Add Inc &nbsp; <i class="fas fa-plus"></i>
+                                </button>
+                            </div> --}}
+                        <div class="row mt-1"style="height: 203px; overflow: auto">
+                            <table class="table table-striped" id="tb-char-val">
+                                <thead>
+                                    <tr>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="height:137px">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- </div> --}}
+
+                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                            <ul class="pagination">
+                                <li>Halaman</li>
+                                <li class="paginate_button active mr-2"><a aria-controls="example1"
+                                        id="current_page_char_value" data-dt-idx="1" tabindex="0">1</a></li>
+                                <li>Dari</li>
+                                <li class="ml-2" id="total_page_char_value">25</li>
+                                <li class="paginate_button next next-char-value prev " id="example1_previous"
+                                    data-page="prev">
+                                    <a aria-controls="example1" id="link_next" data-dt-idx="0" tabindex="0"><i
+                                            class="fa fa-chevron-left"></i></a>
+                                </li>
+                                <li class="paginate_button next next-char-value prev" id="next-step" data-page="next"><a
+                                        id="link_next" aria-controls="example1" data-dt-idx="2" tabindex="0"><i
+                                            class="fa fa-chevron-right"></i></a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
         <div class="modal fade" id="add-cn" role="dialog" aria-labelledby="add-cn" aria-hidden="true">
@@ -523,6 +580,69 @@ use Illuminate\Support\Facades\Auth;
             </div>
         </div>
 
+
+        <div class="modal fade" id="edit-cn" role="dialog" aria-labelledby="edit-cn" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit-cnLabel">Add Colloquial Name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">CN :</label>
+                            <input type="text" class="form-control" id="cn-id-edit">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Colloquial Name:</label>
+                            <input type="text" class="form-control" id="cn-name-edit">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btn-edit-cn-modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="edit-inc" role="dialog" aria-labelledby="edit-inc" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit-incLabel">Edit Inc</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">INC</label>
+                            <input type="text" class="form-control" id="incid-edit-inc">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Item Name</label>
+                            <input type="text" class="form-control" id="name-edit-inc">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Item Name</label>
+                            <select name="" class="form-control" id="status-edit-inc" name="status-edit-inc">
+                                <option value="Active">Active</option>
+                                <option value="Deactive">Deactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btn-edit-inc-modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <script>
             var pageInc = 1;
             var totalPageImage = 0
@@ -532,6 +652,118 @@ use Illuminate\Support\Facades\Auth;
             var pageImage = 1;
             var pageCollo = 1;
             var filter = "";
+            var pageValChar = 1;
+            var totalPageVal = 0;
+
+            function loadvalueChar(start = 0, limit = 25, page, id, value) {
+                $.ajax({
+                    url: "/getIncCharacteristicsValue",
+                    method: "GET",
+                    data: {
+                        start: start,
+                        limit: limit,
+                        filter: '[{"operator":"eq","value":"' + id +
+                            '","property":"inc","type":"string"},{"operator":"eq","value":"' + value +
+                            '","property":"characteristics","type":"string"},{"operator":"eq","value":"ABPM","property":"mrcode","type":"string"}]',
+                        action: 'getIncCharacteristicsValue',
+                        page: page
+                    }
+                }).done(function(v) {
+                    $("#tb-char-val tbody").empty();
+                    chartIndex = 1;
+                    v.data.forEach(function(v) {
+                        var row = $('<tr class="tr-tab-1" >');
+                        row.append(
+                            '<td class=""> ' + v.nvalue + '</td></tr>'
+                        );
+                        $("#tb-char-val").append(row);
+                    })
+                    totalPageVal = Math.ceil(v.total / 25);
+                    $('#total_page_char_value').text(totalPageVal)
+                })
+            }
+            $('#value-char').on('show.bs.modal', function(event) {
+                pageValChar = 1;
+                $('#current_page_char_value').text(pageValChar);
+
+                var button = $(event.relatedTarget);
+                loadvalueChar(0, 25, 1, button.data('inc'), button.data("char"));
+                $('.next-char-value').unbind('click')
+                $('.next-char-value').click(function() {
+                    if ($(this).data("page") === "next" && pageValChar <= totalPageVal) {
+                        pageValChar += 1;
+                    }
+                    if ($(this).data("page") === "prev") {
+                        pageValChar -= 1;
+                    }
+                    $('#current_page_char_value').text(pageValChar);
+                    loadvalueChar(0, 25, pageValChar, button.data('inc'), button.data("char"));
+                });
+            });
+            $('#edit-cn').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                $('#cn-id-edit').val(button.data("cn"))
+                $('#cn-name-edit').val(button.data("name"))
+                $('#btn-edit-cn-modal').unbind('click')
+                $('#btn-edit-cn-modal').click(function() {
+                    $.ajax({
+                        url: "/SaveIncColloquialName",
+                        method: "POST",
+                        data: {
+                            _token: csrf_token,
+                            data_items: '[{"id":6908,"inc":"' + $('#inc-id-detail').val() + '","cn":"' +
+                                $('#cn-id-edit').val() + '","xref_inc":null,"colloquial_name":"' + $(
+                                    '#cn-name-edit').val() +
+                                '","language":null,"groupclass":"' + button.data("groupclass") +
+                                '","item_name":"' + $('#name_inc')
+                                .val() + '","short_name_code":"' + $('#short_inc').val() +
+                                '","description":null,"inc_reff":"' + button.data("reff") +
+                                '","is_active":"' + button.data("isactive") +
+                                '","transaction_type":"Material"}]'
+                        }
+                    }).done(function(v) {
+                        loadCollo(pageCollo)
+                        Toast.fire(
+                            v.success ? 'Successfully' : "Failed",
+                            v.message,
+                            v.success ? "success" : "error"
+                        )
+                    })
+                })
+            });
+            $('#edit-inc').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                $('#incid-edit-inc').val(button.data("id"))
+                $('#name-edit-inc').val(button.data("name"))
+                $("#status-edit-inc > [value=" + button.data("status") + "]").attr("selected", "true");
+                $('#btn-edit-inc-modal').unbind("click")
+                $('#btn-edit-inc-modal').click(function() {
+                    $.ajax({
+                        method: "POST",
+                        url: "/SaveIncItem",
+                        data: {
+                            _token: csrf_token,
+                            data_items: '[{"inc_class_name":"' + button.data('class') +
+                                '","id":' + button.data('idinc') + ',"inc":"' + $('#incid-edit-inc')
+                                .val() +
+                                '","item_name":"' + $('#name-edit-inc').val() +
+                                '","short_name_code":"' +
+                                button.data("short") +
+                                '","description":null,"transaction_type":"Material","is_active":"' + $(
+                                    '#status-edit-inc').val() + '","groupclass":"' + button.data(
+                                    "groupclass") + '"}]'
+                        }
+
+                    }).done(function(v) {
+                        loadResultInc(1, 0, 25, filter);
+                        Toast.fire(
+                            v.success ? 'Successfully' : "Failed",
+                            v.message,
+                            v.success ? "success" : "error"
+                        )
+                    })
+                })
+            });
 
             function changeImage(input) {
                 var reader;
@@ -577,6 +809,7 @@ use Illuminate\Support\Facades\Auth;
                     // do something with jsonResponse
                 };
             })
+
             $('#btn-save-cn-modal').click(function() {
                 $.ajax({
                     method: "POST",
@@ -618,6 +851,8 @@ use Illuminate\Support\Facades\Auth;
             })
             $('#btn-search').click(function() {
                 loadSearch(1, 0, 25);
+                pageInc = 1;
+                $('#current_page_inc').text(pageInc);
             })
 
             $('#save-short-desc').click(function() {
@@ -681,6 +916,7 @@ use Illuminate\Support\Facades\Auth;
                 var selectInc = $('#select-inc')
                 var selectMgc = $('#select-mgc')
                 var nameCode = $('#name-code')
+                filter = "";
                 if (selectStatus.val() != null && selectStatus.val() != "") {
                     filter += '{"operator":"eq","value":"' + selectStatus.val() + '","property":"is_active","type":"string"},';
                 }
@@ -704,6 +940,7 @@ use Illuminate\Support\Facades\Auth;
 
                 filter += '{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}';
                 loadResultInc(1, start, 25, filter);
+                $('.next-inc').unbind("click");
                 $('.next-inc').click(function() {
                     if ($(this).data("page") === "next") {
                         pageInc += 1;
@@ -730,6 +967,7 @@ use Illuminate\Support\Facades\Auth;
                     $("#total_page_char").text(totalPageChar)
                     $("#tb-characteristic tbody").empty();
                     chartIndex = 1;
+                    $('#current_page_char').text(pageChar);
                     v.data.forEach(function(v) {
                         var row = $('<tr class="tr-tab-1" >');
                         row.append(
@@ -742,15 +980,17 @@ use Illuminate\Support\Facades\Auth;
                             '<td class=""> ' + v.characteristics + '</td></tr>'
                         );
                         row.append(
-                            '<td class=""><button type="button" class="btn btn-default btn-circle"><i class="fa fa-info"></i></td></tr>'
+                            '<td class=""><button data-inc="' + $('#inc-id-detail').val() +
+                            '" data-char="' + v.characteristics +
+                            '"  type="button" data-toggle="modal" data-target="#value-char" class="btn btn-default btn-circle"><i class="fa fa-info"></i></td></tr>'
                         );
                         row.append(
                             '<td class="">' + v.type + '</td></tr>'
                         );
-                        row.append(
-                            '<td class="delete-in-char text-danger"><button data-id="' + v.id +
-                            '" type="button" id="delete-char" class="btn btn-default delete-char"><i style="color:red" class="fa fa-trash"></i></td>'
-                        );
+                        // row.append(
+                        //     '<td class="delete-in-char text-danger"><button data-id="' + v.id +
+                        //     '" type="button" id="delete-char" class="btn btn-default delete-char"><i style="color:red" class="fa fa-trash"></i></button> <button class="btn btn-default" id="edit-char" ><i style="color:green" class="fa fa-edit"></i></button></td>'
+                        // );
                         $("#tb-characteristic").append(row);
                         chartIndex++;
                     })
@@ -885,10 +1125,13 @@ use Illuminate\Support\Facades\Auth;
                             '</td></tr>'
                         );
 
-                        row.append(
-                            '<td class="delete-in-collo text-danger"><button data-id="' + v.cn +
-                            '" type="button" id="delete-collo" class="btn btn-default delete-collo"><i style="color:red" class="fa fa-trash"></i></td>'
-                        );
+                        // row.append(
+                        //     '<td class="delete-in-collo text-danger"><button data-id="' + v.cn +
+                        //     '" type="button" id="delete-collo" class="btn btn-default delete-collo"><i style="color:red" class="fa fa-trash"></i></button><button class="btn btn-default" id="edit-collo" data-toggle="modal" data-target="#edit-cn" data-groupclass="' +
+                        //     v.groupclass + '" data-reff="' + v.inc_reff + '" data-isactive="' + v
+                        //     .is_active + '" data-cn="' + v.cn + '" data-name="' + v.colloquial_name +
+                        //     '" ><i style="color:green" class="fa fa-edit"></i></button></td>'
+                        // );
 
                         $("#tb-collo").append(row);
                         $('.delete-collo').click(function() {
@@ -968,15 +1211,20 @@ use Illuminate\Support\Facades\Auth;
                             '<td class=""> ' + v.inc + '</td></tr>'
                         );
                         row.append(
-                            '<td class=""> ' + v.inc_class_name + '</td></tr>'
+                            '<td class=""> ' + v.item_name + '</td></tr>'
                         );
                         row.append(
                             '<td class=""> ' + v.is_active + '</td></tr>'
                         );
 
                         row.append(
-                            '<td class="delete-in-result-inc text-danger"><button data-id="' + v.inc +
-                            '" type="button" id="delete-result-inc" class="btn btn-default delete-result-inc"><i style="color:red" class="fa fa-trash"></i></td>'
+                            '<button data-toggle="modal" data-target="#edit-inc" data-id="' +
+                            v.inc +
+                            '" type="button" id="edit-result-inc" data-title="Edit Inc" data-groupclass="' +
+                            v.groupclass + '"  data-idinc="' + v.id + '" data-short="' + v.short_name_code +
+                            '" data-class="' + v.inc_class_name + '" data-id="' + v.inc +
+                            '" data-name="' + v.item_name + '" data-status="' + v.is_active +
+                            '" class="btn btn-default edit-result-inc"><i style="color:green" class="fa fa-edit"></i></td></button>'
                         );
                         $("#tb-inc").append(row);
                     })
@@ -1007,6 +1255,11 @@ use Illuminate\Support\Facades\Auth;
                         totalPageCollo = 0;
                         pageChar = 1;
                         pageImage = 1;
+                        pageCollo = 1;
+
+                        $('#current_page_collo').text(pageCollo)
+                        $('#current_page_image').text(pageImage)
+                        $('#current_page_char').text(pageChar);
                         MGCMultipleselect2.empty()
 
                         $(this).each(function() {
@@ -1059,38 +1312,41 @@ use Illuminate\Support\Facades\Auth;
                                     loadCharact(0, 25, 1, "inc");
 
 
-                                    var lastPageChar = 1;
-                                    $('.next-char').click(function() {
-                                        console.log("page char" + pageChar)
-                                        lastPageChar =
-                                            totalPageChar;
-                                        if (pageChar <
-                                            lastPageChar && $(
-                                                this).data(
-                                                "page") ===
-                                            "next") {
-                                            pageChar += 1;
-                                            console.log("next");
-                                        }
-                                        if (pageChar != 1 && $(
-                                                this).data(
-                                                "page") ===
-                                            "prev") {
-                                            pageChar -= 1;
-                                            console.log("prev");
-                                        }
-                                        $('#current_page_char')
-                                            .text(pageChar);
-                                        loadCharact(0, 25,
-                                            pageChar,
-                                            "inc");
 
-                                    });
                                 })
+                                var lastPageChar = 1;
+                                $(".next-char").unbind('click');
 
+                                $('.next-char').click(function() {
+                                    lastPageChar =
+                                        totalPageChar;
+                                    if (pageChar <
+                                        lastPageChar && $(
+                                            this).data(
+                                            "page") ===
+                                        "next") {
+                                        pageChar += 1;
+                                        console.log("next");
+                                    }
+                                    if (pageChar != 1 && $(
+                                            this).data(
+                                            "page") ===
+                                        "prev") {
+                                        pageChar -= 1;
+                                        console.log("prev");
+                                    }
+
+                                    $('#current_page_char')
+                                        .text(pageChar);
+                                    loadCharact(0, 25,
+                                        pageChar,
+                                        "inc");
+
+                                });
                                 loadCollo();
                                 var lastPageCollo = 1;
                                 var pageCollo = 1;
+                                $('.next-collo').unbind("click")
                                 $('.next-collo').click(function() {
                                     lastPageCollo =
                                         totalPageCollo;
@@ -1116,6 +1372,7 @@ use Illuminate\Support\Facades\Auth;
                                 });
                             })
                             loadImage(inc[1], 1, 0, 1);
+                            $('.next-image').unbind("click")
                             $('.next-image').click(function() {
                                 totalPageImage = totalPageImage / 1;
                                 if (pageImage < totalPageImage && $(this).data("page") ===
