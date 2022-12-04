@@ -454,7 +454,7 @@ use Illuminate\Support\Facades\Auth;
                             <input type="text" class="form-control" id="inc-add">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1" id="name-code-add">Name Code:</label>
+                            <label for="exampleInputEmail1">Name Code:</label>
                             <input type="text" class="form-control" id="name-code-add">
                         </div>
                         <div class="form-group">
@@ -677,6 +677,34 @@ use Illuminate\Support\Facades\Auth;
             var filter = "";
             var pageValChar = 1;
             var totalPageVal = 0;
+
+            $("#btn-reset").click(function() {
+                $("#tb-inc tbody").empty();
+                $("#tb-characteristic tbody").empty();
+                $("#tb-collo tbody").empty();
+                pageInc = 0;
+                totalPageImage = 0;
+                totalPageChar = 0;
+                totalPageCollo = 0;
+                pageChar = 1;
+                pageImage = 1;
+                pageCollo = 1;
+                filter = "";
+                pageValChar = 1;
+                totalPageVal = 0;
+                $('#total_page_inc').text(1)
+                $('#total_page_char').text(1)
+                $('#total_page_collo').text(1)
+                $('#total_page_image').text(1)
+                $('#total_page_inc').text(1)
+
+                $(':input').val('');
+                $('#select-mgc-2').val(null).trigger('change');
+                $('#select-inc').val(null).trigger('change');
+                $('#select-mgc').val(null).trigger('change');
+                $("#select-status").val(null).trigger('change');
+
+            });
 
             function loadvalueChar(start = 0, limit = 25, page, id, value) {
                 $.ajax({
