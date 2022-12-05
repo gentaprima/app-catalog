@@ -14,7 +14,7 @@ class CompaniesMController extends Controller
 {
 	public function getCompaniesM(Request $request){
         $sql = "SELECT * FROM vw_companies_m" ;
-        $result = BaseModel::buildSql($sql);;
+        $result = BaseModel::buildSqlValuationClass($sql);;
         return \Response::json($result,200);
     }
 
@@ -33,7 +33,8 @@ class CompaniesMController extends Controller
             $i = 1;
             foreach ($data_items as $row) {
                 $UpdateCompaniesM = CompaniesM::find($row->id);
-                if(count($UpdateCompaniesM) > 0 ){
+                // if(count($UpdateCompaniesM) > 0 ){
+                if($UpdateCompaniesM != null ){
                     $UpdateCompaniesM->name = $row->name ;
                     $UpdateCompaniesM->save();
                 }else{

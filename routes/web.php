@@ -78,6 +78,10 @@ Route::get('/single-view/get-reason-not-validate','Catalogue\CatalogueController
 Route::get('/cleansing/duplication','NavController@cleansingDuplication');
 // CLEANSING & DUPLICATION
 
+// Administrator
+Route::get('/administrator/setting-company','NavController@viewSettingCompany');
+// Administrator
+
 
 // DICTIONARY
 Route::get('/dictionary/material-characteristic', 'NavController@viewMaterialCharacteristic');
