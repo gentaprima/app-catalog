@@ -78,6 +78,11 @@ Route::get('/single-view/get-reason-not-validate','Catalogue\CatalogueController
 Route::get('/cleansing/duplication','NavController@cleansingDuplication');
 // CLEANSING & DUPLICATION
 
+// Administrator
+Route::get('/administrator/setting-company','NavController@viewSettingCompany');
+Route::get('/administrator/manage-users','NavController@viewManageUsers');
+// Administrator
+
 
 // DICTIONARY
 Route::get('/dictionary/material-characteristic', 'NavController@viewMaterialCharacteristic');
@@ -126,6 +131,9 @@ Route::get('/geTrxCode', 'Setting\SettingUsersController@geTrxCode');
 Route::get('/geTrxCodeComboBox', 'Setting\SettingUsersController@geTrxCodeComboBox');
 Route::get('/geTrxCodeHisto', 'Setting\SettingUsersController@geTrxCodeHisto');
 Route::get('/getFlowOwnerCode', 'Setting\SettingUsersController@getFlowOwnerCode');
+
+Route::get('/getManageUsers', 'Setting\SettingUsersController@getManageUsers');
+Route::get('/getUsersGroup', 'Setting\SettingUsersGroupController@getUsersGroup');
 
 Route::get('/getUsers', 'Setting\SettingUsersController@getUsers');
 Route::get('/getUsersComboBox', 'Setting\SettingUsersController@getUsersComboBox');

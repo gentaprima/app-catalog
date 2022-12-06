@@ -184,4 +184,12 @@ class NavController extends Controller
     public function viewValuationClass(){
         return view('/dashboard/dictionary/valuation-class');
     }
+
+    public function viewSettingCompany(){
+        return view('/dashboard/administrator/manage-company');
+    }
+
+    public function viewManageUsers(){
+        return view('/dashboard/administrator/manage-user');
+    }
 }
