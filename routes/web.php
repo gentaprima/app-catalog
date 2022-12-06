@@ -80,6 +80,7 @@ Route::get('/cleansing/duplication','NavController@cleansingDuplication');
 
 // Administrator
 Route::get('/administrator/setting-company','NavController@viewSettingCompany');
+Route::get('/administrator/manage-users','NavController@viewManageUsers');
 // Administrator
 
 
@@ -130,6 +131,9 @@ Route::get('/geTrxCode', 'Setting\SettingUsersController@geTrxCode');
 Route::get('/geTrxCodeComboBox', 'Setting\SettingUsersController@geTrxCodeComboBox');
 Route::get('/geTrxCodeHisto', 'Setting\SettingUsersController@geTrxCodeHisto');
 Route::get('/getFlowOwnerCode', 'Setting\SettingUsersController@getFlowOwnerCode');
+
+Route::get('/getManageUsers', 'Setting\SettingUsersController@getManageUsers');
+Route::get('/getUsersGroup', 'Setting\SettingUsersGroupController@getUsersGroup');
 
 Route::get('/getUsers', 'Setting\SettingUsersController@getUsers');
 Route::get('/getUsersComboBox', 'Setting\SettingUsersController@getUsersComboBox');

@@ -51,8 +51,8 @@
                         <th>Company</th>
                         <th>User Group</th>
                         <th>Active</th>
-                        <th>Date Created</th>
-                        <th>Date Created</th>
+                        <th>Action</th>
+                        <!-- <th>Date Created</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -89,27 +89,56 @@
                 <div class="modal-body">
                     <form action="">
                         <div class="form-group row">
-                            <label for="" class="col-sm-2">Code</label>
+                            <label for="" class="col-sm-2">Username</label>
                             <div class="col-sm-10">
-                                <input type="text" id="code" class="form-control">
+                                <input type="text" id="username" class="form-control">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2">Company</label>
+                            <label for="" class="col-sm-2">Email</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="company">
+                                <input type="text" class="form-control" id="email">
                             </div>
                         </div>
-                        <!-- <div class="form-group row">
-                            <label for="" class="col-sm-2">Status</label>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2">Real Name</label>
                             <div class="col-sm-10">
-                                <select name="" id="status" class="form-control">
-                                    <option value="">Select Status</option>
-                                    <option value="Used">Used</option>
-                                    <option value="Not Used">Not Used</option>
+                                <input type="text" class="form-control" id="realname">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="password">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2">Select Company</label>
+                            <div class="col-sm-10">
+                                <select class="js-example-data-ajax" id="company">
+                                    <option value="">Select Company</option>
                                 </select>
                             </div>
-                        </div> -->
+                        </div>=
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2">Select Group</label>
+                            <div class="col-sm-10">
+                                <select class="js-example-basic-single2"  id="groupId">
+                                    <option value="">Select Group</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2">Active?</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="isActive">
+                                    <option value="">Select Active/Not Active</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Not Active</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <input type="hidden" id="idType">
                     </form>
                 </div>
@@ -126,6 +155,12 @@
         $(document).ready(function() {
             $("#main-menu-MNU100").addClass("nav-item menu-is-opening menu-open")
             $("#subchild-MNU102").addClass("nav-link active")
+        });
+        
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+            $('.js-example-basic-single2').select2();
+            // $('.js-example-basic-single3').select2();
         });
 
         var delayTimer;
@@ -153,17 +188,87 @@
 
         }
 
+
+        getSelectCompany();
+
+        function getSelectCompany() {
+            $("#company").select2({
+
+                ajax: {
+                    url: `/getCompaniesMComboBox`,
+                    dataType: 'json',
+                    data: function(params) {
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            query: params.term,
+                            page: 1,
+                            start: 0,
+                            limit: 25,
+                            filter: `[{"operator":"like","value":"${params.term}","property":"name","type":"string"}]`
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    }
+                }
+            })
+        }
+
+        function getGroup() {
+            $("#company").select2({
+
+                ajax: {
+                    url: `/getUsersGroup`,
+                    dataType: 'json',
+                    data: function(params) {
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            query: params.term,
+                            page: 1,
+                            start: 0,
+                            limit: 25,
+                            filter: `[{"operator":"like","value":"${params.term}","property":"group_name","type":"string"}]`
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: item.group_name,
+                                    id: item.group_id
+                                }
+                            })
+                        };
+                    }
+                }
+            })
+
+        }
+
         function addData() {
             document.getElementById("titlemodalForm").innerHTML = "Add Company"
-            document.getElementById("code").value = "";
-            document.getElementById("company").value = "";
-            // document.getElementById("status").value = "";
-            document.getElementById("btnApply").setAttribute("onclick", 'processAdd()');
-            document.getElementById("code").removeAttribute("readonly");
+            // document.getElementById("code").value = "";
+            // document.getElementById("company").value = "";
+            // // document.getElementById("status").value = "";
+            // document.getElementById("btnApply").setAttribute("onclick", 'processAdd()');
+            // document.getElementById("code").removeAttribute("readonly");
         }
 
         function updateData(code, company, id) {
-            document.getElementById("code").setAttribute("readonly",true);
+            document.getElementById("code").setAttribute("readonly", true);
             document.getElementById("titlemodalForm").innerHTML = "Update Company"
             document.getElementById("code").value = code;
             document.getElementById("company").value = company;
@@ -173,7 +278,23 @@
         }
 
         function processAdd() {
-           
+            // [{
+            //     "user_id": "5f052979df265",
+            //     "group_id": "USG3",
+            //     "real_name": "Eryos Hendriiiiiii",
+            //     "companies_m_id": "8",
+            //     "user_name": "eryos.hendri",
+            //     "email": "gentaprima600@gmail.com",
+            //     "api_token": null,
+            //     "last_login": "",
+            //     "count_login": 0,
+            //     "created_at": "2020-07-08 09:03:37",
+            //     "updated_at": "2022-12-05 16:05:40",
+            //     "is_active": 1,
+            //     "email_asli": "eryos.hendri@ptssb.co.id",
+            //     "password": "",
+            //     "id": "APP.model.UsersModel-864"
+            // }]
             let code = document.getElementById("code").value;
             let desc = document.getElementById("company").value;
 
@@ -213,7 +334,7 @@
         }
 
         function processUpdate() {
-            
+
             let code = document.getElementById("code").value;
             let desc = document.getElementById("desc").value;
             let id = document.getElementById("idType").value;
@@ -305,7 +426,7 @@
         function loadData(page = 1, start = 1, limit = 25, search = "") {
             $("#tableData tbody").empty();
             $.ajax({
-                url: `/getCompaniesM?page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"${search}","property":"name","type":"string"},{"operator":"like","value":"${search}","property":"code","type":"string"}]`,
+                url: `/getManageUsers?page=${page}&start=${start}&limit=${limit}&filter=[{"operator":"like","value":"${search}","property":"real_name","type":"string"},{"operator":"like","value":"${search}","property":"user_name","type":"string"},{"operator":"like","value":"${search}","property":"email","type":"string"},{"operator":"like","value":"${search}","property":"name","type":"string"}]`,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
@@ -317,8 +438,17 @@
                     }
                     for (let i = 0; i < response.data.length; i++) {
                         var tr = $("<tr>");
-                        tr.append("<td>" + response.data[i].code + "</td>");
+                        tr.append("<td>" + response.data[i].user_name + "</td>");
+                        tr.append("<td>" + (response.data[i].email) + "</td>");
+                        tr.append("<td>" + (response.data[i].real_name) + "</td>");
+                        tr.append("<td>****</td>");
                         tr.append("<td>" + (response.data[i].name) + "</td>");
+                        tr.append("<td>" + (response.data[i].group_name) + "</td>");
+                        if (response.data[i].is_active == 1) {
+                            tr.append("<td>Active</td>");
+                        } else {
+                            tr.append("<td>Not Active</td>");
+                        }
                         if (groupName == `Administrator's`) {
                             tr.append(`<td>
                                         <center>

@@ -43,10 +43,17 @@ class SettingUsersController extends Controller
 
     }
 
+    public function getManageUsers(Request $request){
+        $sql = "SELECT * FROM vw_users" ;
+        $result = BaseModel::buildSqlValuationClass($sql);;
+        return \Response::json($result,200);
+    }
+
  	public  function SaveUser(Request $request){
         DB::beginTransaction();
         try {
             $input = Input::all();
+            // dd($input);
             $data_items = json_decode(stripslashes($input['data_items']));
             
             $i = 1;

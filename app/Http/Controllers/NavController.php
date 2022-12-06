@@ -188,4 +188,8 @@ class NavController extends Controller
     public function viewSettingCompany(){
         return view('/dashboard/administrator/manage-company');
     }
+
+    public function viewManageUsers(){
+        return view('/dashboard/administrator/manage-user');
+    }
 }
