@@ -94,6 +94,10 @@
 
         <!-- /.content -->
         <script>
+            $(document).ready(function() {
+                $("#main-menu-MNU33").addClass("nav-item menu-is-opening menu-open")
+                $("#subchild-MNU45").addClass("nav-link active")
+            });
             $('#tableData tbody').empty();
             var totalData = 0;
             loadData(1, 0, 25);

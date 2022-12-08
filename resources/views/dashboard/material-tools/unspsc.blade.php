@@ -197,8 +197,8 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-3">MGC: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <select multiple="multiple" disabled class="js-example-basic-multiple js-example-basic-type"
-                                        id="select-mgc-2">
+                                    <select multiple="multiple" disabled
+                                        class="js-example-basic-multiple js-example-basic-type" id="select-mgc-2">
                                         <option value="">Select MGC</option>
                                     </select>
                                 </div>
@@ -644,6 +644,10 @@ use Illuminate\Support\Facades\Auth;
 
 
         <script>
+            $(document).ready(function() {
+                $("#main-menu-MNU25").addClass("nav-item menu-is-opening menu-open")
+                $("#subchild-MNU27").addClass("nav-link active")
+            });
             var pageInc = 1;
             var totalPageImage = 0
             var totalPageChar = 0;
@@ -783,10 +787,77 @@ use Illuminate\Support\Facades\Auth;
             //     changeImage(this);
             // })
 
-            loadInc(0, 25, pageInc);
-            $('.js-example-basic-single').select2({
-                tags: false
+            // loadInc(0, 25, pageInc);
+            // $('.js-example-basic-single').select2({
+            //     tags: false
+            // });
+            $('#select-inc').select2({
+                tags: false,
+                ajax: {
+                    url: `/getIncMgc`,
+                    dataType: 'json',
+                    data: function(params) {
+                        console.log(params.term);
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            query: params.term,
+                            action: "getIncByMGC",
+                            page: 1,
+                            start: 0,
+                            limit: 25,
+                            filter: `[{"operator":"eq","value":"service","property":"transaction_type","type":"string"},{"operator":"like","value":"${params.term}","property":"class_inc_name","type":"string"}]`
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: item.class_inc_name,
+                                    id: item.inc + '-' + item.id + '-' + item.name_code + '-' + item
+                                        .short_name_code
+                                }
+                            })
+                        };
+                    }
+                }
             });
+            $('#select-inc').change(function(v) {
+                incCode = $(this).val().split("-")[0];
+                console.log(incCode);
+                $("#select-mgc").select2({
+                    ajax: {
+                        url: `/getMgcByInc`,
+                        dataType: 'json',
+                        data: function(params) {
+                            if (params.term == undefined) {
+                                params.term = ""
+                            }
+                            var query = {
+                                query: params.term,
+                                action: "getIncByMGC",
+                                page: 1,
+                                start: 0,
+                                limit: 25,
+                                filter: `[{"operator":"like","value":"service","property":"transaction_type","type":"string"},{"operator":"eq","value":"${incCode}","property":"inc","type":"string"}]`
+                            }
+                            return query;
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(item) {
+                                    return {
+                                        text: item.name,
+                                        id: item.groupclass
+                                    }
+                                })
+                            };
+                        }
+                    }
+                })
+            })
             $("#btn-save-img-modal").click(function() {
                 var xhr;
                 var fd = new FormData();
@@ -844,11 +915,11 @@ use Illuminate\Support\Facades\Auth;
             $('#test_id').val($("#test_id option:contains('Option 4')").val()).change();
 
 
-            $('#select-inc').change(function() {
-                $(".js-example-basic-mgc").empty();
-                $(".js-example-basic-mgc").append('<option value="">Select Inc</option>');
-                loadMgcByInc($(this).val(), 0, 25, 1);
-            })
+            // $('#select-inc').change(function() {
+            //     $(".js-example-basic-mgc").empty();
+            //     $(".js-example-basic-mgc").append('<option value="">Select Inc</option>');
+            //     loadMgcByInc($(this).val(), 0, 25, 1);
+            // })
             $('#btn-search').click(function() {
                 loadSearch(1, 0, 25);
                 pageInc = 1;
@@ -922,11 +993,13 @@ use Illuminate\Support\Facades\Auth;
                 }
 
                 if (selectInc.val() != null && selectInc.val() != "") {
-                    filter += '{"operator":"eq","value":"' + selectInc.val() + '","property":"inc","type":"string"},';
+                    filter += '{"operator":"eq","value":"' + selectInc.val().split("-")[0] +
+                        '","property":"inc","type":"string"},';
                 }
 
                 if (selectMgc.val() != null && selectMgc.val() != "") {
-                    filter += '{"operator":"eq","value":"' + selectMgc.val() + '","property":"groupclass","type":"string"},';
+                    filter += '{"operator":"eq","value":"' + selectMgc.val().split("-")[0] +
+                        '","property":"groupclass","type":"string"},';
                 }
                 // if (selectMgc.val() != null && selectMgc.val() != "") {
                 //     filter += '{"operator":"like","value":"' + nameCode.val() +

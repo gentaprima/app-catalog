@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Auth;
 ?>
 <style>
-
     .table-hover tbody tr:hover td {
         background-color: rgba(205, 206, 206, 0.50);
     }
@@ -158,8 +157,17 @@ use Illuminate\Support\Facades\Auth;
                     <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
                         <ul class="pagination">
                             <li>Halaman</li>
-                            <li class="paginate_button active mr-2"><a aria-controls="example1"
-                                    id="current_page" data-dt-idx="1" tabindex="0">1</a></li>
+                            {{-- <li class="paginate_button active mr-2"><a aria-controls="example1"
+                                    id="current_page" data-dt-idx="1" tabindex="0">1</a></li> --}}
+                            <li class="paginate_button active ml-2 mr-2"><input type="text"
+                                    class="form-control form-control-sm" id="current_page" value="1"
+                                    style="
+                                        margin: 0px;
+                                        padding: 0px;
+                                        width: 40px;
+                                        text-align: center;
+                                    "
+                                    maxlength="3"></li>
                             <li>Dari</li>
                             <li class="ml-2" id="total_page">0</li>
                             <li class="paginate_button next prev" id="previous" data-page="prev"><a
@@ -340,6 +348,10 @@ use Illuminate\Support\Facades\Auth;
         </div>
         <!-- /.content -->
         <script>
+            $(document).ready(function() {
+                $("#main-menu-MNU33").addClass("nav-item menu-is-opening menu-open")
+                $("#subchild-MNU34").addClass("nav-link active")
+            });
             totalData = 0;
             var page = 1;
             var likeFilter = "";
@@ -418,7 +430,7 @@ use Illuminate\Support\Facades\Auth;
                         '","property":"' + $('#select-filter-date').val() + '","type":"string"},';
                 }
                 likeFilter = likeFilter.replaceAt(0, "").replaceAt(likeFilter.length - 1, " ").replaceAll(",,", ",")
-                loadData(page, 0,$('#filter-count').val());
+                loadData(page, 0, $('#filter-count').val());
                 // $.ajax({
                 //     method: "GET",
                 //     url: '/getMultiViewCatalogM?start=0&limit=10&action=getMultiView&page=1&sort=[{"property":"adr_d_items_id","direction":"ASC"}]&filter=["'+moreFilter+']'
@@ -429,6 +441,12 @@ use Illuminate\Support\Facades\Auth;
             $('#filter-count').change(function() {
                 loadData(page, 0, $(this).val());
 
+            });
+            $("#current_page").on('keypress', function(e) {
+                if (e.which == 13) {
+                    page = parseInt($("#current_page").val()) 
+                    loadData($("#current_page").val(), 0, $('#filter-count').val());
+                }
             });
             // var page = $('#page');
             $('.next').click(function() {
@@ -446,8 +464,8 @@ use Illuminate\Support\Facades\Auth;
                     page = page - 1;
 
                 }
-                start.text(page);;
-                loadData(page, 0,$('#filter-count').val());
+                start.val(page);
+                loadData(page, 0, $('#filter-count').val());
             })
 
             $('#short-desc-search').keypress(function(e) {
@@ -456,13 +474,13 @@ use Illuminate\Support\Facades\Auth;
                 {
                     likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                         '","property": "short_description","type": "string"}';
-                    loadData(page, 0,$('#filter-count').val())
+                    loadData(page, 0, $('#filter-count').val())
                 }
             });
             $('#short-desc-btn').click(function() {
                 likeFilter = ',{"operator": "like","value": "' + $(this).val() +
                     '","property": "short_description","type": "string"}';
-                loadData(page, 0,$('#filter-count').val());
+                loadData(page, 0, $('#filter-count').val());
             })
             $('#raw-search').keypress(function(e) {
                 var key = e.which;
@@ -488,7 +506,7 @@ use Illuminate\Support\Facades\Auth;
                     likeFilter = ',{"operator": "like","value": "' + $('#short-desc-search').val() +
                         '","property": "short_description","type": "string"}';
                 }
-                loadData(page, 0,$('#filter-count').val())
+                loadData(page, 0, $('#filter-count').val())
                 likeFilter = "";
             })
             // {"operator":"like","value":"PLATE:ASTM A36;45MM","property":"short_description","type":"string"}
@@ -526,6 +544,7 @@ use Illuminate\Support\Facades\Auth;
                     console.log(result);
                     totalData = result.total;
                     $('#total_page').html(Math.ceil(totalData / limit));
+                    $("#current_page").attr("max",Math.ceil(totalData / limit));
                     $("#material-table tbody").empty();
                     $("#material-table2 tbody").empty();
                     exportData = result.data;
@@ -628,7 +647,9 @@ use Illuminate\Support\Facades\Auth;
                         $("#material-table2").append(rowMaterial2);
 
 
-                        var rowMaterial = $('<tr class="d-flex tr-tab-1">');
+                        var rowMaterial = $(
+                            '<tr class="d-flex tr-tab-1" data-toggle="tooltip" data-placement="bottom" title="Click here to show detail in below">'
+                        );
                         rowMaterial.append(
                             element.status_user == 1 ?
                             '<td style="font-size:12px" class="col-1 text-center"><i class="fas fa-circle nav-icon text-success"></i></td>' :
