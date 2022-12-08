@@ -667,6 +667,11 @@ use Illuminate\Support\Facades\Auth;
 
 
         <script>
+            $(document).ready(function() {
+                $("#main-menu-MNU25").addClass("nav-item menu-is-opening menu-open")
+                $("#subchild-MNU26").addClass("nav-link active")
+            });
+
             var pageInc = 1;
             var totalPageImage = 0
             var totalPageChar = 0;
@@ -834,10 +839,75 @@ use Illuminate\Support\Facades\Auth;
             //     changeImage(this);
             // })
 
-            loadInc(0, 25, pageInc);
-            $('.js-example-basic-single').select2({
-                tags: false
+            // loadInc(0, 25, pageInc);
+            $('#select-inc').select2({
+                tags: false,
+                ajax: {
+                    url: `/getIncMgc`,
+                    dataType: 'json',
+                    data: function(params) {
+                        console.log(params.term);
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            query: params.term,
+                            action: "getIncByMGC",
+                            page: 1,
+                            start: 0,
+                            limit: 25,
+                            filter: `[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"like","value":"${params.term}","property":"class_inc_name","type":"string"}]`
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: item.class_inc_name,
+                                    id: item.inc + '-' + item.id + '-' + item.name_code + '-' + item
+                                        .short_name_code
+                                }
+                            })
+                        };
+                    }
+                }
             });
+            $('#select-inc').change(function(v) {
+                incCode = $(this).val().split("-")[0];
+                console.log(incCode);
+                $("#select-mgc").select2({
+                    ajax: {
+                        url: `/getMgcByInc`,
+                        dataType: 'json',
+                        data: function(params) {
+                            if (params.term == undefined) {
+                                params.term = ""
+                            }
+                            var query = {
+                                query: params.term,
+                                action: "getIncByMGC",
+                                page: 1,
+                                start: 0,
+                                limit: 25,
+                                filter: `[{"operator":"like","value":"Material","property":"transaction_type","type":"string"},{"operator":"eq","value":"${incCode}","property":"inc","type":"string"}]`
+                            }
+                            return query;
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(item) {
+                                    return {
+                                        text: item.name,
+                                        id: item.groupclass
+                                    }
+                                })
+                            };
+                        }
+                    }
+                })
+            })
+
             $("#btn-save-img-modal").click(function() {
                 var xhr;
                 var fd = new FormData();
@@ -888,18 +958,18 @@ use Illuminate\Support\Facades\Auth;
             var MGCMultipleselect2 =
                 $(document).ready(function() {
                     MGCMultipleselect2 = $('#select-mgc-2').select2({
-                        multiple: true,
+                        multiple: true
                     });
                 });
 
             $('#test_id').val($("#test_id option:contains('Option 4')").val()).change();
 
 
-            $('#select-inc').change(function() {
-                $(".js-example-basic-mgc").empty();
-                $(".js-example-basic-mgc").append('<option value="">Select Inc</option>');
-                loadMgcByInc($(this).val(), 0, 25, 1);
-            })
+            // $('#select-inc').change(function() {
+            //     $(".js-example-basic-mgc").empty();
+            //     $(".js-example-basic-mgc").append('<option value="">Select Inc</option>');
+            //     // loadMgcByInc($(this).val(), 0, 25, 1);
+            // })
             $('#btn-search').click(function() {
                 loadSearch(1, 0, 25);
                 pageInc = 1;
@@ -973,15 +1043,16 @@ use Illuminate\Support\Facades\Auth;
                 }
 
                 if (selectInc.val() != null && selectInc.val() != "") {
-                    filter += '{"operator":"eq","value":"' + selectInc.val() + '","property":"inc","type":"string"},';
+                    filter += '{"operator":"eq","value":"' + selectInc.val().split("-")[0] +
+                        '","property":"inc","type":"string"},';
                 }
 
                 if (selectMgc.val() != null && selectMgc.val() != "") {
                     filter += '{"operator":"eq","value":"' + selectMgc.val() + '","property":"groupclass","type":"string"},';
                 }
                 // if (selectMgc.val() != null && selectMgc.val() != "") {
-                //     filter += '{"operator":"like","value":"' + nameCode.val() +
-                //         '","property":"cross_references_name","type":"string"},';
+                //     filter += '{"operator":"like","value":"' + selectMgc.val() +
+                //         '","property":"groupclass","type":"string"},';
                 // }
 
                 if (nameCode.val() != null && nameCode.val() != "") {
@@ -1046,21 +1117,34 @@ use Illuminate\Support\Facades\Auth;
                         chartIndex++;
                     })
                     $('.delete-char').click(function() {
-                        $.ajax({
-                            url: "/DeleteIncCharacteristics",
-                            method: "POST",
-                            data: {
-                                _token: csrf_token,
-                                id: $(this).data('id')
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: "/DeleteIncCharacteristics",
+                                    method: "POST",
+                                    data: {
+                                        _token: csrf_token,
+                                        id: $(this).data('id')
+                                    }
+                                }).done(function(v) {
+                                    loadCharact(0, 25, 1, "inc");
+                                    Toast.fire(
+                                        v.success,
+                                        v.message,
+                                        v.success ? "success" : "error"
+                                    )
+                                })
                             }
-                        }).done(function(v) {
-                            loadCharact(0, 25, 1, "inc");
-                            Toast.fire(
-                                v.success,
-                                v.message,
-                                v.success ? "success" : "error"
-                            )
                         })
+
                     });
                 })
             }
@@ -1186,21 +1270,34 @@ use Illuminate\Support\Facades\Auth;
 
                         $("#tb-collo").append(row);
                         $('.delete-collo').click(function() {
-                            $.ajax({
-                                method: "POST",
-                                url: "/DeleteIncColloquialName",
-                                data: {
-                                    _token: csrf_token,
-                                    cn: $(this).data('id')
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "You won't be able to revert this!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        method: "POST",
+                                        url: "/DeleteIncColloquialName",
+                                        data: {
+                                            _token: csrf_token,
+                                            cn: $(this).data('id')
+                                        }
+                                    }).done(function(v) {
+                                        loadCollo(pageCollo);
+                                        Toast.fire(
+                                            v.success,
+                                            v.message,
+                                            v.success ? "success" : "error"
+                                        )
+                                    })
                                 }
-                            }).done(function(v) {
-                                loadCollo(pageCollo);
-                                Toast.fire(
-                                    v.success,
-                                    v.message,
-                                    v.success ? "success" : "error"
-                                )
                             })
+
                         })
                         chartIndex++;
                     })
@@ -1282,21 +1379,34 @@ use Illuminate\Support\Facades\Auth;
                     })
 
                     $('.delete-result-inc').click(function() {
-                        $.ajax({
-                            method: "POST",
-                            url: "/DeleteInc",
-                            data: {
-                                _token: csrf_token,
-                                inc: $(this).data('id')
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    method: "POST",
+                                    url: "/DeleteInc",
+                                    data: {
+                                        _token: csrf_token,
+                                        inc: $(this).data('id')
+                                    }
+                                }).done(function(v) {
+                                    loadResultInc(1, 0, 25, filter);
+                                    Toast.fire(
+                                        v.success,
+                                        v.message,
+                                        v.success ? "success" : "error"
+                                    )
+                                })
                             }
-                        }).done(function(v) {
-                            loadResultInc(1, 0, 25, filter);
-                            Toast.fire(
-                                v.success,
-                                v.message,
-                                v.success ? "success" : "error"
-                            )
                         })
+
                     })
 
                     $('#current_page_inc').text(pageInc);
@@ -1312,7 +1422,7 @@ use Illuminate\Support\Facades\Auth;
                         $('#current_page_collo').text(pageCollo)
                         $('#current_page_image').text(pageImage)
                         $('#current_page_char').text(pageChar);
-                        MGCMultipleselect2.empty()
+
 
                         $(this).each(function() {
                             var value = $(this).text();
@@ -1446,24 +1556,25 @@ use Illuminate\Support\Facades\Auth;
                 });
             }
 
-            function loadInc(start, limit, page) {
-                console.log('/getIncMgc?query=&filter=&limit=' +
-                    limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]');
-                $.ajax({
-                    method: "GET",
-                    url: '/getIncMgc?query=&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"like","value":"%","property":"class_inc_name","type":"string"}]&limit=' +
-                        limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]',
-                    dataType: "json"
-                }).done(function(v) {
-                    $(".js-example-basic-inc").empty();
-                    $(".js-example-basic-inc").append('<option value="">Select Inc</option>');
-                    v.forEach(function(val) {
-                        $(".js-example-basic-inc").append('<option value="' + val.inc + '">' + val
-                            .class_inc_name +
-                            '</option>');
-                    })
-                })
-            }
+            // function loadInc(start, limit, page) {
+            //     console.log('/getIncMgc?query=&filter=&limit=' +
+            //         limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]');
+            //     $.ajax({
+            //         method: "GET",
+            //         url: '/getIncMgc?query=&filter=[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"},{"operator":"like","value":"%","property":"class_inc_name","type":"string"}]&limit=' +
+            //             limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]',
+            //         dataType: "json"
+            //     }).done(function(v) {
+            //         $(".js-example-basic-inc").empty();
+            //         $(".js-example-basic-inc").append('<option value="">Select Inc</option>');
+            //         v.forEach(function(val) {
+            //             $(".js-example-basic-inc").append('<option value="' + val.inc + '">' + val
+            //                 .class_inc_name +
+            //                 '</option>');
+            //         })
+            //     })
+            // }
+
 
             $('#add-inc').click(function() {
 

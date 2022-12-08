@@ -348,6 +348,10 @@ use Illuminate\Support\Facades\Auth;
         </div>
         <!-- /.content -->
         <script>
+            $(document).ready(function() {
+                $("#main-menu-MNU33").addClass("nav-item menu-is-opening menu-open")
+                $("#subchild-MNU34").addClass("nav-link active")
+            });
             totalData = 0;
             var page = 1;
             var likeFilter = "";
