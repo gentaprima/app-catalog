@@ -120,9 +120,9 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Result Inc</h4>
                         <hr>
                         <div class="row">
-                            {{-- <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal" data-target="#add-inc">
+                            <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal" data-target="#add-inc">
                                 Add Inc &nbsp; <i class="fas fa-plus"></i>
-                            </button> --}}
+                            </button>
                         </div>
                         <div class="row mt-1"style="height: 203px; overflow: auto">
                             <table class="table table-striped" id="tb-inc">
@@ -216,6 +216,12 @@ use Illuminate\Support\Facades\Auth;
                     <div class="card p-4 mb-1 m-2" style="height: 453px;max-height: 449px;">
                         <h4>Image</h4>
                         <hr>
+                        <div class="row">
+                            <button type="button" class="float-left ml-2 btn btn-primary" data-toggle="modal"
+                                data-target="#add-image">
+                                Add Image &nbsp; <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                         <img class="mt-1"
                             style="
                         max-height: 227px;

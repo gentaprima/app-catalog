@@ -305,7 +305,7 @@ use Illuminate\Support\Facades\Auth;
 
                         <hr>
                         <div class="row">
-                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#add-inc">
+                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#add-char">
                                 Add Characteristic &nbsp; <i class="fas fa-plus"></i>
                             </button>
                         </div>
@@ -657,6 +657,40 @@ use Illuminate\Support\Facades\Auth;
                             </select>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btn-edit-inc-modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="add-char" role="dialog" aria-labelledby="add-char" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="add-charLabel">Edit Inc</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {{-- <div class="modal-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">INC</label>
+                            <input type="text" class="form-control" id="incid-edit-inc">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Item Name</label>
+                            <input type="text" class="form-control" id="name-edit-inc">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Item Name</label>
+                            <select name="" class="form-control" id="status-edit-inc" name="status-edit-inc">
+                                <option value="Active">Active</option>
+                                <option value="Deactive">Deactive</option>
+                            </select>
+                        </div>
+                    </div> --}}
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" id="btn-edit-inc-modal">Ok</button>
