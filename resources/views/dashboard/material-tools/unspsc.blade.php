@@ -120,9 +120,9 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Result Inc</h4>
                         <hr>
                         <div class="row">
-                            {{-- <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal" data-target="#add-inc">
+                            <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal" data-target="#add-inc">
                                 Add Inc &nbsp; <i class="fas fa-plus"></i>
-                            </button> --}}
+                            </button>
                         </div>
                         <div class="row mt-1"style="height: 203px; overflow: auto">
                             <table class="table table-striped" id="tb-inc">
@@ -160,8 +160,12 @@ use Illuminate\Support\Facades\Auth;
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card p-4 mb-1 m-2">
-                        <h4>INC Detail</h4>
+                    <div class="card p-4 mb-1 m-2"
+                        style="
+                    height: 448px;
+                    min-height: 448px;
+                ">
+                    <h4>INC Detail</h4>
                         <hr>
                         <div class="form-group row">
                             <label for="" class="col-sm-3">INC: </label>
@@ -216,6 +220,12 @@ use Illuminate\Support\Facades\Auth;
                     <div class="card p-4 mb-1 m-2" style="height: 453px;max-height: 449px;">
                         <h4>Image</h4>
                         <hr>
+                        <div class="row">
+                            <button type="button" class="float-left ml-2 btn btn-primary" data-toggle="modal"
+                                data-target="#add-image">
+                                Add Image &nbsp; <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                         <img class="mt-1"
                             style="
                         max-height: 227px;
@@ -298,6 +308,11 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Inc Characteristic</h4>
 
                         <hr>
+                        <div class="row">
+                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#add-char">
+                                Add Characteristic &nbsp; <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                         <div class="row mt-1"style="max-height: 400px; overflow: auto">
                             <table class="table table-striped" id="tb-characteristic">
                                 <thead>
@@ -384,6 +399,11 @@ use Illuminate\Support\Facades\Auth;
                     <div class="card p-4 mb-1 m-2">
                         <h4>Colloquial Name</h4>
                         <hr>
+                        <div class="row">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#add-cn">
+                                Add CN &nbsp; <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                         <div class="row mt-1"style="height: 203px; overflow: auto">
                             <table class="table table-striped" id="tb-collo">
                                 <thead>
@@ -865,6 +885,7 @@ use Illuminate\Support\Facades\Auth;
                 fd.append('_token', csrf_token);
                 fd.append('inc', $("#inc-id-detail").val());
                 fd.append('description', $('#description-in').val());
+                fd.append('transaction_type', "Service");
                 xhr = new XMLHttpRequest();
                 xhr.open('POST', '/SaveIncImages', true);
                 xhr.onreadystatechange = function(response) {};
@@ -887,6 +908,7 @@ use Illuminate\Support\Facades\Auth;
                     url: "/SaveIncColloquialName",
                     data: {
                         _token: csrf_token,
+                        transaction_type: "Service",
                         data_items: '[{"id":"insert_cn","inc":"' + $('#inc-id-detail').val() + '","cn":"' + $(
                             '#cn-id').val() + '","colloquial_name":"' + $('#cn').val() + '"}]'
                     }
@@ -948,7 +970,7 @@ use Illuminate\Support\Facades\Auth;
             $('#btn-save-inc-modal').click(function() {
                 var data = {
                     _token: csrf_token,
-                    transaction_type: "Material",
+                    transaction_type: "Service",
                     "textfield-1075-inputEl": "",
                     inc: $('#inc-add').val(),
                     inc_name: $('#name-code-add').val(),
