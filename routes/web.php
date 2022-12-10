@@ -81,6 +81,9 @@ Route::get('/cleansing/duplication','NavController@cleansingDuplication');
 // Administrator
 Route::get('/administrator/setting-company','NavController@viewSettingCompany');
 Route::get('/administrator/manage-users','NavController@viewManageUsers');
+Route::get('/getNewUsers','Setting\SettingUsersController@getNewUsers');
+Route::get('/getDetailUser','Setting\SettingUsersController@getDetailUser');
+Route::post('/deleteConfirmationUser','Setting\SettingUsersController@deleteConfirmationUser');
 // Administrator
 
 
@@ -111,6 +114,8 @@ Route::get('/dictionary/abbreviation','NavController@viewAbbreviation');
 Route::get('/dictionary/valuation-class','NavController@viewValuationClass');
 
 // DICTIONARY
+
+
 
 // NEW
 Route::get('/TestMail', 'Addition\AdditionController@TestMail');

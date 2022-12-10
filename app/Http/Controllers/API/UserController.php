@@ -19,6 +19,67 @@ class UserController extends Controller
     public $successStatus = 200;
 
 
+    public function createUser(Request $request){
+        $validator = Validator::make($request->all(), [
+            'real_name' => 'required',
+            'email' => 'required|email',
+            'companies_m_id' => 'required',
+            'user_name' => 'required',
+            'password' => 'required',
+            'c_password' => 'required|same:password'
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'=>false,
+                'message'=>$validator->errors()->first()
+            ], 401);            
+        }
+
+
+        $getDataUsers = DB::table("users")->where("user_name",$request->user_name)->first();
+        if($getDataUsers != null){
+            return response()->json([
+                'status'=>false,
+                'message'=>"username already used"
+            ],401);
+        }
+
+        $getDataUsersTemp = DB::table("users_temp")->where("user_name",$request->user_name)->first();
+        if($getDataUsersTemp != null){
+            return response()->json([
+                'status'=>false,
+                'message'=>"username already used"
+            ],401);
+        }
+
+        $cekDataTemp = DB::table('users_temp')->orderBy('id','desc')->first();
+        if($cekDataTemp == null){
+            $autoIncrement = 1;
+        }else{
+            $autoIncrement = $cekDataTemp->id + 1;
+        }
+
+        DB::table('users_temp')->insert([
+            'id' => $autoIncrement,
+            'real_name' => $request->real_name,
+            'user_name' => $request->user_name,
+            'email' => $request->email,
+            'companies_m_id' => $request->companies_m_id,
+            'password' => $request->password,
+            'api_token' => $request->api_token,
+            'remember_token' => $request->remember_token
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' =>"Successfully creating user"
+        ]);
+
+    }
+
+
     /**
      * login api
      *
@@ -42,7 +103,8 @@ class UserController extends Controller
 				Auth::login(request('username');
 				$data = array(
 				  'success' => true ,
-				  'message' => 'Ok',
+		
+                  'message' => 'Ok',
 				  '_token'=> $restUser->createToken('abm@ecatalogue')->accessToken,
 				);
 				return response()->json($data,$this->successStatus);				

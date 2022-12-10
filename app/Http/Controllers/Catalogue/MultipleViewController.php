@@ -695,6 +695,7 @@ class MultipleViewController extends Controller
                     $long_text = $row->long_description;
                     $itemsIncCharsAll = substr($long_text, $lenShortNameCode);
                     $itemsIncCharsAllArray = explode(';', $itemsIncCharsAll);
+                    dd($short_text);
                     $num_itemsIncCharsAllArray = count($itemsIncCharsAllArray[0]);
                     $arrSpec = array();
                     foreach($itemsIncCharsAllArray as $incCharValue) {
