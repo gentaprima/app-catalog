@@ -424,6 +424,12 @@ class DataToolsController extends Controller
             $incCharacteristic->sequence = $getIncMaxSequence->sequence + 1;
             $incCharacteristic->save();
         }
+
+        $data = array(
+            'success' => true,
+            'message' => "Proccess Success"
+        );
+        return \Response::json($data, 200);
     }
 
     function SaveIncCharacteristics(Request $request)
