@@ -160,12 +160,8 @@ use Illuminate\Support\Facades\Auth;
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card p-4 mb-1 m-2"
-                        style="
-                    height: 448px;
-                    min-height: 448px;
-                ">
-                    <h4>INC Detail</h4>
+                    <div class="card p-4 mb-1 m-2">
+                        <h4>INC Detail</h4>
                         <hr>
                         <div class="form-group row">
                             <label for="" class="col-sm-3">INC: </label>
@@ -184,9 +180,9 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-3">Short: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <input readonly type="text" class="form-control" id="short_inc" placeholder="">
+                                    <input type="text" class="form-control" id="short_inc" placeholder="">
                                     <div class="input-group-append">
-                                        <button disabled type="submit" id="save-short-desc" class="btn btn-default">
+                                        <button type="submit" id="save-short-desc" class="btn btn-default">
                                             <i class="fas fa-save"></i>
                                         </button>
                                     </div>
@@ -201,18 +197,18 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-3">MGC: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <select multiple="multiple" disabled
-                                        class="js-example-basic-multiple js-example-basic-type" id="select-mgc-2">
+                                    <select multiple="multiple" class="js-example-basic-multiple js-example-basic-type"
+                                        id="select-mgc-2">
                                         <option value="">Select MGC</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="card-footer bg-white ml-auto mr-0 pr-0">
+                        <div class="card-footer bg-white ml-auto mr-0 pr-0">
                             <button id="btn-save-inc" type="button" class="btn btn-primary">
                                 Save &nbsp; <i class="fas fa-save"></i>
                             </button>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
 
@@ -410,6 +406,7 @@ use Illuminate\Support\Facades\Auth;
                                     <tr>
                                         <th>CN</th>
                                         <th>Colloquial Name</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -445,13 +442,19 @@ use Illuminate\Support\Facades\Auth;
         <div class="modal fade" id="add-inc" role="dialog" aria-labelledby="add-inc" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="add-incLabel">Add Inc</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Inc:</label>
                             <input type="text" class="form-control" id="inc-add">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1" id="name-code-add">Name Code:</label>
+                            <label for="exampleInputEmail1">Name Code:</label>
                             <input type="text" class="form-control" id="name-code-add">
                         </div>
                         <div class="form-group">
@@ -647,7 +650,7 @@ use Illuminate\Support\Facades\Auth;
                             <input type="text" class="form-control" id="name-edit-inc">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Item Name</label>
+                            <label for="exampleInputEmail1">Status</label>
                             <select name="" class="form-control" id="status-edit-inc" name="status-edit-inc">
                                 <option value="Active">Active</option>
                                 <option value="Deactive">Deactive</option>
@@ -663,11 +666,84 @@ use Illuminate\Support\Facades\Auth;
         </div>
 
 
+
+        <div class="modal fade" id="edit-char" role="dialog" aria-labelledby="edit-char" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit-charLabel">Edit Characteristic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group mb-2">
+                            <select class="js-example-basic-single form-control" id="select-edit-characteristict">
+                                <option value="">Select Characteristic</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <select class="js-example-basic-single form-control" id="select-edit-type">
+                                <option value="">Select Type</option>
+                                <option value="M">M - Mandatory</option>
+                                <option value="O">O - Optional</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btn-edit-char-modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="modal fade" id="add-char" role="dialog" aria-labelledby="add-char" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="add-charLabel">Add Characteristic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group mb-2">
+                            <select class="js-example-basic-single form-control" id="select-characteristict">
+                                <option value="">Select Characteristic</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <select class="js-example-basic-single form-control" id="select-type">
+                                <option value="">Select Type</option>
+                                <option value="M">M - Mandatory</option>
+                                <option value="O">O - Optional</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btn-add-characteristic">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <script>
             $(document).ready(function() {
                 $("#main-menu-MNU25").addClass("nav-item menu-is-opening menu-open")
                 $("#subchild-MNU27").addClass("nav-link active")
             });
+
+            var mrCode;
             var pageInc = 1;
             var totalPageImage = 0
             var totalPageChar = 0;
@@ -678,6 +754,36 @@ use Illuminate\Support\Facades\Auth;
             var filter = "";
             var pageValChar = 1;
             var totalPageVal = 0;
+
+            $("#btn-reset").click(function() {
+                $("#tb-inc tbody").empty();
+                $("#tb-characteristic tbody").empty();
+                $("#tb-collo tbody").empty();
+                pageInc = 0;
+                totalPageImage = 0;
+                totalPageChar = 0;
+                totalPageCollo = 0;
+                pageChar = 1;
+                pageImage = 1;
+                pageCollo = 1;
+                filter = "";
+                pageValChar = 1;
+                totalPageVal = 0;
+                $('#total_page_inc').text(1)
+                $('#total_page_char').text(1)
+                $('#total_page_collo').text(1)
+                $('#total_page_image').text(1)
+                $('#total_page_inc').text(1)
+
+                $(':input').val('');
+                $('#select-mgc-2').val(null).trigger('change');
+                $('#select-inc').val(null).trigger('change');
+                $('#select-mgc').val(null).trigger('change');
+                $("#select-status").val(null).trigger('change');
+
+            });
+
+
 
             function loadvalueChar(start = 0, limit = 25, page, id, value) {
                 $.ajax({
@@ -706,6 +812,62 @@ use Illuminate\Support\Facades\Auth;
                     $('#total_page_char_value').text(totalPageVal)
                 })
             }
+            $('#edit-char').on('show.bs.modal', function(event) {
+                $("#btn-edit-char-modal").unbind('click');
+                $("#btn-edit-char-modal").click(function() {
+                    $.ajax({
+                        url: "/SaveIncCharacteristics",
+                        method: "POST",
+                        data: {
+                            id: $('#btn-edit-char').data("id"),
+                            _token: csrf_token,
+                            inc_m_id: mrCode,
+                            inc: $("#inc-id-detail").val(),
+                            characteristics_m_id: $("#select-edit-characteristict").val().split("-")[0],
+                            characteristics: $("#short_inc").val(),
+                            type: $("#select-edit-type").val(),
+                            mrcode: $("#select-edit-characteristict").val().split("-")[1]
+                        }
+                    }).done(function(v) {
+                        loadCharact(0, 25,
+                            pageChar,
+                            "inc");
+                        Toast.fire(
+                            v.success ? 'Successfully' : "Failed",
+                            v.message,
+                            v.success ? "success" : "error"
+                        )
+                    })
+                })
+            })
+            $('#add-char').on('show.bs.modal', function(event) {
+                $("#btn-add-characteristic").unbind('click');
+                $("#btn-add-characteristic").click(function() {
+                    console.log($("#select-characteristict").text())
+                    $.ajax({
+                        url: "/SaveIncCharacteristics",
+                        method: "POST",
+                        data: {
+                            _token: csrf_token,
+                            inc_m_id: mrCode,
+                            inc: $("#inc-id-detail").val(),
+                            characteristics_m_id: $("#select-characteristict").val().split("-")[0],
+                            characteristics: $("#short_inc").val(),
+                            type: $("#select-type").val(),
+                            mrcode: $("#select-characteristict").val().split("-")[1]
+                        }
+                    }).done(function(v) {
+                        loadCharact(0, 25,
+                            pageChar,
+                            "inc");
+                        Toast.fire(
+                            v.success ? 'Successfully' : "Failed",
+                            v.message,
+                            v.success ? "success" : "error"
+                        )
+                    })
+                })
+            })
             $('#value-char').on('show.bs.modal', function(event) {
                 pageValChar = 1;
                 $('#current_page_char_value').text(pageValChar);
@@ -724,6 +886,7 @@ use Illuminate\Support\Facades\Auth;
                     loadvalueChar(0, 25, pageValChar, button.data('inc'), button.data("char"));
                 });
             });
+
             $('#edit-cn').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
                 $('#cn-id-edit').val(button.data("cn"))
@@ -743,7 +906,7 @@ use Illuminate\Support\Facades\Auth;
                                 .val() + '","short_name_code":"' + $('#short_inc').val() +
                                 '","description":null,"inc_reff":"' + button.data("reff") +
                                 '","is_active":"' + button.data("isactive") +
-                                '","transaction_type":"Material"}]'
+                                '","transaction_type":"Service"}]'
                         }
                     }).done(function(v) {
                         loadCollo(pageCollo)
@@ -773,7 +936,7 @@ use Illuminate\Support\Facades\Auth;
                                 '","item_name":"' + $('#name-edit-inc').val() +
                                 '","short_name_code":"' +
                                 button.data("short") +
-                                '","description":null,"transaction_type":"Material","is_active":"' + $(
+                                '","description":null,"transaction_type":"Service","is_active":"' + $(
                                     '#status-edit-inc').val() + '","groupclass":"' + button.data(
                                     "groupclass") + '"}]'
                         }
@@ -808,9 +971,64 @@ use Illuminate\Support\Facades\Auth;
             // })
 
             // loadInc(0, 25, pageInc);
-            // $('.js-example-basic-single').select2({
-            //     tags: false
-            // });
+            $("#select-edit-characteristict").select2({
+                ajax: {
+                    url: "/getCharacteristicsM",
+                    dataType: 'json',
+                    data: function(params) {
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            filter: `[{"operator":"like","value":"${params.term}","property":"mrcode_characteristic","type":"string"}]`,
+                            page: 1,
+                            limit: 25,
+                            start: 0,
+                            query: params.term,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.data, function(item) {
+                                return {
+                                    text: item.mrcode_characteristic,
+                                    id: item.id + "-" + item.mrcode
+                                }
+                            })
+                        };
+                    }
+                }
+            })
+            $("#select-characteristict").select2({
+                ajax: {
+                    url: "/getCharacteristicsM",
+                    dataType: 'json',
+                    data: function(params) {
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            filter: `[{"operator":"like","value":"${params.term}","property":"mrcode_characteristic","type":"string"}]`,
+                            page: 1,
+                            limit: 25,
+                            start: 0,
+                            query: params.term,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.data, function(item) {
+                                return {
+                                    text: item.mrcode_characteristic,
+                                    id: item.id + "-" + item.mrcode
+                                }
+                            })
+                        };
+                    }
+                }
+            })
             $('#select-inc').select2({
                 tags: false,
                 ajax: {
@@ -827,7 +1045,7 @@ use Illuminate\Support\Facades\Auth;
                             page: 1,
                             start: 0,
                             limit: 25,
-                            filter: `[{"operator":"eq","value":"service","property":"transaction_type","type":"string"},{"operator":"like","value":"${params.term}","property":"class_inc_name","type":"string"}]`
+                            filter: `[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"},{"operator":"like","value":"${params.term}","property":"class_inc_name","type":"string"}]`
                         }
                         return query;
                     },
@@ -844,6 +1062,36 @@ use Illuminate\Support\Facades\Auth;
                     }
                 }
             });
+            // $('#select-characteristict').select2({
+            //     ajax: {
+            //         url: "/getCharacteristicsM",
+            //         dataType: "json",
+            //         data: function(params) {
+            //             if (params.term == undefined) {
+            //                 params.term = ""
+            //             }
+            //             var query = {
+            //                 filter: '[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"}]',
+            //                 page: 1,
+            //                 limit: 25,
+            //                 start: 0,
+            //                 query: ""
+            //             }
+            //             return query;
+            //         },
+            //         processResults: function(data) {
+            //             return {
+            //                 results: $.map(data, function(item) {
+            //                     return {
+            //                         text: item.characteristic,
+            //                         id: item.id 
+            //                     }
+            //                 })
+            //             };
+            //         }
+            //     }
+            // })
+
             $('#select-inc').change(function(v) {
                 incCode = $(this).val().split("-")[0];
                 console.log(incCode);
@@ -861,7 +1109,7 @@ use Illuminate\Support\Facades\Auth;
                                 page: 1,
                                 start: 0,
                                 limit: 25,
-                                filter: `[{"operator":"like","value":"service","property":"transaction_type","type":"string"},{"operator":"eq","value":"${incCode}","property":"inc","type":"string"}]`
+                                filter: `[{"operator":"like","value":"Service","property":"transaction_type","type":"string"},{"operator":"eq","value":"${incCode}","property":"inc","type":"string"}]`
                             }
                             return query;
                         },
@@ -878,6 +1126,7 @@ use Illuminate\Support\Facades\Auth;
                     }
                 })
             })
+
             $("#btn-save-img-modal").click(function() {
                 var xhr;
                 var fd = new FormData();
@@ -885,7 +1134,6 @@ use Illuminate\Support\Facades\Auth;
                 fd.append('_token', csrf_token);
                 fd.append('inc', $("#inc-id-detail").val());
                 fd.append('description', $('#description-in').val());
-                fd.append('transaction_type', "Service");
                 xhr = new XMLHttpRequest();
                 xhr.open('POST', '/SaveIncImages', true);
                 xhr.onreadystatechange = function(response) {};
@@ -908,7 +1156,6 @@ use Illuminate\Support\Facades\Auth;
                     url: "/SaveIncColloquialName",
                     data: {
                         _token: csrf_token,
-                        transaction_type: "Service",
                         data_items: '[{"id":"insert_cn","inc":"' + $('#inc-id-detail').val() + '","cn":"' + $(
                             '#cn-id').val() + '","colloquial_name":"' + $('#cn').val() + '"}]'
                     }
@@ -930,7 +1177,7 @@ use Illuminate\Support\Facades\Auth;
             var MGCMultipleselect2 =
                 $(document).ready(function() {
                     MGCMultipleselect2 = $('#select-mgc-2').select2({
-                        multiple: true,
+                        multiple: true
                     });
                 });
 
@@ -940,7 +1187,7 @@ use Illuminate\Support\Facades\Auth;
             // $('#select-inc').change(function() {
             //     $(".js-example-basic-mgc").empty();
             //     $(".js-example-basic-mgc").append('<option value="">Select Inc</option>');
-            //     loadMgcByInc($(this).val(), 0, 25, 1);
+            //     // loadMgcByInc($(this).val(), 0, 25, 1);
             // })
             $('#btn-search').click(function() {
                 loadSearch(1, 0, 25);
@@ -1020,12 +1267,11 @@ use Illuminate\Support\Facades\Auth;
                 }
 
                 if (selectMgc.val() != null && selectMgc.val() != "") {
-                    filter += '{"operator":"eq","value":"' + selectMgc.val().split("-")[0] +
-                        '","property":"groupclass","type":"string"},';
+                    filter += '{"operator":"eq","value":"' + selectMgc.val() + '","property":"groupclass","type":"string"},';
                 }
                 // if (selectMgc.val() != null && selectMgc.val() != "") {
-                //     filter += '{"operator":"like","value":"' + nameCode.val() +
-                //         '","property":"cross_references_name","type":"string"},';
+                //     filter += '{"operator":"like","value":"' + selectMgc.val() +
+                //         '","property":"groupclass","type":"string"},';
                 // }
 
                 if (nameCode.val() != null && nameCode.val() != "") {
@@ -1082,29 +1328,43 @@ use Illuminate\Support\Facades\Auth;
                         row.append(
                             '<td class="">' + v.type + '</td></tr>'
                         );
-                        // row.append(
-                        //     '<td class="delete-in-char text-danger"><button data-id="' + v.id +
-                        //     '" type="button" id="delete-char" class="btn btn-default delete-char"><i style="color:red" class="fa fa-trash"></i></button> <button class="btn btn-default" id="edit-char" ><i style="color:green" class="fa fa-edit"></i></button></td>'
-                        // );
+                        row.append(
+                            '<td class="delete-in-char text-danger"> <button data-toggle="modal" id="btn-edit-char" data-id=' +
+                            v.id +
+                            ' data-target="#edit-char" class="btn btn-default"><i style="color:green" class="fa fa-edit"></i></button></td>'
+                        );
                         $("#tb-characteristic").append(row);
                         chartIndex++;
                     })
                     $('.delete-char').click(function() {
-                        $.ajax({
-                            url: "/DeleteIncCharacteristics",
-                            method: "POST",
-                            data: {
-                                _token: csrf_token,
-                                id: $(this).data('id')
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: "/DeleteIncCharacteristics",
+                                    method: "POST",
+                                    data: {
+                                        _token: csrf_token,
+                                        id: $(this).data('id')
+                                    }
+                                }).done(function(v) {
+                                    loadCharact(0, 25, 1, "inc");
+                                    Toast.fire(
+                                        v.success,
+                                        v.message,
+                                        v.success ? "success" : "error"
+                                    )
+                                })
                             }
-                        }).done(function(v) {
-                            loadCharact(0, 25, 1, "inc");
-                            Toast.fire(
-                                v.success,
-                                v.message,
-                                v.success ? "success" : "error"
-                            )
                         })
+
                     });
                 })
             }
@@ -1220,31 +1480,43 @@ use Illuminate\Support\Facades\Auth;
                             '</td></tr>'
                         );
 
-                        // row.append(
-                        //     '<td class="delete-in-collo text-danger"><button data-id="' + v.cn +
-                        //     '" type="button" id="delete-collo" class="btn btn-default delete-collo"><i style="color:red" class="fa fa-trash"></i></button><button class="btn btn-default" id="edit-collo" data-toggle="modal" data-target="#edit-cn" data-groupclass="' +
-                        //     v.groupclass + '" data-reff="' + v.inc_reff + '" data-isactive="' + v
-                        //     .is_active + '" data-cn="' + v.cn + '" data-name="' + v.colloquial_name +
-                        //     '" ><i style="color:green" class="fa fa-edit"></i></button></td>'
-                        // );
+                        row.append(
+                            '<td class="delete-in-collo text-danger"><button class="btn btn-default" id="edit-collo" data-toggle="modal" data-target="#edit-cn" data-groupclass="' +
+                            v.groupclass + '" data-reff="' + v.inc_reff + '" data-isactive="' + v
+                            .is_active + '" data-cn="' + v.cn + '" data-name="' + v.colloquial_name +
+                            '" ><i style="color:green" class="fa fa-edit"></i></button></td>'
+                        );
 
                         $("#tb-collo").append(row);
                         $('.delete-collo').click(function() {
-                            $.ajax({
-                                method: "POST",
-                                url: "/DeleteIncColloquialName",
-                                data: {
-                                    _token: csrf_token,
-                                    cn: $(this).data('id')
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "You won't be able to revert this!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        method: "POST",
+                                        url: "/DeleteIncColloquialName",
+                                        data: {
+                                            _token: csrf_token,
+                                            cn: $(this).data('id')
+                                        }
+                                    }).done(function(v) {
+                                        loadCollo(pageCollo);
+                                        Toast.fire(
+                                            v.success,
+                                            v.message,
+                                            v.success ? "success" : "error"
+                                        )
+                                    })
                                 }
-                            }).done(function(v) {
-                                loadCollo(pageCollo);
-                                Toast.fire(
-                                    v.success,
-                                    v.message,
-                                    v.success ? "success" : "error"
-                                )
                             })
+
                         })
                         chartIndex++;
                     })
@@ -1301,7 +1573,7 @@ use Illuminate\Support\Facades\Auth;
                     $("#tb-inc tbody").empty();
 
                     val.data.forEach(function(v) {
-                        var row = $('<tr class="tr-tab-1" >');
+                        var row = $('<tr class="tr-tab-1" data-mrcode=' + v.id + '>');
                         row.append(
                             '<td class=""> ' + v.inc + '</td></tr>'
                         );
@@ -1313,7 +1585,7 @@ use Illuminate\Support\Facades\Auth;
                         );
 
                         row.append(
-                            '<button data-toggle="modal" data-target="#edit-inc" data-id="' +
+                            '<td class="delete-in-result-inc text-danger"> <button data-toggle="modal" data-target="#edit-inc" data-id="' +
                             v.inc +
                             '" type="button" id="edit-result-inc" data-title="Edit Inc" data-groupclass="' +
                             v.groupclass + '"  data-idinc="' + v.id + '" data-short="' + v.short_name_code +
@@ -1325,26 +1597,40 @@ use Illuminate\Support\Facades\Auth;
                     })
 
                     $('.delete-result-inc').click(function() {
-                        $.ajax({
-                            method: "POST",
-                            url: "/DeleteInc",
-                            data: {
-                                _token: csrf_token,
-                                inc: $(this).data('id')
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    method: "POST",
+                                    url: "/DeleteInc",
+                                    data: {
+                                        _token: csrf_token,
+                                        inc: $(this).data('id')
+                                    }
+                                }).done(function(v) {
+                                    loadResultInc(1, 0, 25, filter);
+                                    Toast.fire(
+                                        v.success,
+                                        v.message,
+                                        v.success ? "success" : "error"
+                                    )
+                                })
                             }
-                        }).done(function(v) {
-                            loadResultInc(1, 0, 25, filter);
-                            Toast.fire(
-                                v.success,
-                                v.message,
-                                v.success ? "success" : "error"
-                            )
                         })
+
                     })
 
                     $('#current_page_inc').text(pageInc);
                     $('#total_page_inc').text(Math.ceil(val.total / 25))
                     $(".tr-tab-1").click(function(e) {
+                        mrCode = $(this).data("mrcode");
                         totalPageImage = 0
                         totalPageChar = 0;
                         totalPageCollo = 0;
@@ -1355,7 +1641,7 @@ use Illuminate\Support\Facades\Auth;
                         $('#current_page_collo').text(pageCollo)
                         $('#current_page_image').text(pageImage)
                         $('#current_page_char').text(pageChar);
-                        MGCMultipleselect2.empty()
+
 
                         $(this).each(function() {
                             var value = $(this).text();
@@ -1370,7 +1656,6 @@ use Illuminate\Support\Facades\Auth;
                                     _token: csrf_token
                                 }
                             }).done(function(v) {
-
                                 $.ajax({
                                     url: '/getIncColloquialName?&start=0&limit=25&page=1&filter=[{"operator":"eq","value":"' +
                                         inc[1] + '","property":"inc","type":"string"}]'
@@ -1379,8 +1664,9 @@ use Illuminate\Support\Facades\Auth;
                                     $("#tb-collo tbody").empty();
                                     $("#inc-id-detail").val(inc[1]);
                                     $("#name_inc").val(v.data[0].item_name);
-                                    $("#short_inc").val(v.data[0].item_name);
+                                    $("#short_inc").val(v.data[0].short_name_code);
                                     $("#desc_inc").val(v.data[0].description);
+
                                     loadImage(inc[1], 1, 1, 1)
                                     $.ajax({
                                         method: "GET",
@@ -1405,9 +1691,6 @@ use Illuminate\Support\Facades\Auth;
 
                                     });
                                     loadCharact(0, 25, 1, "inc");
-
-
-
                                 })
                                 var lastPageChar = 1;
                                 $(".next-char").unbind('click');
@@ -1489,24 +1772,25 @@ use Illuminate\Support\Facades\Auth;
                 });
             }
 
-            function loadInc(start, limit, page) {
-                console.log('/getIncMgc?query=&filter=&limit=' +
-                    limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]');
-                $.ajax({
-                    method: "GET",
-                    url: '/getIncMgc?query=&filter=[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"},{"operator":"like","value":"%","property":"class_inc_name","type":"string"}]&limit=' +
-                        limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]',
-                    dataType: "json"
-                }).done(function(v) {
-                    $(".js-example-basic-inc").empty();
-                    $(".js-example-basic-inc").append('<option value="">Select Inc</option>');
-                    v.forEach(function(val) {
-                        $(".js-example-basic-inc").append('<option value="' + val.inc + '">' + val
-                            .class_inc_name +
-                            '</option>');
-                    })
-                })
-            }
+            // function loadInc(start, limit, page) {
+            //     console.log('/getIncMgc?query=&filter=&limit=' +
+            //         limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]');
+            //     $.ajax({
+            //         method: "GET",
+            //         url: '/getIncMgc?query=&filter=[{"operator":"eq","value":"Service","property":"transaction_type","type":"string"},{"operator":"like","value":"%","property":"class_inc_name","type":"string"}]&limit=' +
+            //             limit + '&page=' + page + '&start=' + start + '&sort=[{"property":"inc","direction":"ASC"}]',
+            //         dataType: "json"
+            //     }).done(function(v) {
+            //         $(".js-example-basic-inc").empty();
+            //         $(".js-example-basic-inc").append('<option value="">Select Inc</option>');
+            //         v.forEach(function(val) {
+            //             $(".js-example-basic-inc").append('<option value="' + val.inc + '">' + val
+            //                 .class_inc_name +
+            //                 '</option>');
+            //         })
+            //     })
+            // }
+
 
             $('#add-inc').click(function() {
 

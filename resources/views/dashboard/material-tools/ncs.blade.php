@@ -650,7 +650,7 @@ use Illuminate\Support\Facades\Auth;
                             <input type="text" class="form-control" id="name-edit-inc">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Item Name</label>
+                            <label for="exampleInputEmail1">Status</label>
                             <select name="" class="form-control" id="status-edit-inc" name="status-edit-inc">
                                 <option value="Active">Active</option>
                                 <option value="Deactive">Deactive</option>
@@ -665,39 +665,76 @@ use Illuminate\Support\Facades\Auth;
             </div>
         </div>
 
-        <div class="modal fade" id="add-char" role="dialog" aria-labelledby="add-char" aria-hidden="true">
+
+
+        <div class="modal fade" id="edit-char" role="dialog" aria-labelledby="edit-char" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="add-charLabel">Edit Inc</h5>
+                        <h5 class="modal-title" id="edit-charLabel">Edit Characteristic</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    {{-- <div class="modal-body">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">INC</label>
-                            <input type="text" class="form-control" id="incid-edit-inc">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Item Name</label>
-                            <input type="text" class="form-control" id="name-edit-inc">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Item Name</label>
-                            <select name="" class="form-control" id="status-edit-inc" name="status-edit-inc">
-                                <option value="Active">Active</option>
-                                <option value="Deactive">Deactive</option>
+                    <div class="modal-body">
+                        <div class="input-group mb-2">
+                            <select class="js-example-basic-single form-control" id="select-edit-characteristict">
+                                <option value="">Select Characteristic</option>
                             </select>
                         </div>
-                    </div> --}}
+
+                        <div class="input-group mb-2">
+                            <select class="js-example-basic-single form-control" id="select-edit-type">
+                                <option value="">Select Type</option>
+                                <option value="M">M - Mandatory</option>
+                                <option value="O">O - Optional</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="btn-edit-inc-modal">Ok</button>
+                        <button type="button" class="btn btn-primary" id="btn-edit-char-modal">Ok</button>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+
+        <div class="modal fade" id="add-char" role="dialog" aria-labelledby="add-char" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="add-charLabel">Add Characteristic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group mb-2">
+                            <select class="js-example-basic-single form-control" id="select-characteristict">
+                                <option value="">Select Characteristic</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <select class="js-example-basic-single form-control" id="select-type">
+                                <option value="">Select Type</option>
+                                <option value="M">M - Mandatory</option>
+                                <option value="O">O - Optional</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btn-add-characteristic">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
         <script>
@@ -706,6 +743,7 @@ use Illuminate\Support\Facades\Auth;
                 $("#subchild-MNU26").addClass("nav-link active")
             });
 
+            var mrCode;
             var pageInc = 1;
             var totalPageImage = 0
             var totalPageChar = 0;
@@ -745,6 +783,8 @@ use Illuminate\Support\Facades\Auth;
 
             });
 
+
+
             function loadvalueChar(start = 0, limit = 25, page, id, value) {
                 $.ajax({
                     url: "/getIncCharacteristicsValue",
@@ -772,6 +812,62 @@ use Illuminate\Support\Facades\Auth;
                     $('#total_page_char_value').text(totalPageVal)
                 })
             }
+            $('#edit-char').on('show.bs.modal', function(event) {
+                $("#btn-edit-char-modal").unbind('click');
+                $("#btn-edit-char-modal").click(function() {
+                    $.ajax({
+                        url: "/SaveIncCharacteristics",
+                        method: "POST",
+                        data: {
+                            id: $('#btn-edit-char').data("id"),
+                            _token: csrf_token,
+                            inc_m_id: mrCode,
+                            inc: $("#inc-id-detail").val(),
+                            characteristics_m_id: $("#select-edit-characteristict").val().split("-")[0],
+                            characteristics: $("#short_inc").val(),
+                            type: $("#select-edit-type").val(),
+                            mrcode: $("#select-edit-characteristict").val().split("-")[1]
+                        }
+                    }).done(function(v) {
+                        loadCharact(0, 25,
+                            pageChar,
+                            "inc");
+                        Toast.fire(
+                            v.success ? 'Successfully' : "Failed",
+                            v.message,
+                            v.success ? "success" : "error"
+                        )
+                    })
+                })
+            })
+            $('#add-char').on('show.bs.modal', function(event) {
+                $("#btn-add-characteristic").unbind('click');
+                $("#btn-add-characteristic").click(function() {
+                    console.log($("#select-characteristict").text())
+                    $.ajax({
+                        url: "/SaveIncCharacteristics",
+                        method: "POST",
+                        data: {
+                            _token: csrf_token,
+                            inc_m_id: mrCode,
+                            inc: $("#inc-id-detail").val(),
+                            characteristics_m_id: $("#select-characteristict").val().split("-")[0],
+                            characteristics: $("#short_inc").val(),
+                            type: $("#select-type").val(),
+                            mrcode: $("#select-characteristict").val().split("-")[1]
+                        }
+                    }).done(function(v) {
+                        loadCharact(0, 25,
+                            pageChar,
+                            "inc");
+                        Toast.fire(
+                            v.success ? 'Successfully' : "Failed",
+                            v.message,
+                            v.success ? "success" : "error"
+                        )
+                    })
+                })
+            })
             $('#value-char').on('show.bs.modal', function(event) {
                 pageValChar = 1;
                 $('#current_page_char_value').text(pageValChar);
@@ -790,6 +886,7 @@ use Illuminate\Support\Facades\Auth;
                     loadvalueChar(0, 25, pageValChar, button.data('inc'), button.data("char"));
                 });
             });
+
             $('#edit-cn').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
                 $('#cn-id-edit').val(button.data("cn"))
@@ -874,6 +971,64 @@ use Illuminate\Support\Facades\Auth;
             // })
 
             // loadInc(0, 25, pageInc);
+            $("#select-edit-characteristict").select2({
+                ajax: {
+                    url: "/getCharacteristicsM",
+                    dataType: 'json',
+                    data: function(params) {
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            filter: `[{"operator":"like","value":"${params.term}","property":"mrcode_characteristic","type":"string"}]`,
+                            page: 1,
+                            limit: 25,
+                            start: 0,
+                            query: params.term,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.data, function(item) {
+                                return {
+                                    text: item.mrcode_characteristic,
+                                    id: item.id + "-" + item.mrcode
+                                }
+                            })
+                        };
+                    }
+                }
+            })
+            $("#select-characteristict").select2({
+                ajax: {
+                    url: "/getCharacteristicsM",
+                    dataType: 'json',
+                    data: function(params) {
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            filter: `[{"operator":"like","value":"${params.term}","property":"mrcode_characteristic","type":"string"}]`,
+                            page: 1,
+                            limit: 25,
+                            start: 0,
+                            query: params.term,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.data, function(item) {
+                                return {
+                                    text: item.mrcode_characteristic,
+                                    id: item.id + "-" + item.mrcode
+                                }
+                            })
+                        };
+                    }
+                }
+            })
             $('#select-inc').select2({
                 tags: false,
                 ajax: {
@@ -907,6 +1062,36 @@ use Illuminate\Support\Facades\Auth;
                     }
                 }
             });
+            // $('#select-characteristict').select2({
+            //     ajax: {
+            //         url: "/getCharacteristicsM",
+            //         dataType: "json",
+            //         data: function(params) {
+            //             if (params.term == undefined) {
+            //                 params.term = ""
+            //             }
+            //             var query = {
+            //                 filter: '[{"operator":"eq","value":"Material","property":"transaction_type","type":"string"}]',
+            //                 page: 1,
+            //                 limit: 25,
+            //                 start: 0,
+            //                 query: ""
+            //             }
+            //             return query;
+            //         },
+            //         processResults: function(data) {
+            //             return {
+            //                 results: $.map(data, function(item) {
+            //                     return {
+            //                         text: item.characteristic,
+            //                         id: item.id 
+            //                     }
+            //                 })
+            //             };
+            //         }
+            //     }
+            // })
+
             $('#select-inc').change(function(v) {
                 incCode = $(this).val().split("-")[0];
                 console.log(incCode);
@@ -1145,7 +1330,9 @@ use Illuminate\Support\Facades\Auth;
                         );
                         row.append(
                             '<td class="delete-in-char text-danger"><button data-id="' + v.id +
-                            '" type="button" id="delete-char" class="btn btn-default delete-char"><i style="color:red" class="fa fa-trash"></i></button> <button class="btn btn-default" id="edit-char" ><i style="color:green" class="fa fa-edit"></i></button></td>'
+                            '" type="button" id="delete-char" class="btn btn-default delete-char"><i style="color:red" class="fa fa-trash"></i></button> <button data-toggle="modal" id="btn-edit-char" data-id=' +
+                            v.id +
+                            ' data-target="#edit-char" class="btn btn-default"><i style="color:green" class="fa fa-edit"></i></button></td>'
                         );
                         $("#tb-characteristic").append(row);
                         chartIndex++;
@@ -1388,7 +1575,7 @@ use Illuminate\Support\Facades\Auth;
                     $("#tb-inc tbody").empty();
 
                     val.data.forEach(function(v) {
-                        var row = $('<tr class="tr-tab-1" >');
+                        var row = $('<tr class="tr-tab-1" data-mrcode=' + v.id + '>');
                         row.append(
                             '<td class=""> ' + v.inc + '</td></tr>'
                         );
@@ -1446,6 +1633,7 @@ use Illuminate\Support\Facades\Auth;
                     $('#current_page_inc').text(pageInc);
                     $('#total_page_inc').text(Math.ceil(val.total / 25))
                     $(".tr-tab-1").click(function(e) {
+                        mrCode = $(this).data("mrcode");
                         totalPageImage = 0
                         totalPageChar = 0;
                         totalPageCollo = 0;
@@ -1471,7 +1659,6 @@ use Illuminate\Support\Facades\Auth;
                                     _token: csrf_token
                                 }
                             }).done(function(v) {
-
                                 $.ajax({
                                     url: '/getIncColloquialName?&start=0&limit=25&page=1&filter=[{"operator":"eq","value":"' +
                                         inc[1] + '","property":"inc","type":"string"}]'
@@ -1480,8 +1667,9 @@ use Illuminate\Support\Facades\Auth;
                                     $("#tb-collo tbody").empty();
                                     $("#inc-id-detail").val(inc[1]);
                                     $("#name_inc").val(v.data[0].item_name);
-                                    $("#short_inc").val(v.data[0].item_name);
+                                    $("#short_inc").val(v.data[0].short_name_code);
                                     $("#desc_inc").val(v.data[0].description);
+
                                     loadImage(inc[1], 1, 1, 1)
                                     $.ajax({
                                         method: "GET",
@@ -1506,9 +1694,6 @@ use Illuminate\Support\Facades\Auth;
 
                                     });
                                     loadCharact(0, 25, 1, "inc");
-
-
-
                                 })
                                 var lastPageChar = 1;
                                 $(".next-char").unbind('click');
