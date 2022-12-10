@@ -413,7 +413,11 @@ class DataToolsController extends Controller
                                     ->where('inc_m_id',$request->inc_m_id)
                                     ->orderBy('sequence','desc')
                                     ->first();
-            
+            if($getIncMaxSequence == null){
+                $sequence = 1;
+            }else{
+                $sequence = $getIncMaxSequence->sequence + 1;
+            }
             $incCharacteristic = new IncCharacteristics();
             $incCharacteristic->inc_m_id = $request->inc_m_id;
             $incCharacteristic->inc = $request->inc;
@@ -421,7 +425,7 @@ class DataToolsController extends Controller
             $incCharacteristic->characteristics = $request->characteristics;
             $incCharacteristic->type = $request->type;
             $incCharacteristic->mrcode = $request->mrcode;
-            $incCharacteristic->sequence = $getIncMaxSequence->sequence + 1;
+            $incCharacteristic->sequence = $sequence;
             $incCharacteristic->save();
         }
 
