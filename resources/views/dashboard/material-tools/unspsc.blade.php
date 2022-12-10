@@ -120,9 +120,9 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Result Inc</h4>
                         <hr>
                         <div class="row">
-                            {{-- <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal" data-target="#add-inc">
+                            <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal" data-target="#add-inc">
                                 Add Inc &nbsp; <i class="fas fa-plus"></i>
-                            </button> --}}
+                            </button>
                         </div>
                         <div class="row mt-1"style="height: 203px; overflow: auto">
                             <table class="table table-striped" id="tb-inc">
@@ -160,8 +160,12 @@ use Illuminate\Support\Facades\Auth;
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card p-4 mb-1 m-2">
-                        <h4>INC Detail</h4>
+                    <div class="card p-4 mb-1 m-2"
+                        style="
+                    height: 448px;
+                    min-height: 448px;
+                ">
+                    <h4>INC Detail</h4>
                         <hr>
                         <div class="form-group row">
                             <label for="" class="col-sm-3">INC: </label>
@@ -197,8 +201,8 @@ use Illuminate\Support\Facades\Auth;
                             <label for="" class="col-sm-3">MGC: </label>
                             <div class="col-sm-9">
                                 <div class="input-group mb-2">
-                                    <select multiple="multiple" disabled class="js-example-basic-multiple js-example-basic-type"
-                                        id="select-mgc-2">
+                                    <select multiple="multiple" disabled
+                                        class="js-example-basic-multiple js-example-basic-type" id="select-mgc-2">
                                         <option value="">Select MGC</option>
                                     </select>
                                 </div>
@@ -216,6 +220,12 @@ use Illuminate\Support\Facades\Auth;
                     <div class="card p-4 mb-1 m-2" style="height: 453px;max-height: 449px;">
                         <h4>Image</h4>
                         <hr>
+                        <div class="row">
+                            <button type="button" class="float-left ml-2 btn btn-primary" data-toggle="modal"
+                                data-target="#add-image">
+                                Add Image &nbsp; <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                         <img class="mt-1"
                             style="
                         max-height: 227px;
@@ -298,6 +308,11 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Inc Characteristic</h4>
 
                         <hr>
+                        <div class="row">
+                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#add-char">
+                                Add Characteristic &nbsp; <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                         <div class="row mt-1"style="max-height: 400px; overflow: auto">
                             <table class="table table-striped" id="tb-characteristic">
                                 <thead>
@@ -384,6 +399,11 @@ use Illuminate\Support\Facades\Auth;
                     <div class="card p-4 mb-1 m-2">
                         <h4>Colloquial Name</h4>
                         <hr>
+                        <div class="row">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#add-cn">
+                                Add CN &nbsp; <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                         <div class="row mt-1"style="height: 203px; overflow: auto">
                             <table class="table table-striped" id="tb-collo">
                                 <thead>
@@ -644,6 +664,10 @@ use Illuminate\Support\Facades\Auth;
 
 
         <script>
+            $(document).ready(function() {
+                $("#main-menu-MNU25").addClass("nav-item menu-is-opening menu-open")
+                $("#subchild-MNU27").addClass("nav-link active")
+            });
             var pageInc = 1;
             var totalPageImage = 0
             var totalPageChar = 0;
@@ -783,10 +807,77 @@ use Illuminate\Support\Facades\Auth;
             //     changeImage(this);
             // })
 
-            loadInc(0, 25, pageInc);
-            $('.js-example-basic-single').select2({
-                tags: false
+            // loadInc(0, 25, pageInc);
+            // $('.js-example-basic-single').select2({
+            //     tags: false
+            // });
+            $('#select-inc').select2({
+                tags: false,
+                ajax: {
+                    url: `/getIncMgc`,
+                    dataType: 'json',
+                    data: function(params) {
+                        console.log(params.term);
+                        if (params.term == undefined) {
+                            params.term = ""
+                        }
+                        var query = {
+                            query: params.term,
+                            action: "getIncByMGC",
+                            page: 1,
+                            start: 0,
+                            limit: 25,
+                            filter: `[{"operator":"eq","value":"service","property":"transaction_type","type":"string"},{"operator":"like","value":"${params.term}","property":"class_inc_name","type":"string"}]`
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: item.class_inc_name,
+                                    id: item.inc + '-' + item.id + '-' + item.name_code + '-' + item
+                                        .short_name_code
+                                }
+                            })
+                        };
+                    }
+                }
             });
+            $('#select-inc').change(function(v) {
+                incCode = $(this).val().split("-")[0];
+                console.log(incCode);
+                $("#select-mgc").select2({
+                    ajax: {
+                        url: `/getMgcByInc`,
+                        dataType: 'json',
+                        data: function(params) {
+                            if (params.term == undefined) {
+                                params.term = ""
+                            }
+                            var query = {
+                                query: params.term,
+                                action: "getIncByMGC",
+                                page: 1,
+                                start: 0,
+                                limit: 25,
+                                filter: `[{"operator":"like","value":"service","property":"transaction_type","type":"string"},{"operator":"eq","value":"${incCode}","property":"inc","type":"string"}]`
+                            }
+                            return query;
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(item) {
+                                    return {
+                                        text: item.name,
+                                        id: item.groupclass
+                                    }
+                                })
+                            };
+                        }
+                    }
+                })
+            })
             $("#btn-save-img-modal").click(function() {
                 var xhr;
                 var fd = new FormData();
@@ -794,6 +885,7 @@ use Illuminate\Support\Facades\Auth;
                 fd.append('_token', csrf_token);
                 fd.append('inc', $("#inc-id-detail").val());
                 fd.append('description', $('#description-in').val());
+                fd.append('transaction_type', "Service");
                 xhr = new XMLHttpRequest();
                 xhr.open('POST', '/SaveIncImages', true);
                 xhr.onreadystatechange = function(response) {};
@@ -816,6 +908,7 @@ use Illuminate\Support\Facades\Auth;
                     url: "/SaveIncColloquialName",
                     data: {
                         _token: csrf_token,
+                        transaction_type: "Service",
                         data_items: '[{"id":"insert_cn","inc":"' + $('#inc-id-detail').val() + '","cn":"' + $(
                             '#cn-id').val() + '","colloquial_name":"' + $('#cn').val() + '"}]'
                     }
@@ -844,11 +937,11 @@ use Illuminate\Support\Facades\Auth;
             $('#test_id').val($("#test_id option:contains('Option 4')").val()).change();
 
 
-            $('#select-inc').change(function() {
-                $(".js-example-basic-mgc").empty();
-                $(".js-example-basic-mgc").append('<option value="">Select Inc</option>');
-                loadMgcByInc($(this).val(), 0, 25, 1);
-            })
+            // $('#select-inc').change(function() {
+            //     $(".js-example-basic-mgc").empty();
+            //     $(".js-example-basic-mgc").append('<option value="">Select Inc</option>');
+            //     loadMgcByInc($(this).val(), 0, 25, 1);
+            // })
             $('#btn-search').click(function() {
                 loadSearch(1, 0, 25);
                 pageInc = 1;
@@ -877,7 +970,7 @@ use Illuminate\Support\Facades\Auth;
             $('#btn-save-inc-modal').click(function() {
                 var data = {
                     _token: csrf_token,
-                    transaction_type: "Material",
+                    transaction_type: "Service",
                     "textfield-1075-inputEl": "",
                     inc: $('#inc-add').val(),
                     inc_name: $('#name-code-add').val(),
@@ -922,11 +1015,13 @@ use Illuminate\Support\Facades\Auth;
                 }
 
                 if (selectInc.val() != null && selectInc.val() != "") {
-                    filter += '{"operator":"eq","value":"' + selectInc.val() + '","property":"inc","type":"string"},';
+                    filter += '{"operator":"eq","value":"' + selectInc.val().split("-")[0] +
+                        '","property":"inc","type":"string"},';
                 }
 
                 if (selectMgc.val() != null && selectMgc.val() != "") {
-                    filter += '{"operator":"eq","value":"' + selectMgc.val() + '","property":"groupclass","type":"string"},';
+                    filter += '{"operator":"eq","value":"' + selectMgc.val().split("-")[0] +
+                        '","property":"groupclass","type":"string"},';
                 }
                 // if (selectMgc.val() != null && selectMgc.val() != "") {
                 //     filter += '{"operator":"like","value":"' + nameCode.val() +

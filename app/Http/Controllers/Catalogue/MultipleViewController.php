@@ -681,6 +681,7 @@ class MultipleViewController extends Controller
                 ->where('proc_approver','=','Validate')				
                 ->where('sap_material_code','!=','')
                 ->get();
+            return $AdrDItems;
             if(count($AdrDItems) > 0) {
                 $data_mat_mas = array();
                 $data = array();
@@ -725,7 +726,6 @@ class MultipleViewController extends Controller
                     $UpdateAdrDItems->sync_status = 'success' ;
                     $UpdateAdrDItems->save();
                 }
-
 
 
                 $content = \View::make('Template_MatMas')->with('data', $data);
