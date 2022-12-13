@@ -1,6 +1,6 @@
 @extends('master')
 <center>
-    <button onclick="add()">asda</button>
+    <!-- <button onclick="add()">asda</button> -->
 
 </center>
 <script>
