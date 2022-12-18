@@ -120,7 +120,8 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Result Inc</h4>
                         <hr>
                         <div class="row">
-                            <button class="btn btn-primary" data-title="Add Inc" data-toggle="modal" data-target="#add-inc">
+                            <button class="btnAdd btn btn-primary" data-title="Add Inc" data-toggle="modal"
+                                data-target="#add-inc">
                                 Add Inc &nbsp; <i class="fas fa-plus"></i>
                             </button>
                         </div>
@@ -217,7 +218,7 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Image</h4>
                         <hr>
                         <div class="row">
-                            <button type="button" class="float-left ml-2 btn btn-primary" data-toggle="modal"
+                            <button type="button" class="btnAdd float-left ml-2 btn btn-primary" data-toggle="modal"
                                 data-target="#add-image">
                                 Add Image &nbsp; <i class="fas fa-plus"></i>
                             </button>
@@ -305,7 +306,7 @@ use Illuminate\Support\Facades\Auth;
 
                         <hr>
                         <div class="row">
-                            <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#add-char">
+                            <button class="btnAdd btn btn-primary mr-2" data-toggle="modal" data-target="#add-char">
                                 Add Characteristic &nbsp; <i class="fas fa-plus"></i>
                             </button>
                         </div>
@@ -396,7 +397,7 @@ use Illuminate\Support\Facades\Auth;
                         <h4>Colloquial Name</h4>
                         <hr>
                         <div class="row">
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#add-cn">
+                            <button class="btnAdd btn btn-primary" data-toggle="modal" data-target="#add-cn">
                                 Add CN &nbsp; <i class="fas fa-plus"></i>
                             </button>
                         </div>
@@ -739,6 +740,11 @@ use Illuminate\Support\Facades\Auth;
 
         <script>
             $(document).ready(function() {
+                if (groupName != `Administrator's`) {
+                    $(".btnAdd").css("display", "none")
+                } else {
+                    $(".btnAdd").css("display", "inline-block")
+                }
                 $("#main-menu-MNU25").addClass("nav-item menu-is-opening menu-open")
                 $("#subchild-MNU27").addClass("nav-link active")
             });
