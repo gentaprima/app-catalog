@@ -603,7 +603,8 @@ class AdditionController extends Controller
                                         'sap_material_code' => $row['sap_material_code'],
                                         'reason' => $reason,
                                         'updated_at' => date("Y-m-d H:i:s"),
-                                        'updated_by' => $row['updated_by']
+                                        'updated_by' => $row['updated_by'],
+                                        'status' => $row['cataloguer']
                                     ]);
                                 }
                             } else if ($row['cataloguer'] == 'Validate') {
@@ -654,7 +655,8 @@ class AdditionController extends Controller
                                         'sap_material_code' => $row['sap_material_code'],
                                         'reason' => $reason,
                                         'updated_at' => date("Y-m-d H:i:s"),
-                                        'updated_by' => $row['updated_by']
+                                        'updated_by' => $row['updated_by'],
+                                        'status' => $row['cataloguer']
                                     ]);
                                 }
                             } else if ($row['cataloguer'] == 'Not Validate') {
@@ -705,7 +707,8 @@ class AdditionController extends Controller
                                     'sap_material_code' => $row['sap_material_code'],
                                     'reason' => $reason,
                                     'updated_at' => date("Y-m-d H:i:s"),
-                                    'updated_by' => $row['updated_by']
+                                    'updated_by' => $row['updated_by'],
+                                    'status' => $row['cataloguer']
                                 ]);
                             }
                         }
@@ -755,7 +758,8 @@ class AdditionController extends Controller
                                         'sap_material_code' => $row['sap_material_code'],
                                         'reason' => $reason,
                                         'updated_at' => date("Y-m-d H:i:s"),
-                                        'updated_by' => $row['updated_by']
+                                        'updated_by' => $row['updated_by'],
+                                        'status' => $row['std_approval']
                                     ]);
                                 }
                             } else {
@@ -807,7 +811,8 @@ class AdditionController extends Controller
                                     'sap_material_code' => $row['sap_material_code'],
                                     'reason' => $reason,
                                     'updated_at' => date("Y-m-d H:i:s"),
-                                    'updated_by' => $row['updated_by']
+                                    'updated_by' => $row['updated_by'],
+                                    'status' => $row['std_approval']
                                 ]);
                             }
                         }
@@ -943,7 +948,8 @@ class AdditionController extends Controller
                                         'sap_material_code' => $row['sap_material_code'],
                                         'reason' => $reason,
                                         'updated_at' => date("Y-m-d H:i:s"),
-                                        'updated_by' => $row['updated_by']
+                                        'updated_by' => $row['updated_by'],
+                                        'status' => $row['proc_approver']
                                     ]);
                                 }
                             } else {
@@ -1003,7 +1009,8 @@ class AdditionController extends Controller
                                     'sap_material_code' => $row['sap_material_code'],
                                     'reason' => $reason,
                                     'updated_at' => date("Y-m-d H:i:s"),
-                                    'updated_by' => $row['updated_by']
+                                    'updated_by' => $row['updated_by'],
+                                    'status' => $row['proc_approver']
                                 ]);
                             }
                         }

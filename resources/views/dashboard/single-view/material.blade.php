@@ -204,6 +204,7 @@ use Illuminate\Support\Facades\Auth;
                                             <th>Date</th>
                                             <th>Users</th>
                                             <th>Reason</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -646,6 +647,7 @@ use Illuminate\Support\Facades\Auth;
 
     <p hidden="true" id="rawData"></p>
     <p hidden="true" id="categoryData"></p>
+    <p hidden="true" id="statusUser"></p>
 
 
 
@@ -943,6 +945,7 @@ use Illuminate\Support\Facades\Auth;
                         tr.append("<td>" + data[i].updated_at + "</td>");
                         tr.append("<td>" + data[i].real_name + "</td>");
                         tr.append("<td>" + (data[i].reason) + "</td>");
+                        tr.append("<td>" + (data[i].status) + "</td>");
 
                         $("#tableDataReason").append(tr);
                     }
@@ -1058,6 +1061,7 @@ use Illuminate\Support\Facades\Auth;
                         } else {
                             document.getElementById("procApp").value = "";
                         }
+                        document.getElementById("statusUser").innerHTML = data[0].status_user
                         getReference(data[0].adr_d_items_id);
                         getItemsFuncloc(data[0].adr_d_items_id);
                         loadDataCharacteristic(data[0].adr_d_items_id);
@@ -1088,8 +1092,12 @@ use Illuminate\Support\Facades\Auth;
                         // check status
                         if (data[0].status_user == 1) {
                             $("#arrowUser").attr("class", "left right active")
+                            document.getElementById("btnAddReference").hidden = true
+                            document.getElementById("btnAddFunction").hidden = true
                         } else {
                             $("#arrowUser").attr("class", "left right notactive")
+                            document.getElementById("btnAddReference").hidden = false
+                            document.getElementById("btnAddFunction").hidden = false
                         }
                         if (data[0].status_cat == 1) {
                             $("#arrowCat").attr("class", "left right active")
@@ -1392,6 +1400,7 @@ use Illuminate\Support\Facades\Auth;
                             icon: 'error',
                             title: 'Please select proc approver'
                         });
+                        return;
                     }
 
                     if (procApp == 'Not Validate' && reason == '') {
@@ -1639,6 +1648,7 @@ use Illuminate\Support\Facades\Auth;
             let idValueCharacteristic = document.getElementById("idValueCharacteristic").value;
             let descValueCharacteristic = document.getElementById("descCharacteristic").value;
             let valueCharacteristic = document.getElementById("valueCharacteristic").value;
+            console.log(descValueCharacteristic);
             $.ajax({
                 type: "post",
                 dataType: 'json',
@@ -1852,17 +1862,18 @@ use Illuminate\Support\Facades\Auth;
                         tr.append("<td>" + k++ + "</td>");
                         tr.append("<td>" + (response.data[i].description) + "</td>");
                         tr.append("<td>" + (response.data[i].code) + "</td>");
-                        tr.append(`<td><center><i onclick="setValueCharacteristic('${response.data[i].code}')" class='fa fa-check'></i></center></td>`);
+                        tr.append(`<td><center><i onclick="setValueCharacteristic('${response.data[i].description}','${response.data[i].description}')" class='fa fa-check'></i></center></td>`);
                         $("#tableDataAbbr").append(tr);
                     }
                 }
             })
         }
 
-        function setValueCharacteristic(code) {
+        function setValueCharacteristic(code, desc) {
             let adrdItems = document.getElementById("adrDItems").innerHTML;
             let idValueCharacteristic = document.getElementById("idValueCharacteristic").value;
             let descValueCharacteristic = document.getElementById("descCharacteristic").value;
+            // let descriptionValueCharacteristic = document.getElementById("descriptionCharacteristic").value;
             document.getElementById("valueCharacteristic").value = code;
         }
 
@@ -1943,6 +1954,7 @@ use Illuminate\Support\Facades\Auth;
         }
         // Function
         function getItemsFuncloc(adrDItems) {
+            let status = document.getElementById("statusUser").innerHTML
             $("#tableDataFunction tbody").empty();
             $.ajax({
                 type: "GET",
@@ -1954,12 +1966,17 @@ use Illuminate\Support\Facades\Auth;
                         var tr = $("<tr>");
                         tr.append("<td>" + data[i].name + "</td>");
                         tr.append("<td>" + (data[i].description) + "</td>");
-                        tr.append(`<td>
-                            <center>
-                                <button data-toggle="modal" data-target="#modalFunct" onclick="updateFunction('${data[i].name}','${data[i].description}','${data[i].id}')" class="btn btn-default btn-xs"><i class='fa fa-edit'></i></button>
-                                <button  onclick="deleteFunction('${data[i].id}','${data[i].adrDItems}')" class="btn btn-default btn-xs"><i class='fa fa-trash'></i></button>
-                            </center>
-                            </td>`);
+                        if (status == 0) {
+                            tr.append(`<td>
+                                <center>
+                                    <button data-toggle="modal" data-target="#modalFunct" onclick="updateFunction('${data[i].name}','${data[i].description}','${data[i].id}')" class="btn btn-default btn-xs"><i class='fa fa-edit'></i></button>
+                                    <button  onclick="deleteFunction('${data[i].id}','${data[i].adrDItems}')" class="btn btn-default btn-xs"><i class='fa fa-trash'></i></button>
+                                </center>
+                                </td>`);
+                        } else {
+                            tr.append(`<td></td>`);
+
+                        }
                         $("#tableDataFunction").append(tr);
                     }
                 }
@@ -2094,6 +2111,7 @@ use Illuminate\Support\Facades\Auth;
         // Function
         // Reference
         function getReference(adrDItems) {
+            let status = document.getElementById("statusUser").innerHTML;
             $("#tableDataReference tbody").empty();
             $.ajax({
                 type: "GET",
@@ -2107,12 +2125,18 @@ use Illuminate\Support\Facades\Auth;
                         tr.append("<td>" + (data[i].old_material_code) + "</td>");
                         tr.append("<td>" + (data[i].manufactur) + "</td>");
                         tr.append("<td>" + (data[i].type) + "</td>");
-                        tr.append(`<td>
-                            <center>
-                                <button onclick="updateReference('${data[i].id}','${data[i].refno}','${data[i].old_material_code}','${data[i].manufactur}','${data[i].type}')" data-toggle="modal" data-target="#modalReference" class="btn btn-default btn-xs"><i class='fa fa-edit'></i></button>
-                                <button onclick="deleteReference('${data[i].id}','${adrDItems}')"  class="btn btn-default btn-xs"><i class='fa fa-trash'></i></button>
-                            </center>
-                            </td>`);
+                        if (status == 0) {
+
+                            tr.append(`<td>
+                                <center>
+                                    <button onclick="updateReference('${data[i].id}','${data[i].refno}','${data[i].old_material_code}','${data[i].manufactur}','${data[i].type}')" data-toggle="modal" data-target="#modalReference" class="btn btn-default btn-xs"><i class='fa fa-edit'></i></button>
+                                    <button onclick="deleteReference('${data[i].id}','${adrDItems}')"  class="btn btn-default btn-xs"><i class='fa fa-trash'></i></button>
+                                </center>
+                                </td>`);
+                        } else {
+                            tr.append(`<td></td>`);
+
+                        }
                         $("#tableDataReference").append(tr);
                     }
                 }

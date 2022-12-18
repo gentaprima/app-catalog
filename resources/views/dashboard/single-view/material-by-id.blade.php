@@ -204,6 +204,7 @@ use Illuminate\Support\Facades\Auth;
                                             <th>Date</th>
                                             <th>Users</th>
                                             <th>Reason</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -905,6 +906,7 @@ use Illuminate\Support\Facades\Auth;
                         tr.append("<td>" + data[i].updated_at + "</td>");
                         tr.append("<td>" + data[i].real_name + "</td>");
                         tr.append("<td>" + (data[i].reason) + "</td>");
+                        tr.append("<td>" + (data[i].status) + "</td>");
 
                         $("#tableDataReason").append(tr);
                     }
@@ -1354,6 +1356,7 @@ use Illuminate\Support\Facades\Auth;
                             icon: 'error',
                             title: 'Please select proc approver'
                         });
+                        return;
                     }
 
                     if (procApp == 'Not Validate' && reason == '') {
