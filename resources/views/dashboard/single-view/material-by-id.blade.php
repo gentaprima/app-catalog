@@ -419,6 +419,7 @@ use Illuminate\Support\Facades\Auth;
                                 <input type="text" class="form-control" id="valueCharacteristic">
                                 <input type="hidden" name="" id="idValueCharacteristic">
                                 <input type="hidden" name="" id="descCharacteristic">
+                                <input type="hidden" name="" id="descriptionCharacteristic">
                                 <span>Catatan : Anda juga bisa mengisi value pada abbreviation diatas, dengan mengcopy paste code abbreviation, maka nanti di long desc akan terisi otomatis description.</span>
                             </div>
                         </div>
@@ -1609,8 +1610,8 @@ use Illuminate\Support\Facades\Auth;
             let adrdItems = document.getElementById("adrDItems").innerHTML;
             let idValueCharacteristic = document.getElementById("idValueCharacteristic").value;
             let descValueCharacteristic = document.getElementById("descCharacteristic").value;
+            let descriptionValueCharacteristic = document.getElementById("descriptionCharacteristic").value;
             let valueCharacteristic = document.getElementById("valueCharacteristic").value;
-            console.log(descValueCharacteristic);
             $.ajax({
                 type: "post",
                 dataType: 'json',
@@ -1618,7 +1619,7 @@ use Illuminate\Support\Facades\Auth;
                 data: {
                     id: idValueCharacteristic,
                     adr_d_items_id: adrdItems,
-                    nValue: valueCharacteristic,
+                    nValue: (descriptionValueCharacteristic != '') ?  valueCharacteristic + '-' + descriptionValueCharacteristic : valueCharacteristic,
                     _token: csrf_token
                 },
                 success: function(response) {
@@ -1647,8 +1648,15 @@ use Illuminate\Support\Facades\Auth;
                     let shortNameCode = document.getElementById("shortNameCode").value;
                     let shortDescValue = "";
                     for (let i = 0; i < data.length; i++) {
-                        shortDesc += data[i].nvalue + ';'
-                        longDesc += data[i].characteristics + ":" + data[i].nvalue + ';'
+                        if (data[i].nvalue.includes('-')) {
+                            let splitNvalue = data[i].nvalue.split('-');
+                            shortDesc += splitNvalue[0] + ';'
+                            longDesc += data[i].characteristics + ":" + splitNvalue[1] + ';'
+                        } else {
+                            shortDesc += data[i].nvalue + ';'
+                            longDesc += data[i].characteristics + ":" + data[i].nvalue + ';'
+
+                        }
                     }
                     document.getElementById("shortDesc").value = shortDesc;
                     document.getElementById("longDesc").value = longDesc;
@@ -1669,13 +1677,19 @@ use Illuminate\Support\Facades\Auth;
                     let data = response.data;
                     let k = 1;
                     for (let i = 0; i < data.length; i++) {
+
                         var tr = $("<tr>");
                         tr.append("<td>" + k++ + "</td>");
                         tr.append("<td>" + data[i].characteristics + "</td>");
                         if (data[i].nvalue == null) {
                             tr.append("<td></td>");
                         } else {
-                            tr.append("<td>" + (data[i].nvalue) + "</td>");
+                            if (data[i].nvalue.includes('-')) {
+                                let splitNvalue = data[i].nvalue.split('-');
+                                tr.append("<td>" + (splitNvalue[0]) + "</td>");
+                            } else {
+                                tr.append("<td>" + (data[i].nvalue) + "</td>");
+                            }
                         }
                         tr.append("<td>" + (data[i].type) + "</td>");
                         tr.append(`<td>
@@ -1752,7 +1766,13 @@ use Illuminate\Support\Facades\Auth;
                         if (data[i].nvalue == null) {
                             tr.append("<td></td>");
                         } else {
-                            tr.append("<td>" + (data[i].nvalue) + "</td>");
+                            // tr.append("<td>" + (data[i].nvalue) + "</td>");
+                            if (data[i].nvalue.includes('-')) {
+                                let splitNvalue = data[i].nvalue.split('-');
+                                tr.append("<td>" + (splitNvalue[0]) + "</td>");
+                            } else {
+                                tr.append("<td>" + (data[i].nvalue) + "</td>");
+                            }
                         }
                         tr.append("<td>" + (data[i].type) + "</td>");
                         tr.append(`<td>
@@ -1805,6 +1825,7 @@ use Illuminate\Support\Facades\Auth;
             document.getElementById("searchDescription").removeAttribute('disabled');
             document.getElementById("descCharacteristic").value = descCharacteristic;
             document.getElementById("valueCharacteristic").value = "";
+            document.getElementById("descriptionCharacteristic").value = "";
             loadDataAbbr();
         }
 
@@ -1824,7 +1845,7 @@ use Illuminate\Support\Facades\Auth;
                         tr.append("<td>" + k++ + "</td>");
                         tr.append("<td>" + (response.data[i].description) + "</td>");
                         tr.append("<td>" + (response.data[i].code) + "</td>");
-                        tr.append(`<td><center><i onclick="setValueCharacteristic('${response.data[i].description}','${response.data[i].description}')" class='fa fa-check'></i></center></td>`);
+                        tr.append(`<td><center><i onclick="setValueCharacteristic('${response.data[i].code}','${response.data[i].description}')" class='fa fa-check'></i></center></td>`);
                         $("#tableDataAbbr").append(tr);
                     }
                 }
@@ -1835,7 +1856,7 @@ use Illuminate\Support\Facades\Auth;
             let adrdItems = document.getElementById("adrDItems").innerHTML;
             let idValueCharacteristic = document.getElementById("idValueCharacteristic").value;
             let descValueCharacteristic = document.getElementById("descCharacteristic").value;
-            // let descriptionValueCharacteristic = document.getElementById("descriptionCharacteristic").value;
+            document.getElementById("descriptionCharacteristic").value = desc;
             document.getElementById("valueCharacteristic").value = code;
         }
 
