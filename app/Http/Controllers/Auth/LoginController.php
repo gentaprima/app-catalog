@@ -239,4 +239,8 @@ class LoginController extends Controller
         );
         return response()->json($data, 200);
     }
+
+    public function loginHandle(){
+        return "OK";
+    }
 }
