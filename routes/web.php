@@ -18,6 +18,8 @@ Auth::routes();
 
 // NEW
 // ADR & HISTORY
+
+
 Route::get('/revision-material', 'NavController@revisionMaterial');
 Route::get('/revision-service', 'NavController@revisionService');
 Route::get('/deletion-material', 'NavController@deletionMaterial');
@@ -119,6 +121,7 @@ Route::get('/dictionary/valuation-class','NavController@viewValuationClass');
 
 // NEW
 Route::get('/TestMail', 'Addition\AdditionController@TestMail');
+
 
 Route::get('/', 'HomeController@index')->name('home');
 // Route::get('/home', 'HomeController@index')->name('layouts/app');
