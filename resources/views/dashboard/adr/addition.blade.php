@@ -28,7 +28,16 @@
     <section class="content">
 
         <div class="card p-4 mb-5 m-2">
-            <h4>Form Adition</h4>
+            <div class="row">
+                <div class="col-6">
+
+                    <h4>Form Adition</h4>
+                </div>
+                <div class="col-6">
+
+                    <button onclick="showImport()" data-toggle="modal" data-target="#modalImport" style="float: right;" class="btn btn-default"><i class="fas fa-file-import"></i> Import Data</button>
+                </div>
+            </div>
             <hr>
             <form action="">
                 <div class="form-group row">
@@ -110,6 +119,35 @@
 
     </section>
     <!-- /.content -->
+
+    <div class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleModalReference">Import Data ADR</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form">
+                        <div class="form-group row">
+                            <div class="col-sm-2">Excel File</div>
+                            <div class="col-sm-10">
+                                <input type="file" id="uploadExcel" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <span>Don't have excel upload template?</span><br>
+                    <span>Click <a href="/getTemplateAddition">here</a> to download</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeModalDelete" data-dismiss="modal">Close</button>
+                    <button onclick="uploadExcel()" type="button" id="deleteButton" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -258,7 +296,7 @@
             let oldMatNo = document.getElementById("oldMatNo").value;
             let manufacturing = document.getElementById("manufacturing").value;
 
-            if (raw != '' && matSer != '' && inc != '' && mgc != '' ) {
+            if (raw != '' && matSer != '' && inc != '' && mgc != '') {
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
@@ -285,6 +323,57 @@
                 });
             }
         }
-        2
+
+        function showImport(){
+            document.getElementById("uploadExcel").value = "";
+        }
+
+        function uploadExcel() {
+            const fileupload = $('#uploadExcel').prop('files')[0];
+            let formData = new FormData();
+            formData.append('file_excel', fileupload);
+            formData.append('_token', csrf_token);
+
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "you want to process data!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, process it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/SaveImportAddition",
+                        data: formData,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success == true) {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: response.message
+                                });
+                                $("#closeModalDelete").click();
+                            } else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: response.message
+                                });
+                                $("#closeModalDelete").click();
+                            }
+                        },
+                        // error: function() {
+                        //     alert("Data Gagal Diupload");
+                        // }
+                    });
+                }
+            })
+        }
     </script>
     @endsection

@@ -1500,7 +1500,7 @@ class AdditionController extends Controller
             DB::rollback();
         }
         $data = array(
-            'data' => $insert,
+            // 'data' => $insert,
             'success' => $success,
             'message' => $message
         );
